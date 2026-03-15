@@ -12,9 +12,12 @@ public class User {
     public User() {}
 
     // 2 parametreli kayıt için bu Constructor'ı ekle
-    public User(String username, String email) {
+    public User(String username, String email, String password,String firstName, String lastName) {
         this.username = username;
         this.email = email;
+        this.password_hash = password;
+        this.first_name = firstName;
+        this.last_name = lastName;
     }
 
     // 2. Ana Constructor (Kullanıcı kaydı için gerekli alanlar)

@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /*
     private void testSupabaseConnection() {
         new Thread(() -> {
             try {
@@ -62,11 +63,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
+    */
 
     public void navHomePage(View view){
         Intent intent = new Intent(this,AddMeal.class);
         startActivity(intent);
     }
+
+    public void navProfile(View view){
+        Intent intent = new Intent(this,UserRegister.class);
+        startActivity(intent);
+    }
+
     public void closeInformation(View view){
         InformationCard.getInstance().hide();
     }
