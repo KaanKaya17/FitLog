@@ -12,6 +12,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitLog">
         <activity
+            android:name=".WaterTrack"
+            android:exported="false" />
+        <activity
+            android:name=".Settings"
+            android:exported="false" />
+        <activity
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
+            android:name=".TrackYourWeight"
+            android:exported="false" />
+        <activity
+            android:name=".MealDetail"
+            android:exported="false" />
+        <activity
+            android:name=".AddMeal"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
