@@ -29,10 +29,6 @@ public class Navigation {
         context.startActivity(intent);
     }
 
-    public static void goToAddMeal(Context context) {
-        openActivity(context, AddMeal.class);
-    }
-
     public static void goToSettings(Context context) {
         openActivity(context, Settings.class);
     }
