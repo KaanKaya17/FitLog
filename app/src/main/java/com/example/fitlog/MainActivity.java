@@ -2,6 +2,7 @@ package com.example.fitlog;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -17,6 +18,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        //testSupabaseConnection();
+
+        InformationCard.getInstance().init(this);
+        InformationCard.getInstance().show("Kalori Nedir?", "Kalori, besinlerin içerdiği enerji miktarını ölçen birimdir.");
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -24,9 +31,43 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void testSupabaseConnection() {
+        new Thread(() -> {
+            try {
+                // Retrofit örneğini oluştur
+                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
+
+                // Kendi API anahtarını buraya yapıştır
+                String apiKey = "YOUR_SUPABASE_ANON_KEY";
+                String authHeader = "Bearer " + apiKey;
+
+                User newUser = new User("test_kullanici", "test@mail.com");
+
+                // Retrofit isteğini senkron çalıştır (Test için)
+                retrofit2.Response<Void> response = api.insertUser(
+                        apiKey,
+                        authHeader,
+                        "application/json",
+                        "return=minimal",
+                        newUser
+                ).execute();
+
+                if (response.isSuccessful()) {
+                    Log.d("SUPABASE_TEST", "Başarılı! Veri veritabanına eklendi.");
+                } else {
+                    Log.e("SUPABASE_TEST", "Hata: " + response.errorBody().string());
+                }
+            } catch (Exception e) {
+                Log.e("SUPABASE_TEST", "Bağlantı Hatası: " + e.getMessage());
+            }
+        }).start();
+    }
+
     public void navHomePage(View view){
         Intent intent = new Intent(this,AddMeal.class);
         startActivity(intent);
     }
-
+    public void closeInformation(View view){
+        InformationCard.getInstance().hide();
+    }
 }
