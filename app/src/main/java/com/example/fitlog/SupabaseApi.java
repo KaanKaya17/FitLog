@@ -11,6 +11,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface SupabaseApi {
+
+    //User Api
     @POST("rest/v1/users")
     Call<Void> insertUser(
             @Header("apikey") String apiKey,
@@ -27,8 +29,9 @@ public interface SupabaseApi {
             @Query("email") String emailFilter,
             @Header("Accept") String accept
     );
+    //---
 
-
+    //Water Track Api
     @POST("rest/v1/water_log")
     Call<Void> insertWaterLog(
             @Header("apikey") String apiKey,
@@ -46,4 +49,16 @@ public interface SupabaseApi {
             @Query("user_id") String userIdFilter,
             @Query("consumed_at") String dateFilter
     );
+    //---
+
+    //Meal Log Api
+    @POST("rest/v1/meal_log")
+    Call<Void> insertMealLog(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Header("Content-Type") String contentType,
+            @Header("Prefer") String prefer,
+            @Body MealLog mealLog
+    );
+    //---
 }
