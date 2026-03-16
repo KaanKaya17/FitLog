@@ -36,8 +36,7 @@ public class UserLogin extends AppCompatActivity {
     }
 
     public void btnUserRegister(View view){
-        Intent intent = new Intent(this, UserRegister.class);
-        startActivity(intent);
+        Navigation.toRegister(this);
     }
 
     public void btnLogin(View view){

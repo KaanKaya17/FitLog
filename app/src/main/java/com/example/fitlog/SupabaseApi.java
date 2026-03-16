@@ -60,5 +60,15 @@ public interface SupabaseApi {
             @Header("Prefer") String prefer,
             @Body MealLog mealLog
     );
+
+    @GET("rest/v1/meal_log")
+    Call<List<MealLog>> getTodayMealLogs(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Header("Accept") String accept,
+            @Query("user_id") String userIdFilter,
+            @Query("eaten_at") String dateFilter
+    );
     //---
+
 }

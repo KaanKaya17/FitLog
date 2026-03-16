@@ -131,8 +131,7 @@ public class UserRegister extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Kayıt başarılı!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(this, UserLogin.class);
-                        startActivity(intent);
+                        Navigation.toLogin(this);
                         finish();
                     });
                 } else {
@@ -152,8 +151,7 @@ public class UserRegister extends AppCompatActivity {
     }
 
     public void btnUserLogin(View view){
-        Intent intent = new Intent(this, UserLogin.class);
-        startActivity(intent);
+        Navigation.toLogin(this);
     }
 
 }
