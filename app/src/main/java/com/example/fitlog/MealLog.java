@@ -2,7 +2,7 @@ package com.example.fitlog;
 
 public class MealLog {
     private int user_id;
-    private transient  int log_id;
+    private int log_id;
     private String food_name;
     private String serving_size;
     private int calories;

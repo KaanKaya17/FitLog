@@ -22,7 +22,7 @@ public interface SupabaseApi {
             @Header("Authorization") String bearerToken,
             @Header("Content-Type") String contentType,
             @Header("Prefer") String prefer, // "return=minimal" diyerek hız kazanabiliriz
-            @Body User user
+            @Body UserInsertDto user
     );
 
     @GET("rest/v1/users")

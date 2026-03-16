@@ -21,6 +21,8 @@ public class UserRegister extends AppCompatActivity {
     EditText editTextFirstName;
     EditText editTextLastName;
 
+    EditText editTextUserUserName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,7 @@ public class UserRegister extends AppCompatActivity {
         editTextPassword = findViewById(R.id.editTextPassword);
         editTextFirstName = findViewById(R.id.editTextFirstName);
         editTextLastName = findViewById(R.id.editTextLastName);
+        editTextUserUserName = findViewById(R.id.editTextName);
     }
 
     public void btnAddUser(View view){
@@ -46,6 +49,7 @@ public class UserRegister extends AppCompatActivity {
         String password = getUserPassword();
         String firstName = getUserFirstName();
         String lastName = getUserLastName();
+        String userName = getUserUserName();
 
         if(!Validator.isValidEmail(email)){
             showError("Geçerli bir mail giriniz");
@@ -67,12 +71,21 @@ public class UserRegister extends AppCompatActivity {
             return;
         }
 
-        addUser("TestUserName", email, password, firstName, lastName);
+        if(!Validator.isValidFirstName(userName)){
+            showError("Kullanici Adi Gecersiz");
+            return;
+        }
+
+        addUser(userName, email, password, firstName, lastName);
         //Toast.makeText(this, "Başarılı", Toast.LENGTH_SHORT).show();
     }
 
     public String getUserMail(){
         return editTextEmail.getText().toString().trim();
+    }
+
+    public String getUserUserName(){
+        return editTextUserUserName.getText().toString().trim();
     }
 
     public String getUserFirstName(){
@@ -117,7 +130,7 @@ public class UserRegister extends AppCompatActivity {
                 }
 
                 // Mail yoksa kayıt işlemine devam et
-                User newUser = new User(userName, userMail, userPassword, userFirstName, userLastName);
+                UserInsertDto newUser = new UserInsertDto(userName, userMail, userPassword, userFirstName, userLastName);
 
                 retrofit2.Response<Void> response = api.insertUser(
                         apiKey,

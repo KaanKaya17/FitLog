@@ -1,13 +1,18 @@
 package com.example.fitlog;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class User {
     // Veritabanındaki sütun isimleriyle birebir aynı olmalı
-    private transient  int user_id;
+    private int user_id;
     private String username;
     private String email;
     private String password_hash;
     private String first_name;
     private String last_name;
+    private int daily_calorie_goal;
+    private int daily_water_goal_ml;
 
     // 1. Boş Constructor (GSON'ın nesneyi oluşturabilmesi için gereklidir)
     public User() {}
@@ -48,4 +53,9 @@ public class User {
 
     public int getId() { return user_id; }
     public void setId(int id) { this.user_id = id; }
+
+    public int getCalorie_goal() { return daily_calorie_goal; }
+    public void setCalorie_goal(int calorie_goal) { this.daily_calorie_goal = calorie_goal; }
+    public int getWater_goal() { return daily_water_goal_ml; }
+    public void setWater_goal(int water_goal) { this.daily_water_goal_ml = water_goal; }
 }

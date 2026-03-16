@@ -28,6 +28,8 @@ public class PrefManager {
         editor.putString(KEY_EMAIL, user.getEmail());
         editor.putString(KEY_FIRST_NAME, user.getFirst_name());
         editor.putString(KEY_LAST_NAME, user.getLast_name());
+        editor.putInt(KEY_CALORIE_GOAL, user.getCalorie_goal());
+        editor.putInt(KEY_WATER_GOAL, user.getWater_goal());
         editor.apply();
     }
 
