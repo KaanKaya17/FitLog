@@ -13,6 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.List;
+
 public class UserRegister extends AppCompatActivity {
 
     EditText editTextEmail;
@@ -67,7 +69,7 @@ public class UserRegister extends AppCompatActivity {
         }
 
         addUser("TestUserName", email, password, firstName, lastName);
-        Toast.makeText(this, "Başarılı", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Başarılı", Toast.LENGTH_SHORT).show();
     }
 
     public String getUserMail(){
@@ -90,19 +92,34 @@ public class UserRegister extends AppCompatActivity {
         Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
-    public void addUser(String userName,String userMail,String userPassword,String userFirstName, String userLastName){
+    public void addUser(String userName, String userMail, String userPassword, String userFirstName, String userLastName) {
         new Thread(() -> {
             try {
-                // Retrofit örneğini oluştur
                 SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-
-                // Kendi API anahtarını buraya yapıştır
                 String apiKey = BuildConfig.SUPABASE_API_KEY;
                 String authHeader = "Bearer " + apiKey;
 
-                User newUser = new User(userName,userMail,userPassword,userFirstName,userLastName);
+                // Önce mail kontrolü
+                retrofit2.Response<List<User>> checkResponse = api.getUserByEmail(
+                        apiKey,
+                        authHeader,
+                        "eq." + userMail,
+                        "application/json"
+                ).execute();
 
-                // Retrofit isteğini senkron çalıştır (Test için)
+                if (checkResponse.isSuccessful() && checkResponse.body() != null) {
+                    if (!checkResponse.body().isEmpty()) {
+                        // Mail zaten kayıtlı
+                        runOnUiThread(() ->
+                                Toast.makeText(this, "Bu mail adresi zaten kayıtlı.", Toast.LENGTH_SHORT).show()
+                        );
+                        return; // işlemi durdur
+                    }
+                }
+
+                // Mail yoksa kayıt işlemine devam et
+                User newUser = new User(userName, userMail, userPassword, userFirstName, userLastName);
+
                 retrofit2.Response<Void> response = api.insertUser(
                         apiKey,
                         authHeader,
@@ -112,12 +129,24 @@ public class UserRegister extends AppCompatActivity {
                 ).execute();
 
                 if (response.isSuccessful()) {
-                    Log.d("SUPABASE_TEST", "Başarılı! Veri veritabanına eklendi.");
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Kayıt başarılı!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(this, UserLogin.class);
+                        startActivity(intent);
+                        finish();
+                    });
                 } else {
-                    Log.e("SUPABASE_TEST", "Hata: " + response.errorBody().string());
+                    Log.e("SUPABASE_REGISTER", "Hata: " + response.errorBody().string());
+                    runOnUiThread(() ->
+                            Toast.makeText(this, "Kayıt sırasında hata oluştu.", Toast.LENGTH_SHORT).show()
+                    );
                 }
+
             } catch (Exception e) {
-                Log.e("SUPABASE_TEST", "Bağlantı Hatası: " + e.getMessage());
+                Log.e("SUPABASE_REGISTER", "Bağlantı Hatası: " + e.getMessage());
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Bağlantı hatası: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
             }
         }).start();
     }

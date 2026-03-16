@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         //InformationCard.getInstance().show("Kalori Nedir?", "Kalori, besinlerin içerdiği enerji miktarını ölçen birimdir.");
 
         PrefManager manager = new PrefManager(this);
-        Toast.makeText(this, "Id : " + manager.getIid(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Id : " + manager.getId(), Toast.LENGTH_LONG).show();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -75,8 +75,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navProfile(View view){
-        Intent intent = new Intent(this,UserRegister.class);
-        startActivity(intent);
+        PrefManager manager = new PrefManager(this);
+        int userId = manager.getId();
+        if(userId != -1){
+            Intent intent = new Intent(this, Profile.class);
+            startActivity(intent);
+        }
+        else{
+            Intent intent = new Intent(this,UserRegister.class);
+            startActivity(intent);
+        }
     }
 
     public void closeInformation(View view){

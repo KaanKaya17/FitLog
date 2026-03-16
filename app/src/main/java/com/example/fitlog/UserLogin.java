@@ -106,7 +106,7 @@ public class UserLogin extends AppCompatActivity {
                             intent.putExtra("username", foundUser.getUsername());
                             int userId = foundUser.getId(); //getid
                             PrefManager manager = new PrefManager(this);
-                            manager.setIid(String.valueOf(userId));
+                            manager.saveUser(foundUser);
                             startActivity(intent);
                             finish();
                         });
