@@ -130,4 +130,20 @@ public class UserLogin extends AppCompatActivity {
             }
         }).start();
     }
+    public void navHomePage(View view) {
+        Navigation.toMain(this);
+    }
+
+    public void navProfile(View view) {
+        PrefManager manager = new PrefManager(this);
+        int userId = manager.getId();
+        if (userId != -1) {
+            Navigation.toProfile(this);
+        } else {
+            Navigation.toRegister(this);
+        }
+    }
+    public void navMealList(View view){
+        Navigation.toMealList(this);
+    }
 }

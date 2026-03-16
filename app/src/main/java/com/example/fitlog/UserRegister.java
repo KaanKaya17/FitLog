@@ -1,6 +1,5 @@
 package com.example.fitlog;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -152,6 +151,22 @@ public class UserRegister extends AppCompatActivity {
 
     public void btnUserLogin(View view){
         Navigation.toLogin(this);
+    }
+    public void navHomePage(View view) {
+        Navigation.toMain(this);
+    }
+
+    public void navProfile(View view) {
+        PrefManager manager = new PrefManager(this);
+        int userId = manager.getId();
+        if (userId != -1) {
+            Navigation.toProfile(this);
+        } else {
+            Navigation.toRegister(this);
+        }
+    }
+    public void navMealList(View view){
+        Navigation.toMealList(this);
     }
 
 }

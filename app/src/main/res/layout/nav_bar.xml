@@ -84,14 +84,14 @@
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="goToEducation"
+            android:onClick="navMealList"
             android:gravity="center"
             android:background="?attr/selectableItemBackgroundBorderless">
 
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:src="@drawable/setting"
+                android:src="@drawable/list"
                 android:alpha="0.6"
                 android:contentDescription="Education"/>
 
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Settings"
+                android:text="Meal List"
                 android:textSize="11sp"
                 android:textColor="#64748B"/>
         </LinearLayout>
