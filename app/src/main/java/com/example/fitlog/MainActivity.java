@@ -175,10 +175,18 @@ public class MainActivity extends AppCompatActivity {
     // ── UI Güncelle ──────────────────────────────────────────────────
 
     private void updateDashboard(int water, int calories, float protein, float carbs, float fat, int mealCount) {
+        PrefManager pref = new PrefManager(this);
+        int calorieGoal  = pref.getCalorieGoal();
+        int waterGoal    = pref.getWaterGoal();
+
+        // ProgressBar max değerlerini hedeflere göre ayarla
+        progressCalorie.setMax(calorieGoal);
+        progressWaterHome.setMax(waterGoal);
 
         // Kalori
         tvCurrentCalories.setText(String.valueOf(calories));
-        animateProgress(progressCalorie, calories, 2000);
+        ((TextView) findViewById(R.id.tvCalorieSummary)).setText("/ " + calorieGoal + " hedef");
+        animateProgress(progressCalorie, calories, calorieGoal);
 
         // Makrolar
         tvProteinSummary.setText(String.format(Locale.getDefault(), "%.1fg", protein));
@@ -186,9 +194,9 @@ public class MainActivity extends AppCompatActivity {
         tvFatSummary.setText(String.format(Locale.getDefault(), "%.1fg", fat));
 
         // Su
-        tvWaterAmount.setText(water + " / 2000 ml");
-        animateProgress(progressWaterHome, water, 2000);
-        int waterPercent = (int) Math.min((water / 2000f) * 100, 100);
+        tvWaterAmount.setText(water + " / " + waterGoal + " ml");
+        animateProgress(progressWaterHome, water, waterGoal);
+        int waterPercent = (int) Math.min((water / (float) waterGoal) * 100, 100);
         tvWaterPercent.setText("%" + waterPercent + " tamamlandı");
 
         // Öğün
@@ -198,9 +206,9 @@ public class MainActivity extends AppCompatActivity {
         // Motivasyon
         if (mealCount == 0) {
             tvMotivationSub.setText("Bugün henüz öğün eklemedin.");
-        } else if (calories < 1000) {
+        } else if (calories < calorieGoal * 0.5f) {
             tvMotivationSub.setText("İyi başlangıç, devam et! 💪");
-        } else if (calories < 2000) {
+        } else if (calories < calorieGoal) {
             tvMotivationSub.setText("Hedefe yaklaşıyorsun!");
         } else {
             tvMotivationSub.setText("Günlük kalori hedefine ulaştın! 🎉");
@@ -238,6 +246,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navStatistic(View view) {
-        Navigation.toMealList(this);
+        Navigation.toSettings(this);
     }
 }

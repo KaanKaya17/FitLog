@@ -10,6 +10,8 @@ public class PrefManager {
     private static final String KEY_EMAIL      = "user_email";
     private static final String KEY_FIRST_NAME = "user_first_name";
     private static final String KEY_LAST_NAME  = "user_last_name";
+    private static final String KEY_CALORIE_GOAL = "calorie_goal";
+    private static final String KEY_WATER_GOAL   = "water_goal";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -41,4 +43,10 @@ public class PrefManager {
         editor.clear();
         editor.apply();
     }
+
+    public void setCalorieGoal(int goal) { editor.putInt(KEY_CALORIE_GOAL, goal); editor.apply(); }
+    public int getCalorieGoal()          { return sharedPreferences.getInt(KEY_CALORIE_GOAL, 2000); }
+
+    public void setWaterGoal(int goal)   { editor.putInt(KEY_WATER_GOAL, goal); editor.apply(); }
+    public int getWaterGoal()            { return sharedPreferences.getInt(KEY_WATER_GOAL, 2000); }
 }

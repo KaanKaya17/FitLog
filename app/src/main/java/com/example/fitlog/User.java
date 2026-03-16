@@ -2,7 +2,7 @@ package com.example.fitlog;
 
 public class User {
     // Veritabanındaki sütun isimleriyle birebir aynı olmalı
-    private int user_id;
+    private transient  int user_id;
     private String username;
     private String email;
     private String password_hash;

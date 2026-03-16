@@ -15,8 +15,7 @@ import java.util.List;
 
 public class WaterTrack extends AppCompatActivity {
 
-    private static final int DAILY_GOAL_ML = 2000;
-
+    private int dailyGoal;
     ProgressBar progressWater;
     TextView tvCurrentAmount;
     TextView tvPercent;
@@ -35,6 +34,10 @@ public class WaterTrack extends AppCompatActivity {
         editTextCustomAmount = findViewById(R.id.editTextCustomAmount);
 
         // Bugünkü toplam suyu Supabase'den çek
+        PrefManager pref = new PrefManager(this);
+        dailyGoal = pref.getWaterGoal(); // 2000 yerine
+
+        progressWater.setMax(dailyGoal); // ← max'ı da güncelle
         loadTodayWater();
     }
 
@@ -95,26 +98,22 @@ public class WaterTrack extends AppCompatActivity {
     // ─── Animasyonlu UI güncelleme ──────────────────────────────────
 
     private void updateUI(int totalMl) {
-        // Sayı animasyonu (progress bar)
         ObjectAnimator animator = ObjectAnimator.ofInt(progressWater, "progress", progressWater.getProgress(), totalMl);
         animator.setDuration(600);
         animator.setInterpolator(new DecelerateInterpolator());
         animator.start();
 
-        // Metin güncelle
         tvCurrentAmount.setText(String.valueOf(totalMl));
 
-        int percent = (int) ((totalMl / (float) DAILY_GOAL_ML) * 100);
-        percent = Math.min(percent, 100); // 100'ü geçmesin
+        int percent = (int) ((totalMl / (float) dailyGoal) * 100);
+        percent = Math.min(percent, 100);
 
-        tvPercent.setText("%" + percent + " tamamlandı");
-
-        // Hedefe ulaşıldıysa rengi değiştir
-        if (totalMl >= DAILY_GOAL_ML) {
+        if (totalMl >= dailyGoal) {
             tvPercent.setText("🎉 Günlük hedefe ulaştın!");
             tvPercent.setTextColor(getColor(android.R.color.holo_blue_dark));
         } else {
-            tvPercent.setTextColor(getColor(R.color.green)); // colors.xml'deki #4CAF50
+            tvPercent.setText("%" + percent + " tamamlandı");
+            tvPercent.setTextColor(getColor(R.color.green));
         }
     }
 

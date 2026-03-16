@@ -2,12 +2,14 @@ package com.example.fitlog;
 
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -78,5 +80,15 @@ public interface SupabaseApi {
             @Query("log_id") String logIdFilter
     );
     //---
+
+    @PATCH("rest/v1/users")
+    Call<Void> updateUserGoals(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Header("Content-Type") String contentType,
+            @Header("Prefer") String prefer,
+            @Query("user_id") String userIdFilter,
+            @Body Map<String, Integer> body
+    );
 
 }

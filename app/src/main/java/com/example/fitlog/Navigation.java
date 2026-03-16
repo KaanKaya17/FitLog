@@ -39,4 +39,6 @@ public class Navigation {
     public static void toLoginAndClear(Activity from) { goAndClear(from, UserLogin.class); }
     public static void toMealList(Activity from) { go(from, MealListActivity.class); }
 
+    public static void toSettings(Activity from) { go(from, Settings.class); }
+
 }
