@@ -1,4 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Turkish</item>
+    </string-array>
     <string name="app_name">FitLog</string>
     <string name="water_title">Water Tracker</string>
     <string name="water_subtitle">Stay hydrated today</string>

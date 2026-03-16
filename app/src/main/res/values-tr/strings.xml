@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="languages">
+        <item>İngilizce</item>
+        <item>Türkçe</item>
+    </string-array>
+    <string name="app_name">FitLog</string>
+    <string name="water_title">Su Takibi</string>
+    <string name="water_subtitle">Bugün yeterince su iç</string>
+    <string name="water_daily_goal">Günlük hedef</string>
+    <string name="water_goal_label"> / 2500 ml</string>
+    <string name="water_remaining">%0 tamamlandı · 2500 ml kaldı</string>
+    <string name="water_glasses">Bardaklar (her biri 250 ml)</string>
+    <string name="water_add">Hızlı ekle</string>
+    <string name="water_reset">Sıfırla</string>
+</resources>
