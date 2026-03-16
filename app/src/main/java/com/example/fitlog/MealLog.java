@@ -2,6 +2,7 @@ package com.example.fitlog;
 
 public class MealLog {
     private int user_id;
+    private int log_id;
     private String food_name;
     private String serving_size;
     private int calories;
@@ -10,6 +11,8 @@ public class MealLog {
     private float fat;
     private float fiber;
     private String confidence;
+
+    public MealLog() {}
 
     public MealLog(int userId, NutritionData data) {
         this.user_id       = userId;
@@ -42,4 +45,7 @@ public class MealLog {
     public void setFiber(float fiber)            { this.fiber = fiber; }
     public String getConfidence()                { return confidence; }
     public void setConfidence(String confidence) { this.confidence = confidence; }
+
+    public int getLog_id() { return log_id; }
+    public void setLog_id(int log_id) { this.log_id = log_id; }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -68,6 +69,13 @@ public interface SupabaseApi {
             @Header("Accept") String accept,
             @Query("user_id") String userIdFilter,
             @Query("eaten_at") String dateFilter
+    );
+
+    @DELETE("rest/v1/meal_log")
+    Call<Void> deleteMealLog(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Query("log_id") String logIdFilter
     );
     //---
 

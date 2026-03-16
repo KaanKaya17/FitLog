@@ -238,7 +238,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void navStatistic(View view) {
-        Intent intent = new Intent(this, WaterTrack.class);
-        startActivity(intent);
+        Navigation.toMealList(this);
     }
 }

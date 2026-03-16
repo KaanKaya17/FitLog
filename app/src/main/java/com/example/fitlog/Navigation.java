@@ -37,4 +37,6 @@ public class Navigation {
 
     // Logout özel - stack temizlenir
     public static void toLoginAndClear(Activity from) { goAndClear(from, UserLogin.class); }
+    public static void toMealList(Activity from) { go(from, MealListActivity.class); }
+
 }
