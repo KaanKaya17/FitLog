@@ -50,22 +50,24 @@ public class Settings extends AppCompatActivity {
         spinnerLanguage.setAdapter(adapter);
 
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            boolean isFirstLoad = true; // ← BU SATIRI EKLE
+
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if(position == 0){
-                    setLocale("en");
+                if (isFirstLoad) {          // ← İLK YÜKLEMEDE ATLA
+                    isFirstLoad = false;
+                    return;
                 }
-                else if(position == 1){
+
+                if (position == 0) {
+                    setLocale("en");
+                } else if (position == 1) {
                     setLocale("tr");
                 }
-
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         initViews();
@@ -222,5 +224,9 @@ public class Settings extends AppCompatActivity {
     }
     public void navMealList(View view){
         Navigation.toMealList(this);
+    }
+
+    public void btnAboutProject(View view){
+        Navigation.toAboutProject(this);
     }
 }
