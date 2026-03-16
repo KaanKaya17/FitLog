@@ -4,6 +4,8 @@ public class WaterLog {
     private int user_id;
     private int amount_ml;
 
+    private String consumed_at;
+
     public WaterLog() {}
 
     public WaterLog(int user_id, int amount_ml) {
@@ -16,4 +18,7 @@ public class WaterLog {
 
     public int getAmount_ml()               { return amount_ml; }
     public void setAmount_ml(int amount_ml) { this.amount_ml = amount_ml; }
+
+    public String getConsumed_at() { return consumed_at; }
+    public void setConsumed_at(String consumed_at) { this.consumed_at = consumed_at; }
 }

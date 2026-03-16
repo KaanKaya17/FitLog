@@ -48,4 +48,9 @@ public class MealLog {
 
     public int getLog_id() { return log_id; }
     public void setLog_id(int log_id) { this.log_id = log_id; }
+
+    private String eaten_at;
+
+    public String getEaten_at() { return eaten_at; }
+    public void setEaten_at(String eaten_at) { this.eaten_at = eaten_at; }
 }
