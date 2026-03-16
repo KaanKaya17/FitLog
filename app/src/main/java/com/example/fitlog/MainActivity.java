@@ -90,4 +90,9 @@ public class MainActivity extends AppCompatActivity {
     public void closeInformation(View view){
         InformationCard.getInstance().hide();
     }
+
+    public void navStatistic(View view){
+        Intent intent = new Intent(this,WaterTrack.class);
+        startActivity(intent);
+    }
 }
