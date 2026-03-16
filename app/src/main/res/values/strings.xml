@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">FitLog</string>
+    <string name="water_title">Water Tracker</string>
+    <string name="water_subtitle">Stay hydrated today</string>
+    <string name="water_daily_goal">Daily goal</string>
+    <string name="water_goal_label"> / 2500 ml</string>
+    <string name="water_remaining">0% completed · 2500 ml remaining</string>
+    <string name="water_glasses">Glasses (250 ml each)</string>
+    <string name="water_add">Quick add</string>
+    <string name="water_reset">Reset</string>
 </resources>

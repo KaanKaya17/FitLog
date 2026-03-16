@@ -1,5 +1,6 @@
 package com.example.fitlog;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -121,5 +122,9 @@ public class UserRegister extends AppCompatActivity {
         }).start();
     }
 
+    public void btnUserLogin(View view){
+        Intent intent = new Intent(this, UserLogin.class);
+        startActivity(intent);
+    }
 
 }

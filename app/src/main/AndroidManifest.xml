@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitLog">
         <activity
+            android:name=".UserLogin"
+            android:exported="false" />
+        <activity
             android:name=".UserRegister"
             android:exported="false" />
         <activity

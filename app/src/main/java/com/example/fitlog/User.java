@@ -2,6 +2,7 @@ package com.example.fitlog;
 
 public class User {
     // Veritabanındaki sütun isimleriyle birebir aynı olmalı
+    private int user_id;
     private String username;
     private String email;
     private String password_hash;
@@ -44,4 +45,7 @@ public class User {
 
     public String getLast_name() { return last_name; }
     public void setLast_name(String last_name) { this.last_name = last_name; }
+
+    public int getId() { return user_id; }
+    public void setId(int id) { this.user_id = id; }
 }

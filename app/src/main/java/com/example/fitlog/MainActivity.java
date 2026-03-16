@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +22,11 @@ public class MainActivity extends AppCompatActivity {
 
         //testSupabaseConnection();
 
-        InformationCard.getInstance().init(this);
-        InformationCard.getInstance().show("Kalori Nedir?", "Kalori, besinlerin içerdiği enerji miktarını ölçen birimdir.");
+        //InformationCard.getInstance().init(this);
+        //InformationCard.getInstance().show("Kalori Nedir?", "Kalori, besinlerin içerdiği enerji miktarını ölçen birimdir.");
+
+        PrefManager manager = new PrefManager(this);
+        Toast.makeText(this, "Id : " + manager.getIid(), Toast.LENGTH_LONG).show();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
