@@ -72,4 +72,8 @@ public class Profile extends AppCompatActivity {
     public void navMealList(View view){
         Navigation.toMealList(this);
     }
+
+    public void btnSettings(View view){
+        Navigation.toSettings(this);
+    }
 }

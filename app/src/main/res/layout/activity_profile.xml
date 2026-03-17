@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F8F9FA"
-    tools:context=".ProfileActivity">
+    tools:context=".Profile">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -405,7 +405,48 @@
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
                 android:backgroundTint="#E53935"
-                android:onClick="btnUserLogOut" />
+                android:onClick="btnUserLogOut" />,
+
+            <LinearLayout
+                android:id="@+id/btnSettings"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:background="@drawable/edittext_bg"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:clickable="true"
+                android:onClick="btnSettings"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@android:drawable/ic_menu_manage"
+                    app:tint="#4CAF50"
+                    android:layout_marginEnd="12dp"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Uygulama Ayarları"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A1A2E" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="›"
+                    android:textSize="20sp"
+                    android:textColor="#CCCCCC" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
