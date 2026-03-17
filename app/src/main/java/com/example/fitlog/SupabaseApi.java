@@ -61,7 +61,7 @@ public interface SupabaseApi {
             @Header("Authorization") String authHeader,
             @Header("Content-Type") String contentType,
             @Header("Prefer") String prefer,
-            @Body MealLog mealLog
+            @Body MealInsertDto mealLog
     );
 
     @GET("rest/v1/meal_log")

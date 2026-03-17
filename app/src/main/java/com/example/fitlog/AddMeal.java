@@ -147,7 +147,7 @@ public class AddMeal extends AppCompatActivity {
                 String authHeader = "Bearer " + apiKey;
 
                 PrefManager pref = new PrefManager(this);
-                MealLog mealLog  = new MealLog(pref.getId(), data);
+                MealInsertDto mealLog  = new MealInsertDto(pref.getId(), data);
 
                 retrofit2.Response<Void> response = api.insertMealLog(
                         apiKey,

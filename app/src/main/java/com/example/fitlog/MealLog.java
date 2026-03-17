@@ -1,11 +1,8 @@
 package com.example.fitlog;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
 public class MealLog {
     private int user_id;
-    private transient int log_id;
+    private int log_id;
     private String food_name;
     private String serving_size;
     private int calories;
