@@ -24,11 +24,10 @@
             android:paddingTop="40dp"
             android:paddingBottom="24dp">
 
-            <!-- Başlık Alanı -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hesap Oluştur"
+                android:text="@string/register_title"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -37,16 +36,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bilgilerinizi doldurun"
+                android:text="@string/register_subtitle"
                 android:textSize="14sp"
                 android:textColor="#9E9E9E"
                 android:layout_marginBottom="32dp" />
 
-            <!-- Kullanıcı Adı -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kullanıcı Adı"
+                android:text="@string/register_label_username"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -56,20 +54,20 @@
                 android:id="@+id/editTextName"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:hint="Kullanıcı adınızı giriniz"
+                android:hint="@string/register_hint_username"
                 android:textSize="15sp"
                 android:layout_marginBottom="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:background="@drawable/edittext_bg"
                 android:textColor="#1A1A2E"
-                android:inputType="text" />
+                android:inputType="text"
+                android:importantForAutofill="no" />
 
-            <!-- E-Posta -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="E-Posta"
+                android:text="@string/login_label_email"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -79,20 +77,20 @@
                 android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:hint="Mail adresinizi giriniz"
+                android:hint="@string/login_hint_email"
                 android:textSize="15sp"
                 android:layout_marginBottom="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:background="@drawable/edittext_bg"
                 android:textColor="#1A1A2E"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:autofillHints="emailAddress" />
 
-            <!-- Şifre -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Şifre"
+                android:text="@string/login_label_password"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -102,21 +100,22 @@
                 android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:hint="Şifrenizi giriniz"
+                android:hint="@string/login_hint_password"
                 android:textSize="15sp"
                 android:layout_marginBottom="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:background="@drawable/edittext_bg"
                 android:textColor="#1A1A2E"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:autofillHints="password" />
 
-            <!-- İsim - Soyisim yan yana -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -128,7 +127,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="İsim"
+                        android:text="@string/register_label_firstname"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E"
@@ -138,14 +137,14 @@
                         android:id="@+id/editTextFirstName"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        android:hint="İsminiz"
+                        android:hint="@string/register_hint_firstname"
                         android:textSize="15sp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:background="@drawable/edittext_bg"
                         android:textColor="#1A1A2E"
-                        android:inputType="textPersonName" />
-
+                        android:inputType="textPersonName"
+                        android:autofillHints="personGivenName" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -158,7 +157,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Soyisim"
+                        android:text="@string/register_label_lastname"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E"
@@ -168,56 +167,55 @@
                         android:id="@+id/editTextLastName"
                         android:layout_width="match_parent"
                         android:layout_height="52dp"
-                        android:hint="Soyadınız"
+                        android:hint="@string/register_hint_lastname"
                         android:textSize="15sp"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:background="@drawable/edittext_bg"
                         android:textColor="#1A1A2E"
-                        android:inputType="textPersonName" />
-
+                        android:inputType="textPersonName"
+                        android:autofillHints="personFamilyName" />
                 </LinearLayout>
-
             </LinearLayout>
 
-            <!-- Kayıt Ol Butonu -->
             <Button
                 android:id="@+id/btnAddUser"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="8dp"
-                android:text="Kayıt Ol"
+                android:text="@string/register_action_register"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
                 android:backgroundTint="#4CAF50"
                 android:onClick="btnAddUser" />
 
-            <!-- Giriş Yap yönlendirme -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp">
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Zaten hesabın var mı? "
+                    android:text="@string/register_footer_has_account"
                     android:textSize="14sp"
-                    android:textColor="#9E9E9E" />
+                    android:textColor="#9E9E9E"
+                    android:layout_marginEnd="4dp" />
 
                 <TextView
-                    android:clickable="true"
-                    android:onClick="btnUserLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Giriş Yap"
+                    android:text="@string/login_action_login"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#4CAF50" />
-
+                    android:textColor="#4CAF50"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="btnUserLogin" />
             </LinearLayout>
 
         </LinearLayout>

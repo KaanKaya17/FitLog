@@ -24,11 +24,10 @@
             android:paddingTop="40dp"
             android:paddingBottom="24dp">
 
-            <!-- Başlık -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Öğün Ekle"
+                android:text="@string/add_meal_title"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -37,12 +36,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AI ile besin değerlerini analiz et"
+                android:text="@string/add_meal_subtitle"
                 android:textSize="14sp"
                 android:textColor="#9E9E9E"
                 android:layout_marginBottom="32dp" />
 
-            <!-- Giriş Kartı -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +52,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yemek Adı"
+                    android:text="@string/add_meal_label_food_name"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A2E"
@@ -64,7 +62,7 @@
                     android:id="@+id/etFood"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:hint="örn: 2 porsiyon pilav, 1 adet elma..."
+                    android:hint="@string/add_meal_hint_food"
                     android:textSize="15sp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
@@ -73,12 +71,11 @@
                     android:inputType="text"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Analiz Et Butonu -->
                 <Button
                     android:id="@+id/btnAnalyze"
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
-                    android:text="🔍  AI ile Analiz Et"
+                    android:text="@string/add_meal_btn_analyze"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:textColor="#FFFFFF"
@@ -86,7 +83,6 @@
 
             </LinearLayout>
 
-            <!-- Loading -->
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
@@ -96,7 +92,6 @@
                 android:visibility="gone"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Sonuç Kartı (başta gizli) -->
             <LinearLayout
                 android:id="@+id/cardResult"
                 android:layout_width="match_parent"
@@ -107,7 +102,6 @@
                 android:layout_marginBottom="16dp"
                 android:visibility="gone">
 
-                <!-- Yemek adı & porsiyon -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -119,9 +113,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:text="🍽️">
-                    </TextView>
+                        android:text="🍽️" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -133,7 +125,7 @@
                             android:id="@+id/tvFoodName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Yemek Adı"
+                            android:text="@string/add_meal_label_food_name"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:textColor="#1A1A2E" />
@@ -142,19 +134,18 @@
                             android:id="@+id/tvServingSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Porsiyon"
+                            android:text="@string/add_meal_label_serving"
                             android:textSize="13sp"
                             android:textColor="#9E9E9E"
                             android:layout_marginTop="2dp" />
 
                     </LinearLayout>
 
-                    <!-- Güven Rozeti -->
                     <TextView
                         android:id="@+id/tvConfidence"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="high"
+                        android:text="@string/add_meal_confidence_high"
                         android:textSize="11sp"
                         android:textStyle="bold"
                         android:textColor="#4CAF50"
@@ -166,14 +157,12 @@
 
                 </LinearLayout>
 
-                <!-- Ayırıcı -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#F0F0F0"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Kalori - büyük gösterim -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -195,20 +184,18 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="kcal"
+                        android:text="@string/unit_kcal"
                         android:textSize="14sp"
                         android:textColor="#4CAF50" />
 
                 </LinearLayout>
 
-                <!-- Makro değerler - yan yana 3'lü -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="8dp">
 
-                    <!-- Protein -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -231,14 +218,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Protein"
+                            android:text="@string/add_meal_macro_protein"
                             android:textSize="11sp"
                             android:textColor="#9E9E9E"
                             android:layout_marginTop="2dp" />
-
                     </LinearLayout>
 
-                    <!-- Karbonhidrat -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -262,14 +247,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Karb."
+                            android:text="@string/add_meal_macro_carbs"
                             android:textSize="11sp"
                             android:textColor="#9E9E9E"
                             android:layout_marginTop="2dp" />
-
                     </LinearLayout>
 
-                    <!-- Yağ -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -292,16 +275,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Yağ"
+                            android:text="@string/add_meal_macro_fat"
                             android:textSize="11sp"
                             android:textColor="#9E9E9E"
                             android:layout_marginTop="2dp" />
-
                     </LinearLayout>
-
                 </LinearLayout>
 
-                <!-- Lif -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
@@ -316,7 +296,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="🌾  Lif"
+                        android:text="@string/add_meal_macro_fiber"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -328,17 +308,15 @@
                         android:text="0g"
                         android:textSize="14sp"
                         android:textColor="#9E9E9E" />
-
                 </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Kaydet Butonu (başta gizli) -->
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:text="Öğünü Kaydet"
+                android:text="@string/add_meal_btn_save"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"

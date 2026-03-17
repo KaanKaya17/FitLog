@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Home"
+                android:text="@string/nav_home"
                 android:textSize="11sp"
                 android:textAlignment="center"
                 android:textColor="#64748B"/>
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Statistic"
+                android:text="@string/nav_statistics"
                 android:textSize="11sp"
                 android:textColor="#64748B"/>
         </LinearLayout>
@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Meal List"
+                android:text="@string/nav_meals"
                 android:textSize="11sp"
                 android:textColor="#64748B"/>
         </LinearLayout>
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Profile"
+                android:text="@string/nav_profile"
                 android:textAlignment="center"
                 android:textSize="11sp"
                 android:textColor="#64748B"/>

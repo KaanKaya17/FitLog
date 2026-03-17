@@ -1,112 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/edittext_bg"
-    android:layout_marginBottom="16dp">
+    android:layout_marginBottom="16dp"
+    android:animateLayoutChanges="true"> <LinearLayout
+    android:id="@+id/layoutHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
 
-    <!-- Tarih Header -->
     <LinearLayout
-        android:id="@+id/layoutHeader"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="16dp"
-        android:clickable="true"
-        android:focusable="true">
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvDayLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Bugün"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#1A1A2E" />
-
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="16 Mart 2025"
-                android:textSize="12sp"
-                android:textColor="#9E9E9E"
-                android:layout_marginTop="2dp" />
-
-        </LinearLayout>
-
-        <!-- Kalori badge -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@drawable/badge_green"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:layout_marginEnd="8dp">
-
-            <TextView
-                android:id="@+id/tvDayCalories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="#4CAF50" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="kcal"
-                android:textSize="10sp"
-                android:textColor="#4CAF50" />
-
-        </LinearLayout>
-
-        <!-- Expand oku -->
         <TextView
-            android:id="@+id/tvExpandArrow"
+            android:id="@+id/tvDayLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="›"
-            android:textSize="22sp"
-            android:textColor="#CCCCCC" />
+            android:text="@string/history_today"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A2E" />
 
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="16 Mart 2026"
+            android:textSize="12sp"
+            android:textColor="#9E9E9E"
+            android:layout_marginTop="2dp"
+            tools:text="17 Mart 2026" />
     </LinearLayout>
 
-    <!-- Detay alanı (başta gizli) -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/badge_green"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:layout_marginEnd="12dp">
+
+        <TextView
+            android:id="@+id/tvDayCalories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1850"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#4CAF50" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/unit_kcal"
+            android:textSize="10sp"
+            android:textColor="#4CAF50" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvExpandArrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="›"
+        android:textSize="22sp"
+        android:textColor="#CCCCCC"
+        android:importantForAccessibility="no" />
+</LinearLayout>
+
     <LinearLayout
         android:id="@+id/layoutDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <!-- Ayırıcı -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#F0F0F0" />
 
-        <!-- Su + Makro özet -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:baselineAligned="false">
 
-            <!-- Su -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -118,27 +113,21 @@
                     android:id="@+id/tvDayWater"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0 ml"
-                    android:textSize="15sp"
+                    android:text="1500 ml"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A2E" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="💧 Su"
+                    android:text="@string/history_label_water_icon"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
-                    android:layout_marginTop="2dp" />
-
+                    android:textColor="#9E9E9E" />
             </LinearLayout>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#F0F0F0" />
+            <View android:layout_width="1dp" android:layout_height="30dp" android:background="#F0F0F0" android:layout_gravity="center_vertical"/>
 
-            <!-- Protein -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -150,27 +139,21 @@
                     android:id="@+id/tvDayProtein"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0g"
-                    android:textSize="15sp"
+                    android:text="85g"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A2E" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Protein"
+                    android:text="@string/history_label_protein"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
-                    android:layout_marginTop="2dp" />
-
+                    android:textColor="#9E9E9E" />
             </LinearLayout>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#F0F0F0" />
+            <View android:layout_width="1dp" android:layout_height="30dp" android:background="#F0F0F0" android:layout_gravity="center_vertical"/>
 
-            <!-- Karb -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -182,27 +165,21 @@
                     android:id="@+id/tvDayCarbs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0g"
-                    android:textSize="15sp"
+                    android:text="210g"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A2E" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Karb."
+                    android:text="@string/history_label_carbs"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
-                    android:layout_marginTop="2dp" />
-
+                    android:textColor="#9E9E9E" />
             </LinearLayout>
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:background="#F0F0F0" />
+            <View android:layout_width="1dp" android:layout_height="30dp" android:background="#F0F0F0" android:layout_gravity="center_vertical"/>
 
-            <!-- Yağ -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -214,24 +191,20 @@
                     android:id="@+id/tvDayFat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0g"
-                    android:textSize="15sp"
+                    android:text="45g"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A2E" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yağ"
+                    android:text="@string/history_label_fat"
                     android:textSize="11sp"
-                    android:textColor="#9E9E9E"
-                    android:layout_marginTop="2dp" />
-
+                    android:textColor="#9E9E9E" />
             </LinearLayout>
-
         </LinearLayout>
 
-        <!-- Ayırıcı -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -239,11 +212,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp" />
 
-        <!-- Öğün listesi başlığı -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Öğünler"
+            android:text="@string/history_label_meals"
             android:textSize="12sp"
             android:textStyle="bold"
             android:textColor="#9E9E9E"
@@ -251,7 +223,6 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- Öğün listesi container -->
         <LinearLayout
             android:id="@+id/layoutMeals"
             android:layout_width="match_parent"
@@ -260,7 +231,5 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingBottom="12dp" />
-
     </LinearLayout>
-
 </LinearLayout>

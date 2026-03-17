@@ -20,18 +20,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Üst Banner / Header Alanı -->
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="160dp">
 
-                <!-- Yeşil banner arka planı -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:background="#4CAF50" />
 
-                <!-- Profil Fotoğrafı -->
                 <ImageView
                     android:id="@+id/imgProfilePhoto"
                     android:layout_width="88dp"
@@ -40,11 +37,10 @@
                     android:src="@drawable/ic_launcher_foreground"
                     android:padding="4dp"
                     android:scaleType="centerCrop"
-                    android:contentDescription="Profil Fotoğrafı" />
+                    android:contentDescription="@string/profile_action_edit" />
 
             </FrameLayout>
 
-            <!-- İsim & Kullanıcı Adı -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,7 +53,7 @@
                     android:id="@+id/tvFullName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ad Soyad"
+                    android:text="@string/profile_label_firstname"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A2E" />
@@ -66,14 +62,13 @@
                     android:id="@+id/tvUsername"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@kullaniciadi"
+                    android:text="@string/home_default_user"
                     android:textSize="14sp"
                     android:textColor="#9E9E9E"
                     android:layout_marginTop="2dp" />
 
             </LinearLayout>
 
-            <!-- İstatistik Kartları -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,7 +77,6 @@
                 android:paddingEnd="24dp"
                 android:paddingBottom="24dp">
 
-                <!-- Antrenman -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -105,14 +99,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Antrenman"
+                        android:text="@string/profile_label_workout"
                         android:textSize="12sp"
                         android:textColor="#9E9E9E"
                         android:layout_marginTop="2dp" />
-
                 </LinearLayout>
 
-                <!-- Gün -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -136,14 +128,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Gün"
+                        android:text="@string/profile_label_day"
                         android:textSize="12sp"
                         android:textColor="#9E9E9E"
                         android:layout_marginTop="2dp" />
-
                 </LinearLayout>
 
-                <!-- Kalori -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -166,20 +156,17 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Kalori"
+                        android:text="@string/profile_label_calorie"
                         android:textSize="12sp"
                         android:textColor="#9E9E9E"
                         android:layout_marginTop="2dp" />
-
                 </LinearLayout>
-
             </LinearLayout>
 
-            <!-- Hesap Bilgileri Başlığı -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hesap Bilgileri"
+                android:text="@string/profile_header_account"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#9E9E9E"
@@ -187,7 +174,6 @@
                 android:paddingEnd="24dp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Bilgi Kartı -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -197,7 +183,6 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="16dp">
 
-                <!-- E-posta Satırı -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
@@ -210,7 +195,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="E-Posta"
+                        android:text="@string/profile_label_email"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -222,18 +207,10 @@
                         android:text="ornek@mail.com"
                         android:textSize="14sp"
                         android:textColor="#9E9E9E" />
-
                 </LinearLayout>
 
-                <!-- Ayırıcı -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#F0F0F0"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" />
 
-                <!-- İsim Satırı -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
@@ -246,7 +223,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="İsim"
+                        android:text="@string/profile_label_firstname"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -258,18 +235,10 @@
                         android:text="—"
                         android:textSize="14sp"
                         android:textColor="#9E9E9E" />
-
                 </LinearLayout>
 
-                <!-- Ayırıcı -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#F0F0F0"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" />
 
-                <!-- Soyisim Satırı -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
@@ -282,7 +251,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Soyisim"
+                        android:text="@string/profile_label_lastname"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -294,16 +263,13 @@
                         android:text="—"
                         android:textSize="14sp"
                         android:textColor="#9E9E9E" />
-
                 </LinearLayout>
-
             </LinearLayout>
 
-            <!-- Ayarlar Başlığı -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ayarlar"
+                android:text="@string/profile_header_settings"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#9E9E9E"
@@ -311,7 +277,6 @@
                 android:paddingEnd="24dp"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Ayarlar Kartı -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -321,7 +286,6 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="16dp">
 
-                <!-- Profili Düzenle -->
                 <LinearLayout
                     android:id="@+id/btnEditProfile"
                     android:layout_width="match_parent"
@@ -337,7 +301,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Profili Düzenle"
+                        android:text="@string/profile_action_edit"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -348,18 +312,10 @@
                         android:text="›"
                         android:textSize="20sp"
                         android:textColor="#CCCCCC" />
-
                 </LinearLayout>
 
-                <!-- Ayırıcı -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#F0F0F0"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#F0F0F0" android:layout_marginStart="16dp" android:layout_marginEnd="16dp" />
 
-                <!-- Şifre Değiştir -->
                 <LinearLayout
                     android:id="@+id/btnChangePassword"
                     android:layout_width="match_parent"
@@ -375,7 +331,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Şifre Değiştir"
+                        android:text="@string/profile_action_change_password"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -386,26 +342,8 @@
                         android:text="›"
                         android:textSize="20sp"
                         android:textColor="#CCCCCC" />
-
                 </LinearLayout>
-
             </LinearLayout>
-
-            <!-- Çıkış Yap Butonu -->
-            <Button
-                android:id="@+id/btnLogout"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="24dp"
-                android:text="Çıkış Yap"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#E53935"
-                android:onClick="btnUserLogOut" />,
 
             <LinearLayout
                 android:id="@+id/btnSettings"
@@ -418,6 +356,7 @@
                 android:background="@drawable/edittext_bg"
                 android:layout_marginStart="24dp"
                 android:layout_marginEnd="24dp"
+                android:layout_marginBottom="16dp"
                 android:clickable="true"
                 android:onClick="btnSettings"
                 android:focusable="true"
@@ -428,13 +367,14 @@
                     android:layout_height="20dp"
                     android:src="@android:drawable/ic_menu_manage"
                     app:tint="#4CAF50"
-                    android:layout_marginEnd="12dp"/>
+                    android:layout_marginEnd="12dp"
+                    android:importantForAccessibility="no" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Uygulama Ayarları"
+                    android:text="@string/profile_action_app_settings"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="#1A1A2E" />
@@ -445,8 +385,22 @@
                     android:text="›"
                     android:textSize="20sp"
                     android:textColor="#CCCCCC" />
-
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="40dp"
+                android:text="@string/profile_action_logout"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#E53935"
+                android:onClick="btnUserLogOut" />
 
         </LinearLayout>
 

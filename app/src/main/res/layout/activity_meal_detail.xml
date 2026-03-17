@@ -24,12 +24,11 @@
             android:paddingTop="40dp"
             android:paddingBottom="24dp">
 
-            <!-- Geri Butonu -->
             <TextView
                 android:id="@+id/btnBack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="← Geri"
+                android:text="@string/meal_detail_back"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="#4CAF50"
@@ -37,12 +36,11 @@
                 android:clickable="true"
                 android:focusable="true" />
 
-            <!-- Yemek Adı & Porsiyon -->
             <TextView
                 android:id="@+id/tvFoodName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Yemek Adı"
+                android:text="@string/add_meal_label_food_name"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -60,16 +58,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="1 porsiyon"
+                    android:text="@string/add_meal_label_serving"
                     android:textSize="14sp"
                     android:textColor="#9E9E9E" />
 
-                <!-- Güven Rozeti -->
                 <TextView
                     android:id="@+id/tvConfidence"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="high"
+                    android:text="@string/add_meal_confidence_high"
                     android:textSize="11sp"
                     android:textStyle="bold"
                     android:textColor="#4CAF50"
@@ -81,11 +78,10 @@
 
             </LinearLayout>
 
-            <!-- Kalori Ana Kart -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kalori"
+                android:text="@string/meal_detail_label_calories"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -112,23 +108,21 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="kcal"
+                    android:text="@string/unit_kcal"
                     android:textSize="16sp"
                     android:textColor="#9E9E9E" />
 
             </LinearLayout>
 
-            <!-- Makro Değerler Başlığı -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Besin Değerleri"
+                android:text="@string/meal_detail_label_nutrients"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
                 android:layout_marginBottom="6dp" />
 
-            <!-- Makro Kart -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -136,7 +130,6 @@
                 android:background="@drawable/edittext_bg"
                 android:layout_marginBottom="16dp">
 
-                <!-- Protein -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
@@ -155,7 +148,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Protein"
+                        android:text="@string/meal_detail_macro_protein"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -173,7 +166,6 @@
                 <View android:layout_width="match_parent" android:layout_height="1dp"
                     android:background="#F0F0F0" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
 
-                <!-- Karbonhidrat -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
@@ -192,7 +184,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Karbonhidrat"
+                        android:text="@string/meal_detail_macro_carbs"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -210,7 +202,6 @@
                 <View android:layout_width="match_parent" android:layout_height="1dp"
                     android:background="#F0F0F0" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
 
-                <!-- Yağ -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
@@ -229,7 +220,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Yağ"
+                        android:text="@string/meal_detail_macro_fat"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -247,7 +238,6 @@
                 <View android:layout_width="match_parent" android:layout_height="1dp"
                     android:background="#F0F0F0" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
 
-                <!-- Lif -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
@@ -266,7 +256,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Lif"
+                        android:text="@string/meal_detail_macro_fiber"
                         android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
@@ -283,12 +273,11 @@
 
             </LinearLayout>
 
-            <!-- Sil Butonu -->
             <Button
                 android:id="@+id/btnDelete"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
-                android:text="Öğünü Sil"
+                android:text="@string/meal_detail_action_delete"
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -7,9 +8,9 @@
     android:padding="16dp"
     android:layout_marginBottom="12dp"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
-    <!-- Üst satır: isim + kalori -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,25 +28,25 @@
                 android:id="@+id/tvMealName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Yemek Adı"
+                android:text="@string/food_label_default_name"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
                 android:maxLines="1"
-                android:ellipsize="end" />
+                android:ellipsize="end"
+                tools:text="Izgara Somon" />
 
             <TextView
                 android:id="@+id/tvServingSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1 porsiyon"
+                android:text="@string/food_label_serving"
                 android:textSize="12sp"
                 android:textColor="#9E9E9E"
-                android:layout_marginTop="2dp" />
-
+                android:layout_marginTop="2dp"
+                tools:text="200 gram" />
         </LinearLayout>
 
-        <!-- Kalori badge -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,33 +65,30 @@
                 android:text="0"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#4CAF50" />
+                android:textColor="#4CAF50"
+                tools:text="450" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="kcal"
+                android:text="@string/unit_kcal"
                 android:textSize="10sp"
                 android:textColor="#4CAF50" />
-
         </LinearLayout>
-
     </LinearLayout>
 
-    <!-- Ayırıcı -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#F0F0F0"
         android:layout_marginBottom="12dp" />
 
-    <!-- Alt satır: protein / karb / yağ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <!-- Protein -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -110,11 +108,10 @@
                 android:layout_height="wrap_content"
                 android:text="0g P"
                 android:textSize="12sp"
-                android:textColor="#9E9E9E" />
-
+                android:textColor="#9E9E9E"
+                tools:text="35g P" />
         </LinearLayout>
 
-        <!-- Karb -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -134,11 +131,10 @@
                 android:layout_height="wrap_content"
                 android:text="0g K"
                 android:textSize="12sp"
-                android:textColor="#9E9E9E" />
-
+                android:textColor="#9E9E9E"
+                tools:text="12g K" />
         </LinearLayout>
 
-        <!-- Yağ -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -158,18 +154,16 @@
                 android:layout_height="wrap_content"
                 android:text="0g Y"
                 android:textSize="12sp"
-                android:textColor="#9E9E9E" />
-
+                android:textColor="#9E9E9E"
+                tools:text="20g Y" />
         </LinearLayout>
 
-        <!-- Ok -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="›"
             android:textSize="20sp"
-            android:textColor="#CCCCCC" />
-
+            android:textColor="#CCCCCC"
+            android:importantForAccessibility="no" />
     </LinearLayout>
-
 </LinearLayout>

@@ -32,7 +32,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="FitLog"
+                android:text="@string/app_name"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Track your nutrition and water easily"
+                android:text="@string/about_tagline"
                 android:textSize="14sp"
                 android:textColor="#9E9E9E"
                 android:layout_gravity="center"
@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Project"
+                android:text="@string/about_header_project"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -68,7 +68,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FitLog helps you track your daily calorie and water intake. The goal of this project is to help users build healthy habits and monitor their nutrition easily."
+                    android:text="@string/about_project_description"
                     android:textSize="13sp"
                     android:textColor="#444444"/>
 
@@ -78,7 +78,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Application Info"
+                android:text="@string/about_header_app_info"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -95,7 +95,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Version"
+                    android:text="@string/about_label_version"
                     android:textSize="12sp"
                     android:textColor="#9E9E9E"/>
 
@@ -111,7 +111,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Developer"
+                    android:text="@string/about_label_developer"
                     android:textSize="12sp"
                     android:textColor="#9E9E9E"/>
 
@@ -129,7 +129,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contact"
+                android:text="@string/about_header_contact"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"

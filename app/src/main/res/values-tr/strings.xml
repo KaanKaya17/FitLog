@@ -13,4 +13,231 @@
     <string name="water_glasses">Bardaklar (her biri 250 ml)</string>
     <string name="water_add">Hızlı ekle</string>
     <string name="water_reset">Sıfırla</string>
+
+    <!-- About Project -->
+    <string name="about_app_name">FitLog</string>
+    <string name="about_tagline">Beslenmenizi ve su tüketiminizi kolayca takip edin</string>
+
+    <string name="about_header_project">Proje</string>
+    <string name="about_project_description">FitLog, günlük kalori ve su alımınızı takip etmenize yardımcı olur. Bu projenin amacı, kullanıcıların sağlıklı alışkanlıklar edinmelerine ve beslenmelerini kolayca izlemelerine destek olmaktır.</string>
+
+    <string name="about_header_app_info">Uygulama Bilgileri</string>
+    <string name="about_label_version">Versiyon</string>
+    <string name="about_version_value">1.0</string>
+    <string name="about_label_developer">Geliştirici</string>
+    <string name="about_developer_name">Kaan Kaya</string>
+
+    <string name="about_header_contact">İletişim</string>
+    <string name="contact_github">GitHub</string>
+    <string name="contact_website">Web Sitesi</string>
+    <string name="contact_linkedin">LinkedIn</string>
+    <string name="contact_instagram">Instagram</string>
+
+    <!-- Add Meal -->
+    <string name="add_meal_title">Öğün Ekle</string>
+    <string name="add_meal_subtitle">AI ile besin değerlerini analiz et</string>
+
+    <string name="add_meal_label_food_name">Yemek Adı</string>
+    <string name="add_meal_hint_food">örn: 2 porsiyon pilav, 1 adet elma...</string>
+    <string name="add_meal_btn_analyze">🔍  AI ile Analiz Et</string>
+
+    <string name="add_meal_label_serving">Porsiyon</string>
+    <string name="add_meal_confidence_high">Yüksek Güven</string>
+    <string name="add_meal_confidence_medium">Orta Güven</string>
+
+    <string name="add_meal_macro_protein">Protein</string>
+    <string name="add_meal_macro_carbs">Karb.</string>
+    <string name="add_meal_macro_fat">Yağ</string>
+    <string name="add_meal_macro_fiber">🌾  Lif</string>
+
+    <string name="add_meal_btn_save">Öğünü Kaydet</string>
+
+    <string name="error_empty_food">Lütfen bir yemek adı girin</string>
+    <string name="msg_analyzing">Analiz ediliyor...</string>
+
+    <!-- Main -->
+    <string name="unit_kcal"> kcal</string>
+    <string name="unit_ml"> ml</string>
+    <string name="unit_gram">g</string>
+
+    <string name="home_greeting">Günaydın 👋</string>
+    <string name="home_default_user">Kullanıcı</string>
+    <string name="home_label_daily_calories">GÜNLÜK KALORİ</string>
+    <string name="home_calorie_goal_hint">/ 2000 hedef</string>
+
+    <string name="home_macro_protein">Protein</string>
+    <string name="home_macro_carbs">Karbo</string>
+    <string name="home_macro_fat">Yağ</string>
+
+    <string name="home_action_add_meal">🍽️  + Öğün Ekle</string>
+    <string name="home_action_add_water">💧  + Su Ekle</string>
+
+    <string name="home_section_water">SU TAKİBİ</string>
+    <string name="home_water_label">💧  Günlük Su</string>
+    <string name="home_water_format">0 / 2000 ml</string>
+    <string name="home_water_percent_format">%%0 tamamlandı</string>
+    <string name="home_action_detail">Detay →</string>
+
+    <string name="home_section_meals">BUGÜNKÜ ÖĞÜNLER</string>
+    <string name="home_meal_count_format">0 öğün</string>
+    <string name="home_meal_sub">bugün eklendi</string>
+    <string name="home_action_list">Listele →</string>
+
+    <string name="home_motivation_title">Günlük hedefe devam!</string>
+    <string name="home_motivation_subtitle">Bugün henüz öğün eklemedin.</string>
+
+    <!-- Add Meal -->
+    <string name="meal_detail_back">← Geri</string>
+    <string name="meal_detail_label_calories">Kalori</string>
+    <string name="meal_detail_label_nutrients">Besin Değerleri</string>
+
+    <string name="meal_detail_macro_protein">Protein</string>
+    <string name="meal_detail_macro_carbs">Karbonhidrat</string>
+    <string name="meal_detail_macro_fat">Yağ</string>
+    <string name="meal_detail_macro_fiber">Lif</string>
+
+    <string name="meal_detail_action_delete">Öğünü Sil</string>
+
+    <string name="dialog_delete_title">Öğünü Sil</string>
+    <string name="dialog_delete_message">Bu öğünü silmek istediğinizden emin misiniz?</string>
+    <string name="action_confirm">Sil</string>
+    <string name="action_cancel">İptal</string>
+
+    <!-- Profile -->
+    <string name="profile_label_workout">Antrenman</string>
+    <string name="profile_label_day">Gün</string>
+    <string name="profile_label_calorie">Kalori</string>
+
+    <string name="profile_header_account">Hesap Bilgileri</string>
+    <string name="profile_label_email">E-Posta</string>
+    <string name="profile_label_firstname">İsim</string>
+    <string name="profile_label_lastname">Soyisim</string>
+
+    <string name="profile_header_settings">Ayarlar</string>
+    <string name="profile_action_edit">Profili Düzenle</string>
+    <string name="profile_action_change_password">Şifre Değiştir</string>
+    <string name="profile_action_app_settings">Uygulama Ayarları</string>
+    <string name="profile_action_logout">Çıkış Yap</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_subtitle">Günlük hedeflerinizi belirleyin</string>
+
+    <string name="settings_header_language">Dil / Language</string>
+    <string name="settings_label_app_language">🌍 Uygulama Dili</string>
+    <string name="settings_sub_app_language">Uygulama dilini seçin</string>
+
+    <string name="settings_header_goals">Günlük Hedefler</string>
+    <string name="settings_label_calorie_goal">🔥 Günlük Kalori Hedefi</string>
+    <string name="settings_hint_calorie">Önerilen: 1500–2500 kcal</string>
+    <string name="settings_label_water_goal">💧 Günlük Su Hedefi</string>
+    <string name="settings_hint_water">Önerilen: 1500–3000 ml</string>
+
+    <string name="settings_header_current">Mevcut Hedefler</string>
+    <string name="settings_current_kcal_sub">kcal hedef</string>
+    <string name="settings_current_ml_sub">ml hedef</string>
+
+    <string name="settings_action_save">Hedefleri Kaydet</string>
+
+    <string name="settings_header_about">Hakkında</string>
+    <string name="settings_label_about_app">ℹ️ Uygulama Hakkında</string>
+    <string name="settings_sub_about_app">Uygulama bilgileri ve geliştirici</string>
+
+    <!-- User Login -->
+    <string name="login_welcome_back">Tekrar Hoş Geldiniz</string>
+    <string name="login_subtitle">Hesabınıza giriş yapın</string>
+
+    <string name="login_label_email">E-Posta</string>
+    <string name="login_hint_email">Mail adresinizi giriniz</string>
+
+    <string name="login_label_password">Şifre</string>
+    <string name="login_hint_password">Şifrenizi giriniz</string>
+
+    <string name="login_action_forgot_password">Şifremi Unuttum</string>
+    <string name="login_action_login">Giriş Yap</string>
+
+    <string name="login_divider_or">veya</string>
+
+    <string name="login_footer_no_account">Hesabın yok mu?</string>
+    <string name="login_action_register">Kayıt Ol</string>
+
+    <!-- User Register -->
+    <string name="register_title">Hesap Oluştur</string>
+    <string name="register_subtitle">Bilgilerinizi doldurun</string>
+
+    <string name="register_label_username">Kullanıcı Adı</string>
+    <string name="register_hint_username">Kullanıcı adınızı giriniz</string>
+
+    <string name="register_label_firstname">İsim</string>
+    <string name="register_hint_firstname">İsminiz</string>
+
+    <string name="register_label_lastname">Soyisim</string>
+    <string name="register_hint_lastname">Soyadınız</string>
+
+    <string name="register_action_register">Kayıt Ol</string>
+    <string name="register_footer_has_account">Zaten hesabın var mı?</string>
+
+    <!-- Water Track -->
+
+    <string name="water_goal_divider">/ %s ml</string>
+    <string name="water_status_percent">%d%% tamamlandı</string>
+
+    <string name="water_header_quick_add">Hızlı Ekle</string>
+    <string name="water_btn_200">200 ml</string>
+    <string name="water_btn_300">300 ml</string>
+    <string name="water_btn_500">500 ml</string>
+
+    <string name="water_header_manual">Manuel Giriş</string>
+    <string name="water_hint_amount">Miktar (ml)</string>
+    <string name="water_action_add">Ekle</string>
+    <string name="water_action_reset">Günü Sıfırla</string>
+
+    <!-- History Day -->
+    <string name="history_today">Bugün</string>
+    <string name="history_yesterday">Dün</string>
+    <string name="history_label_meals">Öğünler</string>
+    <string name="history_label_water_icon">💧 Su</string>
+    <string name="history_label_protein">Protein</string>
+    <string name="history_label_carbs">Karb.</string>
+    <string name="history_label_fat">Yağ</string>
+
+    <string name="format_kcal">%1$s kcal</string>
+    <string name="format_ml">%1$s ml</string>
+    <string name="format_gram">%1$s g</string>
+
+    <!-- History Meal Row -->
+    <string name="meal_row_default_name">Yemek adı</string>
+    <string name="meal_row_kcal_format">%1$d kcal</string>
+
+    <!-- Item Meal -->
+    <string name="food_label_default_name">Yemek Adı</string>
+    <string name="food_label_serving">1 porsiyon</string>
+
+    <string name="food_format_protein">%1$s g P</string>
+    <string name="food_format_carbs">%1$s g K</string>
+    <string name="food_format_fat">%1$s g Y</string>
+
+    <!-- Nav Bar -->
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_statistics">İstatistik</string>
+    <string name="nav_meals">Öğünler</string>
+    <string name="nav_profile">Profil</string>
+
+    <!-- Meal List -->
+    <string name="meal_list_title">Öğünlerim</string>
+    <string name="meal_list_subtitle_format">Bugün %1$d öğün eklendi</string>
+
+    <string name="meal_list_header_today">Bugün</string>
+    <string name="meal_list_empty_title">Henüz öğün eklenmedi</string>
+    <string name="meal_list_empty_subtitle">Öğün eklemek için + butonuna bas</string>
+
+    <string name="label_kcal">kcal</string>
+    <string name="label_protein">protein</string>
+    <string name="label_carbs">karb.</string>
+    <string name="label_fat">yağ</string>
+
+    <!-- History -->
+    <string name="history_title">Geçmiş</string>
+    <string name="history_subtitle">Son 7 günlük özet</string>
+    <string name="history_empty_state">Henüz geçmiş veri bulunmuyor.</string>
 </resources>

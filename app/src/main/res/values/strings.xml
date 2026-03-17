@@ -13,4 +13,233 @@
     <string name="water_glasses">Glasses (250 ml each)</string>
     <string name="water_add">Quick add</string>
     <string name="water_reset">Reset</string>
+
+    <!-- About Project -->
+    <string name="about_app_name">FitLog</string>
+    <string name="about_tagline">Track your nutrition and water easily</string>
+
+    <string name="about_header_project">Project</string>
+    <string name="about_project_description">FitLog helps you track your daily calorie and water intake. The goal of this project is to help users build healthy habits and monitor their nutrition easily.</string>
+
+    <string name="about_header_app_info">Application Info</string>
+    <string name="about_label_version">Version</string>
+    <string name="about_version_value">1.0</string>
+    <string name="about_label_developer">Developer</string>
+    <string name="about_developer_name">Kaan Kaya</string>
+
+    <string name="about_header_contact">Contact</string>
+    <string name="contact_github">GitHub</string>
+    <string name="contact_website">Website</string>
+    <string name="contact_linkedin">LinkedIn</string>
+    <string name="contact_instagram">Instagram</string>
+
+    <!-- Add Meal -->
+    <string name="add_meal_title">Add Meal</string>
+    <string name="add_meal_subtitle">Analyze nutritional values with AI</string>
+
+    <string name="add_meal_label_food_name">Food Name</string>
+    <string name="add_meal_hint_food">e.g. 2 portions of rice, 1 apple...</string>
+    <string name="add_meal_btn_analyze">🔍 Analyze with AI</string>
+
+    <string name="add_meal_label_serving">Serving</string>
+    <string name="add_meal_confidence_high">High Confidence</string>
+    <string name="add_meal_confidence_medium">Medium Confidence</string>
+
+    <string name="add_meal_macro_protein">Protein</string>
+    <string name="add_meal_macro_carbs">Carbs</string>
+    <string name="add_meal_macro_fat">Fat</string>
+    <string name="add_meal_macro_fiber">🌾 Fiber</string>
+
+    <string name="add_meal_btn_save">Save Meal</string>
+
+    <string name="error_empty_food">Please enter a food name</string>
+    <string name="msg_analyzing">Analyzing...</string>
+
+    <!-- Main -->
+    <string name="unit_kcal"> kcal</string>
+    <string name="unit_ml"> ml</string>
+    <string name="unit_gram">g</string>
+
+    <string name="home_greeting">Good morning 👋</string>
+    <string name="home_default_user">User</string>
+    <string name="home_label_daily_calories">DAILY CALORIES</string>
+    <string name="home_calorie_goal_hint">/ 2000 goal</string>
+
+    <string name="home_macro_protein">Protein</string>
+    <string name="home_macro_carbs">Carbs</string>
+    <string name="home_macro_fat">Fat</string>
+
+    <string name="home_action_add_meal">🍽️ + Add Meal</string>
+    <string name="home_action_add_water">💧 + Add Water</string>
+
+    <string name="home_section_water">WATER TRACKING</string>
+    <string name="home_water_label">💧 Daily Water</string>
+    <string name="home_water_format">0 / 2000 ml</string>
+    <string name="home_water_percent_format">%0 completed</string>
+    <string name="home_action_detail">Details →</string>
+
+    <string name="home_section_meals">TODAY\'S MEALS</string>
+    <string name="home_meal_count_format">0 meals</string>
+    <string name="home_meal_sub">added today</string>
+    <string name="home_action_list">View List →</string>
+
+    <string name="home_motivation_title">Keep going toward your daily goal!</string>
+    <string name="home_motivation_subtitle">You haven\'t added any meals today.</string>
+
+    <!-- Add Meal -->
+    <string name="meal_detail_back">← Back</string>
+    <string name="meal_detail_label_calories">Calories</string>
+    <string name="meal_detail_label_nutrients">Nutritional Values</string>
+
+    <string name="meal_detail_macro_protein">Protein</string>
+    <string name="meal_detail_macro_carbs">Carbohydrates</string>
+    <string name="meal_detail_macro_fat">Fat</string>
+    <string name="meal_detail_macro_fiber">Fiber</string>
+
+    <string name="meal_detail_action_delete">Delete Meal</string>
+
+    <string name="dialog_delete_title">Delete Meal</string>
+    <string name="dialog_delete_message">Are you sure you want to delete this meal?</string>
+    <string name="action_confirm">Delete</string>
+    <string name="action_cancel">Cancel</string>
+
+    <!-- Profile -->
+    <string name="profile_label_workout">Workout</string>
+    <string name="profile_label_day">Day</string>
+    <string name="profile_label_calorie">Calories</string>
+
+    <string name="profile_header_account">Account Information</string>
+    <string name="profile_label_email">Email</string>
+    <string name="profile_label_firstname">First Name</string>
+    <string name="profile_label_lastname">Last Name</string>
+
+    <string name="profile_header_settings">Settings</string>
+    <string name="profile_action_edit">Edit Profile</string>
+    <string name="profile_action_change_password">Change Password</string>
+    <string name="profile_action_app_settings">App Settings</string>
+    <string name="profile_action_logout">Log Out</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_subtitle">Set your daily goals</string>
+
+    <string name="settings_header_language">Language</string>
+    <string name="settings_label_app_language">🌍 App Language</string>
+    <string name="settings_sub_app_language">Select the app language</string>
+
+    <string name="settings_header_goals">Daily Goals</string>
+    <string name="settings_label_calorie_goal">🔥 Daily Calorie Goal</string>
+    <string name="settings_hint_calorie">Recommended: 1500–2500 kcal</string>
+    <string name="settings_label_water_goal">💧 Daily Water Goal</string>
+    <string name="settings_hint_water">Recommended: 1500–3000 ml</string>
+
+    <string name="settings_header_current">Current Goals</string>
+    <string name="settings_current_kcal_sub">kcal goal</string>
+    <string name="settings_current_ml_sub">ml goal</string>
+
+    <string name="settings_action_save">Save Goals</string>
+
+    <string name="settings_header_about">About</string>
+    <string name="settings_label_about_app">ℹ️ About App</string>
+    <string name="settings_sub_about_app">App information and developer</string>
+
+    <!-- User Login -->
+    <string name="login_welcome_back">Welcome Back</string>
+    <string name="login_subtitle">Log in to your account</string>
+
+    <string name="login_label_email">Email</string>
+    <string name="login_hint_email">Enter your email</string>
+
+    <string name="login_label_password">Password</string>
+    <string name="login_hint_password">Enter your password</string>
+
+    <string name="login_action_forgot_password">Forgot Password?</string>
+    <string name="login_action_login">Log In</string>
+
+    <string name="login_divider_or">or</string>
+
+    <string name="login_footer_no_account">Don\'t have an account?</string>
+    <string name="login_action_register">Sign Up</string>
+
+    <!-- User Register -->
+    <string name="register_title">Create Account</string>
+    <string name="register_subtitle">Fill in your information</string>
+
+    <string name="register_label_username">Username</string>
+    <string name="register_hint_username">Enter your username</string>
+
+    <string name="register_label_firstname">First Name</string>
+    <string name="register_hint_firstname">Your first name</string>
+
+    <string name="register_label_lastname">Last Name</string>
+    <string name="register_hint_lastname">Your last name</string>
+
+    <string name="register_action_register">Sign Up</string>
+    <string name="register_footer_has_account">Already have an account?</string>
+
+    <!-- Water Track -->
+
+    <string name="water_goal_divider">/ %s ml</string>
+    <string name="water_status_percent">%d%% completed</string>
+
+    <string name="water_header_quick_add">Quick Add</string>
+    <string name="water_btn_200">200 ml</string>
+    <string name="water_btn_300">300 ml</string>
+    <string name="water_btn_500">500 ml</string>
+
+    <string name="water_header_manual">Manual Entry</string>
+    <string name="water_hint_amount">Amount (ml)</string>
+    <string name="water_action_add">Add</string>
+    <string name="water_action_reset">Reset Day</string>
+
+    <!-- History Day -->
+    <string name="history_today">Today</string>
+    <string name="history_yesterday">Yesterday</string>
+    <string name="history_label_meals">Meals</string>
+    <string name="history_label_water_icon">💧 Water</string>
+    <string name="history_label_protein">Protein</string>
+    <string name="history_label_carbs">Carbs</string>
+    <string name="history_label_fat">Fat</string>
+
+    <string name="format_kcal">%1$s kcal</string>
+    <string name="format_ml">%1$s ml</string>
+    <string name="format_gram">%1$s g</string>
+
+    <!-- History Meal Row -->
+    <string name="meal_row_default_name">Food Name</string>
+    <string name="meal_row_kcal_format">%1$d kcal</string>
+
+    <!-- Item Meal -->
+    <string name="food_label_default_name">Food Name</string>
+    <string name="food_label_serving">1 serving</string>
+
+    <string name="food_format_protein">%1$s g P</string>
+    <string name="food_format_carbs">%1$s g C</string>
+    <string name="food_format_fat">%1$s g F</string>
+
+    <!-- Nav Bar -->
+    <string name="nav_home">Home</string>
+    <string name="nav_statistics">Statistics</string>
+    <string name="nav_meals">Meals</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Meal List -->
+    <string name="meal_list_title">My Meals</string>
+    <string name="meal_list_subtitle_format">%1$d meals added today</string>
+
+    <string name="meal_list_header_today">Today</string>
+    <string name="meal_list_empty_title">No meals added yet</string>
+    <string name="meal_list_empty_subtitle">Tap the + button to add a meal</string>
+
+    <string name="label_kcal">kcal</string>
+    <string name="label_protein">protein</string>
+    <string name="label_carbs">carbs</string>
+    <string name="label_fat">fat</string>
+
+    <!-- History -->
+    <string name="history_title">History</string>
+    <string name="history_subtitle">Summary of the last 7 days</string>
+    <string name="history_empty_state">No historical data available yet.</string>
+
+
 </resources>

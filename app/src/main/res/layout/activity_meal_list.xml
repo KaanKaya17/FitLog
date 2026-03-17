@@ -24,11 +24,10 @@
             android:paddingTop="40dp"
             android:paddingBottom="24dp">
 
-            <!-- Başlık -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Öğünlerim"
+                android:text="@string/meal_list_title"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
@@ -38,19 +37,20 @@
                 android:id="@+id/tvSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bugün 0 öğün eklendi"
+                android:text="@string/meal_list_subtitle_format"
                 android:textSize="14sp"
                 android:textColor="#9E9E9E"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="24dp"
+                tools:text="Bugün 3 öğün eklendi" />
 
-            <!-- Günlük Özet Bandı -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@drawable/edittext_bg"
                 android:padding="16dp"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="24dp"
+                android:baselineAligned="false">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -58,7 +58,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:gravity="center">
-
                     <TextView
                         android:id="@+id/tvTotalCalories"
                         android:layout_width="wrap_content"
@@ -67,21 +66,15 @@
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#4CAF50" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="kcal"
+                        android:text="@string/label_kcal"
                         android:textSize="11sp"
-                        android:textColor="#9E9E9E"
-                        android:layout_marginTop="2dp" />
-
+                        android:textColor="#9E9E9E" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#F0F0F0" />
+                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#F0F0F0" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -89,7 +82,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:gravity="center">
-
                     <TextView
                         android:id="@+id/tvTotalProtein"
                         android:layout_width="wrap_content"
@@ -98,21 +90,15 @@
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="protein"
+                        android:text="@string/label_protein"
                         android:textSize="11sp"
-                        android:textColor="#9E9E9E"
-                        android:layout_marginTop="2dp" />
-
+                        android:textColor="#9E9E9E" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#F0F0F0" />
+                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#F0F0F0" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -120,7 +106,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:gravity="center">
-
                     <TextView
                         android:id="@+id/tvTotalCarbs"
                         android:layout_width="wrap_content"
@@ -129,21 +114,15 @@
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="karb."
+                        android:text="@string/label_carbs"
                         android:textSize="11sp"
-                        android:textColor="#9E9E9E"
-                        android:layout_marginTop="2dp" />
-
+                        android:textColor="#9E9E9E" />
                 </LinearLayout>
 
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#F0F0F0" />
+                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#F0F0F0" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -151,7 +130,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:gravity="center">
-
                     <TextView
                         android:id="@+id/tvTotalFat"
                         android:layout_width="wrap_content"
@@ -160,30 +138,24 @@
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:textColor="#1A1A2E" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="yağ"
+                        android:text="@string/label_fat"
                         android:textSize="11sp"
-                        android:textColor="#9E9E9E"
-                        android:layout_marginTop="2dp" />
-
+                        android:textColor="#9E9E9E" />
                 </LinearLayout>
-
             </LinearLayout>
 
-            <!-- Öğün Listesi -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bugün"
+                android:text="@string/meal_list_header_today"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="#1A1A2E"
                 android:layout_marginBottom="8dp" />
 
-            <!-- Boş durum -->
             <LinearLayout
                 android:id="@+id/layoutEmpty"
                 android:layout_width="match_parent"
@@ -192,33 +164,28 @@
                 android:gravity="center"
                 android:padding="40dp"
                 android:visibility="gone">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="🍽️"
                     android:textSize="48sp"
-                    android:layout_marginBottom="12dp" />
-
+                    android:layout_marginBottom="12dp"
+                    android:importantForAccessibility="no"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Henüz öğün eklenmedi"
+                    android:text="@string/meal_list_empty_title"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#1A1A2E"
-                    android:layout_marginBottom="4dp" />
-
+                    android:textColor="#1A1A2E" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Öğün eklemek için + butonuna bas"
+                    android:text="@string/meal_list_empty_subtitle"
                     android:textSize="13sp"
                     android:textColor="#9E9E9E" />
-
             </LinearLayout>
 
-            <!-- Liste -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerMeals"
                 android:layout_width="match_parent"
@@ -226,18 +193,16 @@
                 android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Öğün ekle FAB -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddMeal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="100dp"
         android:src="@android:drawable/ic_input_add"
-        android:contentDescription="Öğün Ekle"
+        android:contentDescription="@string/meal_row_default_name"
         app:backgroundTint="#4CAF50"
         app:tint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
