@@ -250,4 +250,13 @@ public class MainActivity extends AppCompatActivity {
     public void navStatistic(View view) {
         Navigation.toHistory(this);
     }
+
+    public void navAddMeal(View view) {
+        Navigation.toAddMeal(this);
+    }
+
+    public void navWaterTrack(View view) {
+        Navigation.toWaterTrack(this);
+    }
+
 }
