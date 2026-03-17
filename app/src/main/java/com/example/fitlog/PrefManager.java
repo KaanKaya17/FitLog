@@ -12,6 +12,7 @@ public class PrefManager {
     private static final String KEY_LAST_NAME  = "user_last_name";
     private static final String KEY_CALORIE_GOAL = "calorie_goal";
     private static final String KEY_WATER_GOAL   = "water_goal";
+    private static final String KEY_LANGUAGE     = "app_language";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -51,4 +52,7 @@ public class PrefManager {
 
     public void setWaterGoal(int goal)   { editor.putInt(KEY_WATER_GOAL, goal); editor.apply(); }
     public int getWaterGoal()            { return sharedPreferences.getInt(KEY_WATER_GOAL, 2000); }
+
+    public void setLanguage(String lang) { editor.putString(KEY_LANGUAGE, lang); editor.apply(); }
+    public String getLanguage()          { return sharedPreferences.getString(KEY_LANGUAGE, "en"); } // Varsayılan: İngilizce
 }

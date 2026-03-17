@@ -13,6 +13,7 @@ public class User {
     private String last_name;
     private int daily_calorie_goal;
     private int daily_water_goal_ml;
+    private boolean is_blocked;
 
     // 1. Boş Constructor (GSON'ın nesneyi oluşturabilmesi için gereklidir)
     public User() {}
@@ -56,6 +57,10 @@ public class User {
 
     public int getCalorie_goal() { return daily_calorie_goal; }
     public void setCalorie_goal(int calorie_goal) { this.daily_calorie_goal = calorie_goal; }
+
     public int getWater_goal() { return daily_water_goal_ml; }
     public void setWater_goal(int water_goal) { this.daily_water_goal_ml = water_goal; }
+
+    public boolean isBlocked() { return is_blocked; }
+    public void setBlocked(boolean blocked) { this.is_blocked = blocked; }
 }

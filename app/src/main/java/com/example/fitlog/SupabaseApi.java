@@ -91,4 +91,13 @@ public interface SupabaseApi {
             @Body Map<String, Integer> body
     );
 
+    // Kullanıcıyı ID ile getir (blok kontrolü için)
+    @GET("rest/v1/users")
+    Call<List<User>> getUserById(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Header("Accept") String accept,
+            @Query("user_id") String userIdFilter
+    );
+
 }

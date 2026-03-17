@@ -32,6 +32,11 @@ public class Settings extends AppCompatActivity {
     private PrefManager pref;
 
     @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -49,20 +54,31 @@ public class Settings extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLanguage.setAdapter(adapter);
 
+        // Şu anki dili seçili getir
+        String currentLang = pref.getLanguage();
+        if (currentLang.equals("tr")) {
+            spinnerLanguage.setSelection(1);
+        } else {
+            spinnerLanguage.setSelection(0);
+        }
+
         spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            boolean isFirstLoad = true; // ← BU SATIRI EKLE
+            boolean isFirstLoad = true;
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (isFirstLoad) {          // ← İLK YÜKLEMEDE ATLA
+                if (isFirstLoad) {
                     isFirstLoad = false;
                     return;
                 }
 
-                if (position == 0) {
-                    setLocale("en");
-                } else if (position == 1) {
-                    setLocale("tr");
+                String selectedLang = (position == 0) ? "en" : "tr";
+                String currentLang = pref.getLanguage();
+
+                if (!selectedLang.equals(currentLang)) {
+                    // Dili kaydet ve uygulamayı yeniden başlat
+                    pref.setLanguage(selectedLang);
+                    restartApp();
                 }
             }
 
@@ -83,17 +99,11 @@ public class Settings extends AppCompatActivity {
         });
     }
 
-    private void setLocale(String lang){
-
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
-        recreate();
+    private void restartApp() {
+        android.content.Intent intent = new android.content.Intent(this, MainActivity.class);
+        intent.addFlags(android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK | android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void initViews() {

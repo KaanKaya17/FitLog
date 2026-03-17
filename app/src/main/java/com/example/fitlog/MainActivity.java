@@ -30,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvMotivationSub;
 
     @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -57,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Hesabın bloklu olup olmadığını kontrol et
+        UserStatusChecker.check(this);
         // Başka sayfadan dönünce verileri yenile
         loadDashboardData();
     }

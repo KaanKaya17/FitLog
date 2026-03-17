@@ -14,6 +14,11 @@ import androidx.core.view.WindowInsetsCompat;
 public class AboutProject extends AppCompatActivity {
 
     @Override
+    protected void attachBaseContext(android.content.Context newBase) {
+        super.attachBaseContext(LocaleHelper.setLocale(newBase));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
