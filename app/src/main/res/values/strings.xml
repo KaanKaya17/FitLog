@@ -13,6 +13,10 @@
     <string name="water_glasses">Glasses (250 ml each)</string>
     <string name="water_add">Quick add</string>
     <string name="water_reset">Reset</string>
+    <string name="moto_no_meals">You haven\'t added any meals today.</string>
+    <string name="moto_good_start">Good start, keep going! 💪</string>
+    <string name="moto_getting_close">You\'re getting close to your goal!</string>
+    <string name="moto_goal_reached">Daily calorie goal reached! 🎉</string>
 
     <!-- About Project -->
     <string name="about_app_name">FitLog</string>
@@ -61,6 +65,8 @@
     <string name="unit_gram">g</string>
 
     <string name="home_greeting">Good morning 👋</string>
+    <string name="home_greeting_nice_day">Have a nice day 👋</string>
+    <string name="home_greeting_night">Good evening 👋</string>
     <string name="home_default_user">User</string>
     <string name="home_label_daily_calories">DAILY CALORIES</string>
     <string name="home_calorie_goal_hint">/ 2000 goal</string>

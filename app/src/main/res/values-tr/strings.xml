@@ -13,6 +13,10 @@
     <string name="water_glasses">Bardaklar (her biri 250 ml)</string>
     <string name="water_add">Hızlı ekle</string>
     <string name="water_reset">Sıfırla</string>
+    <string name="moto_no_meals">Bugün henüz öğün eklemedin.</string>
+    <string name="moto_good_start">İyi başlangıç, devam et! 💪</string>
+    <string name="moto_getting_close">Hedefe yaklaşıyorsun!</string>
+    <string name="moto_goal_reached">Günlük kalori hedefine ulaştın! 🎉</string>
 
     <!-- About Project -->
     <string name="about_app_name">FitLog</string>
@@ -61,6 +65,8 @@
     <string name="unit_gram">g</string>
 
     <string name="home_greeting">Günaydın 👋</string>
+    <string name="home_greeting_nice_day">İyi Günler 👋</string>
+    <string name="home_greeting_night">İyi Akşamlar 👋</string>
     <string name="home_default_user">Kullanıcı</string>
     <string name="home_label_daily_calories">GÜNLÜK KALORİ</string>
     <string name="home_calorie_goal_hint">/ 2000 hedef</string>

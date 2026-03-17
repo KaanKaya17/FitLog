@@ -64,7 +64,7 @@ public class AddMeal extends AppCompatActivity {
         btnAnalyze.setOnClickListener(v -> {
             String food = etFood.getText().toString().trim();
             if (food.isEmpty()) {
-                Toast.makeText(this, "Lütfen bir yemek girin.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please Enter A Meal", Toast.LENGTH_SHORT).show();
                 return;
             }
             startLoading();
@@ -168,14 +168,14 @@ public class AddMeal extends AppCompatActivity {
                     if (isFinishing() || isDestroyed()) return;
                     btnSave.setEnabled(true);
                     if (response.isSuccessful()) {
-                        Toast.makeText(this, "✅ Öğün kaydedildi!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "✅ Saved Successfully", Toast.LENGTH_SHORT).show();
                         // Formu temizle
                         etFood.setText("");
                         cardResult.setVisibility(View.GONE);
                         btnSave.setVisibility(View.GONE);
                         lastResult = null;
                     } else {
-                        Toast.makeText(this, "Kayıt sırasında hata oluştu.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error While Saving", Toast.LENGTH_SHORT).show();
                         Log.e("SUPABASE_MEAL", "Hata: " + response.code());
                     }
                 });
@@ -184,7 +184,7 @@ public class AddMeal extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
                     btnSave.setEnabled(true);
-                    Toast.makeText(this, "Bağlantı hatası: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Connection Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
         }).start();

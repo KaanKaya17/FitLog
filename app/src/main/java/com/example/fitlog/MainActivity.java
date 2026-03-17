@@ -92,12 +92,12 @@ public class MainActivity extends AppCompatActivity {
     private void setupGreeting() {
         PrefManager pref = new PrefManager(this);
         String firstName = pref.getFirstName();
-        tvUsername.setText(firstName == null || firstName.isEmpty() ? "Kullanıcı" : firstName);
+        tvUsername.setText(firstName == null || firstName.isEmpty() ? String.valueOf(R.string.home_default_user) : firstName);
 
         int hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
-        if (hour < 12)      tvGreeting.setText("Günaydın 👋");
-        else if (hour < 18) tvGreeting.setText("İyi günler 👋");
-        else                tvGreeting.setText("İyi akşamlar 👋");
+        if (hour < 12)      tvGreeting.setText(R.string.home_greeting);
+        else if (hour < 18) tvGreeting.setText(R.string.home_greeting_nice_day);
+        else                tvGreeting.setText(R.string.home_greeting_night);
 
         String date = new SimpleDateFormat("d MMMM", new Locale("tr")).format(new Date());
         tvDate.setText(date);
@@ -213,13 +213,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Motivasyon
         if (mealCount == 0) {
-            tvMotivationSub.setText("Bugün henüz öğün eklemedin.");
+            tvMotivationSub.setText(R.string.moto_no_meals);
         } else if (calories < calorieGoal * 0.5f) {
-            tvMotivationSub.setText("İyi başlangıç, devam et! 💪");
+            tvMotivationSub.setText(R.string.moto_good_start);
         } else if (calories < calorieGoal) {
-            tvMotivationSub.setText("Hedefe yaklaşıyorsun!");
+            tvMotivationSub.setText(R.string.moto_getting_close);
         } else {
-            tvMotivationSub.setText("Günlük kalori hedefine ulaştın! 🎉");
+            tvMotivationSub.setText(R.string.moto_goal_reached);
         }
     }
 

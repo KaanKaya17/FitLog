@@ -43,17 +43,17 @@ public class GeminiNutritionService {
     public void analyzeTextFood(String foodDescription, NutritionCallback callback) {
         new Thread(() -> {
             try {
-                String prompt = "Sen bir beslenme uzmanısın. \"" + foodDescription + "\" için " +
-                        "beslenme değerlerini TAM OLARAK bu JSON formatında ver, başka hiçbir şey yazma:\n" +
+                String prompt = "You are a professional nutritionist. Provide the nutritional values for \"" + foodDescription + "\" " +
+                        "EXACTLY in this JSON format, do not write any other text or explanation:\n" +
                         "{\n" +
-                        "  \"food_name\": \"yemek adı\",\n" +
-                        "  \"serving_size\": \"porsiyon miktarı\",\n" +
+                        "  \"food_name\": \"name of the food\",\n" +
+                        "  \"serving_size\": \"serving amount (e.g., 1 portion or 100g)\",\n" +
                         "  \"calories\": 0,\n" +
                         "  \"protein\": 0.0,\n" +
                         "  \"carbohydrates\": 0.0,\n" +
                         "  \"fat\": 0.0,\n" +
                         "  \"fiber\": 0.0,\n" +
-                        "  \"confidence\": \"high\"\n" +
+                        "  \"confidence\": \"high/medium/low\"\n" +
                         "}";
 
                 JSONObject textPart = new JSONObject();
