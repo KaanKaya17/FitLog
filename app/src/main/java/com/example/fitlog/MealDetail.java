@@ -103,6 +103,7 @@ public class MealDetail extends AppCompatActivity {
 
     public void navHomePage(View view) {
         Navigation.toMain(this);
+        finish();
     }
 
     public void navProfile(View view) {
@@ -113,8 +114,16 @@ public class MealDetail extends AppCompatActivity {
         } else {
             Navigation.toRegister(this);
         }
+        finish();
     }
+
     public void navMealList(View view){
         Navigation.toMealList(this);
+        finish();
+    }
+
+    public void navStatistic(View view){
+        Navigation.toHistory(this);
+        finish();
     }
 }

@@ -182,4 +182,9 @@ public class UserRegister extends AppCompatActivity {
         Navigation.toMealList(this);
     }
 
+    public void navStatistic(View view){
+        Navigation.toHistory(this);
+        finish();
+    }
+
 }

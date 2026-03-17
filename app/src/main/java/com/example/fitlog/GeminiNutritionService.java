@@ -84,6 +84,7 @@ public class GeminiNutritionService {
                         .build();
 
                 Response response = client.newCall(request).execute();
+                if (response.body() == null) throw new Exception("Sunucudan boş yanıt alındı.");
                 String responseString = response.body().string();
 
                 android.util.Log.d("GEMINI_RAW", responseString);

@@ -67,6 +67,7 @@ public class AddMeal extends AppCompatActivity {
                 @Override
                 public void onSuccess(NutritionData data) {
                     runOnUiThread(() -> {
+                        if (isFinishing() || isDestroyed()) return;
                         stopLoading();
                         lastResult = data;
                         showResult(data);
@@ -75,6 +76,7 @@ public class AddMeal extends AppCompatActivity {
                 @Override
                 public void onError(String errorMessage) {
                     runOnUiThread(() -> {
+                        if (isFinishing() || isDestroyed()) return;
                         stopLoading();
                         Toast.makeText(AddMeal.this, "Hata: " + errorMessage, Toast.LENGTH_LONG).show();
                     });
@@ -158,6 +160,7 @@ public class AddMeal extends AppCompatActivity {
                 ).execute();
 
                 runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
                     btnSave.setEnabled(true);
                     if (response.isSuccessful()) {
                         Toast.makeText(this, "✅ Öğün kaydedildi!", Toast.LENGTH_SHORT).show();
@@ -174,6 +177,7 @@ public class AddMeal extends AppCompatActivity {
 
             } catch (Exception e) {
                 runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
                     btnSave.setEnabled(true);
                     Toast.makeText(this, "Bağlantı hatası: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
@@ -183,6 +187,7 @@ public class AddMeal extends AppCompatActivity {
 
     public void navHomePage(View view) {
         Navigation.toMain(this);
+        finish();
     }
 
     public void navProfile(View view) {
@@ -196,5 +201,11 @@ public class AddMeal extends AppCompatActivity {
     }
     public void navMealList(View view){
         Navigation.toMealList(this);
+        finish();
+    }
+
+    public void navStatistic(View view){
+        Navigation.toHistory(this);
+        finish();
     }
 }

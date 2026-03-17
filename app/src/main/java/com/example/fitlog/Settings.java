@@ -211,6 +211,7 @@ public class Settings extends AppCompatActivity {
 
     public void navHomePage(View view) {
         Navigation.toMain(this);
+        finish();
     }
 
     public void navProfile(View view) {
@@ -221,9 +222,17 @@ public class Settings extends AppCompatActivity {
         } else {
             Navigation.toRegister(this);
         }
+        finish();
     }
+
     public void navMealList(View view){
         Navigation.toMealList(this);
+        finish();
+    }
+
+    public void navStatistic(View view){
+        Navigation.toHistory(this);
+        finish();
     }
 
     public void btnAboutProject(View view){

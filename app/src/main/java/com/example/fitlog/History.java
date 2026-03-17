@@ -111,6 +111,7 @@ public class History extends AppCompatActivity {
                 }
 
                 runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
                     progressBarHistory.setVisibility(View.GONE);
                     dayList.clear();
                     dayList.addAll(days);
@@ -120,6 +121,7 @@ public class History extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e("HISTORY", "Hata: " + e.getMessage());
                 runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
                     progressBarHistory.setVisibility(View.GONE);
                     Toast.makeText(this, "Veri yüklenemedi.", Toast.LENGTH_SHORT).show();
                 });
@@ -158,5 +160,32 @@ public class History extends AppCompatActivity {
     private String extractDate(String timestamp) {
         if (timestamp == null || timestamp.length() < 10) return "";
         return timestamp.substring(0, 10);
+    }
+
+    // ── Navigasyon ───────────────────────────────────────────────────
+
+    public void navHomePage(android.view.View view) {
+        Navigation.toMain(this);
+        finish();
+    }
+
+    public void navProfile(android.view.View view) {
+        PrefManager manager = new PrefManager(this);
+        int userId = manager.getId();
+        if (userId != -1) {
+            Navigation.toProfile(this);
+        } else {
+            Navigation.toRegister(this);
+        }
+        finish();
+    }
+
+    public void navMealList(android.view.View view) {
+        Navigation.toMealList(this);
+        finish();
+    }
+
+    public void navStatistic(android.view.View view) {
+        // Zaten History sayfasındayız, tekrar açma
     }
 }

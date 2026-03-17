@@ -68,7 +68,13 @@ public class WaterTrack extends AppCompatActivity {
             Toast.makeText(this, "Miktar giriniz.", Toast.LENGTH_SHORT).show();
             return;
         }
-        int amount = Integer.parseInt(input);
+        int amount;
+        try {
+            amount = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Lütfen geçerli bir sayı girin.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (amount <= 0) {
             Toast.makeText(this, "Geçerli bir miktar giriniz.", Toast.LENGTH_SHORT).show();
             return;
@@ -78,7 +84,6 @@ public class WaterTrack extends AppCompatActivity {
         if(pref.getId() != -1){
             addWater(amount);
         }
-
     }
 
     public void btnReset(View view) {
@@ -149,13 +154,17 @@ public class WaterTrack extends AppCompatActivity {
                     }
                     final int finalTotal = total;
                     currentAmount = finalTotal;
-                    runOnUiThread(() -> updateUI(finalTotal));
+                    runOnUiThread(() -> {
+                        if (isFinishing() || isDestroyed()) return;
+                        updateUI(finalTotal);
+                    });
                 }
 
             } catch (Exception e) {
-                runOnUiThread(() ->
-                        Toast.makeText(this, "Veri yüklenemedi: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    Toast.makeText(this, "Veri yüklenemedi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
             }
         }).start();
     }
@@ -181,20 +190,23 @@ public class WaterTrack extends AppCompatActivity {
                 ).execute();
 
                 if (!response.isSuccessful()) {
-                    runOnUiThread(() ->
-                            Toast.makeText(this, "Kayıt sırasında hata oluştu.", Toast.LENGTH_SHORT).show()
-                    );
+                    runOnUiThread(() -> {
+                        if (isFinishing() || isDestroyed()) return;
+                        Toast.makeText(this, "Kayıt sırasında hata oluştu.", Toast.LENGTH_SHORT).show();
+                    });
                 }
 
             } catch (Exception e) {
-                runOnUiThread(() ->
-                        Toast.makeText(this, "Bağlantı hatası: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-                );
+                runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    Toast.makeText(this, "Bağlantı hatası: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
             }
         }).start();
     }
     public void navHomePage(View view) {
         Navigation.toMain(this);
+        finish();
     }
 
     public void navProfile(View view) {
@@ -208,5 +220,11 @@ public class WaterTrack extends AppCompatActivity {
     }
     public void navMealList(View view){
         Navigation.toMealList(this);
+        finish();
+    }
+
+    public void navStatistic(View view){
+        Navigation.toHistory(this);
+        finish();
     }
 }

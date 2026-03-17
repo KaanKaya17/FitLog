@@ -52,28 +52,29 @@ public class Profile extends AppCompatActivity {
     public void btnUserLogOut(View view){
         PrefManager manager = new PrefManager(this);
         manager.clearUser();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        Navigation.toLoginAndClear(this);
     }
 
     public void navHomePage(View view) {
         Navigation.toMain(this);
+        finish();
     }
 
     public void navProfile(View view) {
-        PrefManager manager = new PrefManager(this);
-        int userId = manager.getId();
-        if (userId != -1) {
-            Navigation.toProfile(this);
-        } else {
-            Navigation.toRegister(this);
-        }
-    }
-    public void navMealList(View view){
-        Navigation.toMealList(this);
+        // Zaten Profile'dayız, tekrar açma
     }
 
     public void btnSettings(View view){
         Navigation.toSettings(this);
+    }
+
+    public void navMealList(View view){
+        Navigation.toMealList(this);
+        finish();
+    }
+
+    public void navStatistic(View view){
+        Navigation.toHistory(this);
+        finish();
     }
 }

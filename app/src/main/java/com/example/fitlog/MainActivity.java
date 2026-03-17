@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         //InformationCard.getInstance().show("Kalori Nedir?", "Kalori, besinlerin içerdiği enerji miktarını ölçen birimdir.");
 
         PrefManager manager = new PrefManager(this);
-        Toast.makeText(this, "Id : " + manager.getId(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Id : " + manager.getId(), Toast.LENGTH_LONG).show();
         // ────────────────────────────────────────────────────────────
 
         initViews();
@@ -162,7 +162,10 @@ public class MainActivity extends AppCompatActivity {
                 final float fFat      = totalFat;
                 final int fMealCount  = mealCount;
 
-                runOnUiThread(() -> updateDashboard(fWater, fCalories, fProtein, fCarbs, fFat, fMealCount));
+                runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    updateDashboard(fWater, fCalories, fProtein, fCarbs, fFat, fMealCount);
+                });
 
             } catch (Exception e) {
                 Log.e("DASHBOARD", "Veri yüklenemedi: " + e.getMessage());
@@ -226,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
     // ── Mevcut nav metodları (dokunma) ──────────────────────────────
 
     public void navHomePage(View view) {
-        Navigation.toMain(this);
+        // MainActivity'yi tekrar açmaktan kaçın
     }
 
     public void navProfile(View view) {

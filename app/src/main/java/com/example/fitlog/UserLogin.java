@@ -146,4 +146,9 @@ public class UserLogin extends AppCompatActivity {
     public void navMealList(View view){
         Navigation.toMealList(this);
     }
+
+    public void navStatistic(View view){
+        Navigation.toHistory(this);
+        finish();
+    }
 }

@@ -143,6 +143,7 @@ public class MealListActivity extends AppCompatActivity {
                     final float fFat    = totalFat;
 
                     runOnUiThread(() -> {
+                        if (isFinishing() || isDestroyed()) return;
                         mealList.clear();
                         mealList.addAll(meals);
                         adapter.notifyDataSetChanged();
@@ -167,9 +168,10 @@ public class MealListActivity extends AppCompatActivity {
 
             } catch (Exception e) {
                 Log.e("MEAL_LIST", "Hata: " + e.getMessage());
-                runOnUiThread(() ->
-                        Toast.makeText(this, "Veri yüklenemedi.", Toast.LENGTH_SHORT).show()
-                );
+                runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    Toast.makeText(this, "Veri yüklenemedi.", Toast.LENGTH_SHORT).show();
+                });
             }
         }).start();
     }
@@ -186,11 +188,12 @@ public class MealListActivity extends AppCompatActivity {
                 ).execute();
 
                 runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
                     if (response.isSuccessful()) {
                         mealList.remove(position);
                         adapter.notifyItemRemoved(position);
                         Toast.makeText(this, "✅ Öğün silindi.", Toast.LENGTH_SHORT).show();
-                        loadMeals(); // Toplam kalori vb değerleri yenilemek için
+                        loadMeals();
                     } else {
                         adapter.notifyItemChanged(position);
                         Toast.makeText(this, "Silme başarısız: " + response.code(), Toast.LENGTH_SHORT).show();
@@ -198,6 +201,7 @@ public class MealListActivity extends AppCompatActivity {
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed()) return;
                     adapter.notifyItemChanged(position);
                     Toast.makeText(this, "Bağlantı hatası.", Toast.LENGTH_SHORT).show();
                 });
@@ -207,6 +211,7 @@ public class MealListActivity extends AppCompatActivity {
 
     public void navHomePage(View view) {
         Navigation.toMain(this);
+        finish();
     }
 
     public void navProfile(View view) {
@@ -219,6 +224,11 @@ public class MealListActivity extends AppCompatActivity {
         }
     }
     public void navMealList(View view){
-        Navigation.toMealList(this);
+        // Zaten MealListActivity'deyiz, tekrar açma
+    }
+
+    public void navStatistic(View view){
+        Navigation.toHistory(this);
+        finish();
     }
 }
