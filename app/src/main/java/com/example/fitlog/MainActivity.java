@@ -17,8 +17,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         PrefManager manager = new PrefManager(this);
         //Toast.makeText(this, "Id : " + manager.getId(), Toast.LENGTH_LONG).show();
         // ────────────────────────────────────────────────────────────
+        checkAdminNotifications();
 
         initViews();
         setupGreeting();
@@ -247,6 +250,69 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Navigation.toRegister(this);
         }
+    }
+
+    private void checkAdminNotifications() {
+        PrefManager pref = new PrefManager(this);
+        int userId = pref.getId();
+        if (userId == -1) return;
+
+        new Thread(() -> {
+            try {
+                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
+                // Filtre: Sadece bu kullanıcıya ait ve okunmamış (is_read = false) olanlar
+                retrofit2.Response<List<AdminNotification>> response = api.getNotifications(
+                        "eq." + userId,
+                        "eq.false",
+                        BuildConfig.SUPABASE_API_KEY,
+                        "Bearer " + BuildConfig.SUPABASE_API_KEY
+                ).execute();
+
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    AdminNotification note = response.body().get(0); // En son mesajı al
+
+                    runOnUiThread(() -> {
+                        showNotificationDialog(note);
+                    });
+                }
+            } catch (Exception e) {
+                Log.e("NOTIF", "Hata: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void showNotificationDialog(AdminNotification note) {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(note.getTitle())
+                .setMessage(note.getMessage())
+                .setPositiveButton("Tamam", (dialog, which) -> {
+                    markAsRead(note.getId()); // Okundu olarak işaretle
+                })
+                .setCancelable(false)
+                .show();
+    }
+
+    private void markAsRead(String noteId) {
+        new Thread(() -> {
+            try {
+                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
+
+                Map<String, Object> update = new HashMap<>();
+                update.put("is_read", true);
+
+                api.markNotificationAsRead(
+                        "eq." + noteId,
+                        BuildConfig.SUPABASE_API_KEY,
+                        "Bearer " + BuildConfig.SUPABASE_API_KEY,
+                        "application/json",
+                        update
+                ).execute();
+
+                Log.d("NOTIF", "Mesaj okundu olarak işaretlendi.");
+            } catch (Exception e) {
+                Log.e("NOTIF", "Güncelleme hatası: " + e.getMessage());
+            }
+        }).start();
     }
 
     public void closeInformation(View view) {

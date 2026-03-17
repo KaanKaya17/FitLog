@@ -99,5 +99,25 @@ public interface SupabaseApi {
             @Header("Accept") String accept,
             @Query("user_id") String userIdFilter
     );
+    //
+
+    // Bildirimleri Getir
+    @GET("rest/v1/admin_notifications")
+    Call<List<AdminNotification>> getNotifications(
+            @Query("user_id") String userIdFilter,    // Örn: "eq.5"
+            @Query("is_read") String isReadFilter,    // Örn: "eq.false"
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String auth
+    );
+
+    // Okundu Olarak İşaretle
+    @PATCH("rest/v1/admin_notifications")
+    Call<Void> markNotificationAsRead(
+            @Query("id") String idFilter,             // Örn: "eq.uuid-değeri"
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String auth,
+            @Header("Content-Type") String contentType,
+            @Body Map<String, Object> updateBody      // {"is_read": true}
+    );
 
 }
