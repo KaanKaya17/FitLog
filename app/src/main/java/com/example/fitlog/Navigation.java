@@ -43,6 +43,8 @@ public class Navigation {
     public static void toAboutProject(Activity from) { go(from, AboutProject.class); }
     public static void toHistory(Activity from) { go(from, History.class); }
 
+    public static void toChangePassword(Activity from) { go(from, ChangePassword.class); }
+
 
 
 }

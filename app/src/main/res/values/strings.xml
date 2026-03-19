@@ -247,5 +247,21 @@
     <string name="history_subtitle">Summary of the last 7 days</string>
     <string name="history_empty_state">No historical data available yet.</string>
 
+    <!-- Change Password -->
+    <string name="change_pwd_title">Update Password</string>
+    <string name="change_pwd_subtitle">Please choose a strong password for your security.</string>
+
+    <string name="label_current_password">Current Password</string>
+    <string name="hint_current_password">Enter old password</string>
+
+    <string name="label_new_password">New Password</string>
+    <string name="hint_new_password">Enter new password</string>
+
+    <string name="label_confirm_password">Confirm New Password</string>
+    <string name="hint_confirm_password">Re-enter new password</string>
+
+    <string name="action_save_password">SAVE PASSWORD</string>
+    <string name="error_password_mismatch">Passwords do not match!</string>
+
 
 </resources>

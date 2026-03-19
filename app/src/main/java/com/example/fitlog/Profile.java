@@ -88,4 +88,9 @@ public class Profile extends AppCompatActivity {
         Navigation.toHistory(this);
         finish();
     }
+
+    public void btnChangePassword(View view){
+        Navigation.toChangePassword(this);
+        finish();
+    }
 }
