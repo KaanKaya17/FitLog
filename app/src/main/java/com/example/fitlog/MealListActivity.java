@@ -103,10 +103,10 @@ public class MealListActivity extends AppCompatActivity {
                 MealLog meal = mealList.get(position);
 
                 new androidx.appcompat.app.AlertDialog.Builder(MealListActivity.this)
-                        .setTitle("Öğünü Sil")
-                        .setMessage(meal.getFood_name() + " silinsin mi?")
-                        .setPositiveButton("Sil", (dialog, which) -> deleteMeal(meal, position))
-                        .setNegativeButton("İptal", (dialog, which) -> adapter.notifyItemChanged(position))
+                        .setTitle(getString(R.string.dialog_delete_title))
+                        .setMessage(getString(R.string.dialog_delete_confirm_format, meal.getFood_name()))
+                        .setPositiveButton(getString(R.string.action_confirm), (dialog, which) -> deleteMeal(meal, position))
+                        .setNegativeButton(getString(R.string.action_cancel), (dialog, which) -> adapter.notifyItemChanged(position))
                         .setCancelable(false)
                         .show();
             }
@@ -163,11 +163,11 @@ public class MealListActivity extends AppCompatActivity {
                         }
 
                         // Özet güncelle
-                        tvSubtitle.setText("Bugün " + meals.size() + " öğün eklendi");
+                        tvSubtitle.setText(getString(R.string.meal_list_subtitle_format, meals.size()));
                         tvTotalCalories.setText(String.valueOf(fCal));
-                        tvTotalProtein.setText(String.format(Locale.getDefault(), "%.1fg", fPro));
-                        tvTotalCarbs.setText(String.format(Locale.getDefault(), "%.1fg", fCarb));
-                        tvTotalFat.setText(String.format(Locale.getDefault(), "%.1fg", fFat));
+                        tvTotalProtein.setText(getString(R.string.format_gram_float, fPro));
+                        tvTotalCarbs.setText(getString(R.string.format_gram_float, fCarb));
+                        tvTotalFat.setText(getString(R.string.format_gram_float, fFat));
                     });
                 }
 
@@ -175,7 +175,7 @@ public class MealListActivity extends AppCompatActivity {
                 Log.e("MEAL_LIST", "Hata: " + e.getMessage());
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
-                    Toast.makeText(this, "Veri yüklenemedi.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.error_data_load_failed), Toast.LENGTH_SHORT).show();
                 });
             }
         }).start();
@@ -197,18 +197,18 @@ public class MealListActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         mealList.remove(position);
                         adapter.notifyItemRemoved(position);
-                        Toast.makeText(this, "✅ Öğün silindi.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.msg_meal_deleted), Toast.LENGTH_SHORT).show();
                         loadMeals();
                     } else {
                         adapter.notifyItemChanged(position);
-                        Toast.makeText(this, "Silme başarısız: " + response.code(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.error_delete_failed_format, response.code()), Toast.LENGTH_SHORT).show();
                     }
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
                     adapter.notifyItemChanged(position);
-                    Toast.makeText(this, "Bağlantı hatası.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
                 });
             }
         }).start();

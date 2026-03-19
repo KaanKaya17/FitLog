@@ -70,6 +70,7 @@
     <string name="home_default_user">User</string>
     <string name="home_label_daily_calories">DAILY CALORIES</string>
     <string name="home_calorie_goal_hint">/ 2000 goal</string>
+    <string name="home_calorie_goal_format">/ %1$d goal</string>
 
     <string name="home_macro_protein">Protein</string>
     <string name="home_macro_carbs">Carbs</string>
@@ -81,11 +82,15 @@
     <string name="home_section_water">WATER TRACKING</string>
     <string name="home_water_label">💧 Daily Water</string>
     <string name="home_water_format">0 / 2000 ml</string>
+    <string name="home_water_progress_format">%1$d / %2$d ml</string>
     <string name="home_water_percent_format">%0 completed</string>
+    <string name="home_water_percent_value">%%%1$d completed</string>
     <string name="home_action_detail">Details →</string>
 
     <string name="home_section_meals">TODAY\'S MEALS</string>
     <string name="home_meal_count_format">0 meals</string>
+    <string name="home_meal_count_value">%1$d meals</string>
+    <string name="home_total_calories_value">%1$d kcal</string>
     <string name="home_meal_sub">added today</string>
     <string name="home_action_list">View List →</string>
 
@@ -108,6 +113,7 @@
     <string name="dialog_delete_message">Are you sure you want to delete this meal?</string>
     <string name="action_confirm">Delete</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_ok">OK</string>
 
     <!-- Profile -->
     <string name="profile_label_workout">Workout</string>
@@ -263,5 +269,26 @@
     <string name="action_save_password">SAVE PASSWORD</string>
     <string name="error_password_mismatch">Passwords do not match!</string>
 
+    <!-- General Error / History -->
+    <string name="error_data_load_failed">Failed to load data.</string>
+    <string name="history_no_meals_today">No meals added for this day.</string>
+    <string name="format_gram_float">%1$.1fg</string>
+    <string name="food_format_protein_float">%1$.1fg P</string>
+    <string name="food_format_carbs_float">%1$.1fg C</string>
+    <string name="food_format_fat_float">%1$.1fg F</string>
+    <string name="dialog_delete_confirm_format">Delete %1$s?</string>
+    <string name="msg_meal_deleted">✅ Meal deleted.</string>
+    <string name="error_delete_failed_format">Failed to delete: %1$d</string>
+    <string name="error_connection">Connection error.</string>
+
+    <!-- Water Track Errors/Messages -->
+    <string name="water_error_empty_amount">Please enter an amount.</string>
+    <string name="water_error_invalid_number">Please enter a valid number.</string>
+    <string name="water_error_negative_amount">Please enter a valid amount.</string>
+    <string name="water_msg_reset">Day has been reset.</string>
+    <string name="water_msg_goal_reached">🎉 Daily goal reached!</string>
+    <string name="error_record_failed">Error occurred while saving.</string>
+    <string name="error_connection_with_msg">Connection error: %1$s</string>
+    <string name="error_data_load_with_msg">Failed to load data: %1$s</string>
 
 </resources>

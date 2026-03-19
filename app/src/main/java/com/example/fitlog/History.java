@@ -128,7 +128,7 @@ public class History extends AppCompatActivity {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
                     progressBarHistory.setVisibility(View.GONE);
-                    Toast.makeText(this, "Veri yüklenemedi.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.error_data_load_failed), Toast.LENGTH_SHORT).show();
                 });
             }
         }).start();
@@ -140,7 +140,7 @@ public class History extends AppCompatActivity {
         List<DayHistory> days = new ArrayList<>();
         SimpleDateFormat dateFmt    = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         SimpleDateFormat displayFmt = new SimpleDateFormat("d MMMM", new Locale("tr"));
-        String[] dayNames = {"Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"};
+       // SimpleDateFormat displayFmt = new SimpleDateFormat("d MMMM", new Locale("tr"));
 
         Calendar cal = Calendar.getInstance();
 
@@ -149,9 +149,9 @@ public class History extends AppCompatActivity {
             String displayDate = displayFmt.format(cal.getTime());
 
             String dayLabel;
-            if (i == 0)      dayLabel = "Bugün";
-            else if (i == 1) dayLabel = "Dün";
-            else             dayLabel = dayNames[cal.get(Calendar.DAY_OF_WEEK) - 1];
+            if (i == 0)      dayLabel = getString(R.string.history_today);
+            else if (i == 1) dayLabel = getString(R.string.history_yesterday);
+            else             dayLabel = new SimpleDateFormat("EEEE", Locale.getDefault()).format(cal.getTime());
 
             days.add(new DayHistory(date, dayLabel, displayDate));
             cal.add(Calendar.DAY_OF_YEAR, -1);

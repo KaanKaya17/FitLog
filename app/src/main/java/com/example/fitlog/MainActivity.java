@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Kalori
         tvCurrentCalories.setText(String.valueOf(calories));
-        ((TextView) findViewById(R.id.tvCalorieSummary)).setText("/ " + calorieGoal + " hedef");
+        ((TextView) findViewById(R.id.tvCalorieSummary)).setText(getString(R.string.home_calorie_goal_format, calorieGoal));
         animateProgress(progressCalorie, calories, calorieGoal);
 
         // Makrolar
@@ -205,14 +205,14 @@ public class MainActivity extends AppCompatActivity {
         tvFatSummary.setText(String.format(Locale.getDefault(), "%.1fg", fat));
 
         // Su
-        tvWaterAmount.setText(water + " / " + waterGoal + " ml");
+        tvWaterAmount.setText(getString(R.string.home_water_progress_format, water, waterGoal));
         animateProgress(progressWaterHome, water, waterGoal);
         int waterPercent = (int) Math.min((water / (float) waterGoal) * 100, 100);
-        tvWaterPercent.setText("%" + waterPercent + " tamamlandı");
+        tvWaterPercent.setText(getString(R.string.home_water_percent_value, waterPercent));
 
         // Öğün
-        tvMealCount.setText(mealCount + " öğün");
-        tvTotalCaloriesHome.setText(calories + " kcal");
+        tvMealCount.setText(getString(R.string.home_meal_count_value, mealCount));
+        tvTotalCaloriesHome.setText(getString(R.string.home_total_calories_value, calories));
 
         // Motivasyon
         if (mealCount == 0) {
@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
         new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle(note.getTitle())
                 .setMessage(note.getMessage())
-                .setPositiveButton("Tamam", (dialog, which) -> {
+                .setPositiveButton(getString(R.string.action_ok), (dialog, which) -> {
                     markAsRead(note.getId()); // Okundu olarak işaretle
                 })
                 .setCancelable(false)

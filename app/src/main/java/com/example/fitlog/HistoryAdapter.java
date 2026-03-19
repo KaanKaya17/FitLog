@@ -38,16 +38,16 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         holder.tvDayLabel.setText(day.dayLabel);
         holder.tvDate.setText(day.displayDate);
         holder.tvDayCalories.setText(String.valueOf(day.totalCalories));
-        holder.tvDayWater.setText(day.totalWater + " ml");
-        holder.tvDayProtein.setText(String.format(Locale.getDefault(), "%.1fg", day.totalProtein));
-        holder.tvDayCarbs.setText(String.format(Locale.getDefault(), "%.1fg", day.totalCarbs));
-        holder.tvDayFat.setText(String.format(Locale.getDefault(), "%.1fg", day.totalFat));
+        holder.tvDayWater.setText(context.getString(R.string.format_ml, String.valueOf(day.totalWater)));
+        holder.tvDayProtein.setText(context.getString(R.string.format_gram_float, day.totalProtein));
+        holder.tvDayCarbs.setText(context.getString(R.string.format_gram_float, day.totalCarbs));
+        holder.tvDayFat.setText(context.getString(R.string.format_gram_float, day.totalFat));
 
         // Öğün listesini doldur
         holder.layoutMeals.removeAllViews();
         if (day.meals.isEmpty()) {
             TextView emptyText = new TextView(context);
-            emptyText.setText("Bu gün öğün eklenmedi.");
+            emptyText.setText(context.getString(R.string.history_no_meals_today));
             emptyText.setTextSize(13f);
             emptyText.setTextColor(0xFF9E9E9E);
             holder.layoutMeals.addView(emptyText);
@@ -57,7 +57,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
                         .inflate(R.layout.item_history_meal_row, holder.layoutMeals, false);
 
                 ((TextView) mealRow.findViewById(R.id.tvMealRowName)).setText(meal.getFood_name());
-                ((TextView) mealRow.findViewById(R.id.tvMealRowCalories)).setText(meal.getCalories() + " kcal");
+                ((TextView) mealRow.findViewById(R.id.tvMealRowCalories)).setText(context.getString(R.string.meal_row_kcal_format, meal.getCalories()));
 
                 holder.layoutMeals.addView(mealRow);
             }

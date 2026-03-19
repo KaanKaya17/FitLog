@@ -39,9 +39,10 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         holder.tvMealName.setText(meal.getFood_name());
         holder.tvServingSize.setText(meal.getServing_size());
         holder.tvCalories.setText(String.valueOf(meal.getCalories()));
-        holder.tvProtein.setText(String.format(Locale.getDefault(), "%.1fg P", meal.getProtein()));
-        holder.tvCarbs.setText(String.format(Locale.getDefault(), "%.1fg K", meal.getCarbohydrates()));
-        holder.tvFat.setText(String.format(Locale.getDefault(), "%.1fg Y", meal.getFat()));
+        android.content.Context ctx = holder.itemView.getContext();
+        holder.tvProtein.setText(ctx.getString(R.string.food_format_protein_float, meal.getProtein()));
+        holder.tvCarbs.setText(ctx.getString(R.string.food_format_carbs_float, meal.getCarbohydrates()));
+        holder.tvFat.setText(ctx.getString(R.string.food_format_fat_float, meal.getFat()));
 
         holder.itemView.setOnClickListener(v -> listener.onMealClick(meal));
     }

@@ -70,18 +70,18 @@ public class WaterTrack extends AppCompatActivity {
     public void btnAddCustom(View view) {
         String input = editTextCustomAmount.getText().toString().trim();
         if (input.isEmpty()) {
-            Toast.makeText(this, "Miktar giriniz.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.water_error_empty_amount), Toast.LENGTH_SHORT).show();
             return;
         }
         int amount;
         try {
             amount = Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Lütfen geçerli bir sayı girin.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.water_error_invalid_number), Toast.LENGTH_SHORT).show();
             return;
         }
         if (amount <= 0) {
-            Toast.makeText(this, "Geçerli bir miktar giriniz.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.water_error_negative_amount), Toast.LENGTH_SHORT).show();
             return;
         }
         editTextCustomAmount.setText("");
@@ -94,7 +94,7 @@ public class WaterTrack extends AppCompatActivity {
     public void btnReset(View view) {
         currentAmount = 0;
         updateUI(0);
-        Toast.makeText(this, "Gün sıfırlandı.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.water_msg_reset), Toast.LENGTH_SHORT).show();
     }
 
     // ─── Su ekleme ──────────────────────────────────────────────────
@@ -119,10 +119,10 @@ public class WaterTrack extends AppCompatActivity {
         percent = Math.min(percent, 100);
 
         if (totalMl >= dailyGoal) {
-            tvPercent.setText("🎉 Günlük hedefe ulaştın!");
+            tvPercent.setText(getString(R.string.water_msg_goal_reached));
             tvPercent.setTextColor(getColor(android.R.color.holo_blue_dark));
         } else {
-            tvPercent.setText("%" + percent + " tamamlandı");
+            tvPercent.setText(getString(R.string.home_water_percent_value, percent));
             tvPercent.setTextColor(getColor(R.color.green));
         }
     }
@@ -168,7 +168,7 @@ public class WaterTrack extends AppCompatActivity {
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
-                    Toast.makeText(this, "Veri yüklenemedi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.error_data_load_with_msg, e.getMessage()), Toast.LENGTH_SHORT).show();
                 });
             }
         }).start();
@@ -197,14 +197,14 @@ public class WaterTrack extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     runOnUiThread(() -> {
                         if (isFinishing() || isDestroyed()) return;
-                        Toast.makeText(this, "Kayıt sırasında hata oluştu.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.error_record_failed), Toast.LENGTH_SHORT).show();
                     });
                 }
 
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
-                    Toast.makeText(this, "Bağlantı hatası: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.error_connection_with_msg, e.getMessage()), Toast.LENGTH_SHORT).show();
                 });
             }
         }).start();

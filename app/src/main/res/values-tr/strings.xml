@@ -70,6 +70,7 @@
     <string name="home_default_user">Kullanıcı</string>
     <string name="home_label_daily_calories">GÜNLÜK KALORİ</string>
     <string name="home_calorie_goal_hint">/ 2000 hedef</string>
+    <string name="home_calorie_goal_format">/ %1$d hedef</string>
 
     <string name="home_macro_protein">Protein</string>
     <string name="home_macro_carbs">Karbo</string>
@@ -81,11 +82,15 @@
     <string name="home_section_water">SU TAKİBİ</string>
     <string name="home_water_label">💧  Günlük Su</string>
     <string name="home_water_format">0 / 2000 ml</string>
+    <string name="home_water_progress_format">%1$d / %2$d ml</string>
     <string name="home_water_percent_format">%%0 tamamlandı</string>
+    <string name="home_water_percent_value">%%%1$d tamamlandı</string>
     <string name="home_action_detail">Detay →</string>
 
     <string name="home_section_meals">BUGÜNKÜ ÖĞÜNLER</string>
     <string name="home_meal_count_format">0 öğün</string>
+    <string name="home_meal_count_value">%1$d öğün</string>
+    <string name="home_total_calories_value">%1$d kcal</string>
     <string name="home_meal_sub">bugün eklendi</string>
     <string name="home_action_list">Listele →</string>
 
@@ -108,6 +113,7 @@
     <string name="dialog_delete_message">Bu öğünü silmek istediğinizden emin misiniz?</string>
     <string name="action_confirm">Sil</string>
     <string name="action_cancel">İptal</string>
+    <string name="action_ok">Tamam</string>
 
     <!-- Profile -->
     <string name="profile_label_workout">Antrenman</string>
@@ -262,4 +268,27 @@
 
     <string name="action_save_password">ŞİFREYİ KAYDET</string>
     <string name="error_password_mismatch">Şifreler birbiriyle eşleşmiyor!</string>
+
+    <!-- General Error / History -->
+    <string name="error_data_load_failed">Veri yüklenemedi.</string>
+    <string name="history_no_meals_today">Bu gün öğün eklenmedi.</string>
+    <string name="format_gram_float">%1$.1fg</string>
+    <string name="food_format_protein_float">%1$.1fg P</string>
+    <string name="food_format_carbs_float">%1$.1fg K</string>
+    <string name="food_format_fat_float">%1$.1fg Y</string>
+    <string name="dialog_delete_confirm_format">%1$s silinsin mi?</string>
+    <string name="msg_meal_deleted">✅ Öğün silindi.</string>
+    <string name="error_delete_failed_format">Silme başarısız: %1$d</string>
+    <string name="error_connection">Bağlantı hatası.</string>
+
+    <!-- Water Track Errors/Messages -->
+    <string name="water_error_empty_amount">Miktar giriniz.</string>
+    <string name="water_error_invalid_number">Lütfen geçerli bir sayı girin.</string>
+    <string name="water_error_negative_amount">Geçerli bir miktar giriniz.</string>
+    <string name="water_msg_reset">Gün sıfırlandı.</string>
+    <string name="water_msg_goal_reached">🎉 Günlük hedefe ulaştın!</string>
+    <string name="error_record_failed">Kayıt sırasında hata oluştu.</string>
+    <string name="error_connection_with_msg">Bağlantı hatası: %1$s</string>
+    <string name="error_data_load_with_msg">Veri yüklenemedi: %1$s</string>
+
 </resources>
