@@ -21,6 +21,17 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.widget.Switch;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
+
 public class Settings extends AppCompatActivity {
 
     private static final int MIN_CALORIE = 500;
@@ -30,6 +41,21 @@ public class Settings extends AppCompatActivity {
     private TextView tvCalorieGoalValue, tvWaterGoalValue;
     private TextView tvCurrentCalorieGoal, tvCurrentWaterGoal;
     private PrefManager pref;
+    private Switch switchWaterReminder;
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    pref.setWaterReminderEnabled(true);
+                    switchWaterReminder.setChecked(true);
+                    scheduleWaterReminder();
+                    Toast.makeText(this, "Bildirimler aktif / Notifications active", Toast.LENGTH_SHORT).show();
+                } else {
+                    pref.setWaterReminderEnabled(false);
+                    switchWaterReminder.setChecked(false);
+                    Toast.makeText(this, "İzin Reddedildi / Permission Denied", Toast.LENGTH_SHORT).show();
+                }
+            });
 
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
@@ -89,6 +115,7 @@ public class Settings extends AppCompatActivity {
         initViews();
         loadCurrentGoals();
         setupSeekBars();
+        setupReminders();
 
         findViewById(R.id.btnSaveSettings).setOnClickListener(v -> saveSettings());
 
@@ -113,6 +140,7 @@ public class Settings extends AppCompatActivity {
         tvWaterGoalValue      = findViewById(R.id.tvWaterGoalValue);
         tvCurrentCalorieGoal  = findViewById(R.id.tvCurrentCalorieGoal);
         tvCurrentWaterGoal    = findViewById(R.id.tvCurrentWaterGoal);
+        switchWaterReminder   = findViewById(R.id.switchWaterReminder);
     }
 
     // ── Mevcut hedefleri yükle ───────────────────────────────────────
@@ -160,6 +188,63 @@ public class Settings extends AppCompatActivity {
             @Override public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+    }
+
+    private void setupReminders() {
+        switchWaterReminder.setChecked(pref.isWaterReminderEnabled());
+        
+        NotificationHelper.createNotificationChannel(this);
+
+        switchWaterReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) ==
+                            PackageManager.PERMISSION_GRANTED) {
+                        pref.setWaterReminderEnabled(true);
+                        scheduleWaterReminder();
+                    } else {
+                        switchWaterReminder.setChecked(false);
+                        requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
+                    }
+                } else {
+                    pref.setWaterReminderEnabled(true);
+                    scheduleWaterReminder();
+                }
+            } else {
+                pref.setWaterReminderEnabled(false);
+                cancelWaterReminder();
+            }
+        });
+    }
+
+    private void scheduleWaterReminder() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, WaterReminderReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        if (alarmManager != null) {
+            long testInterval = 2 * 60 * 60 * 1000; // 2 saat (2 hours)
+            alarmManager.setInexactRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + testInterval,
+                    testInterval,
+                    pendingIntent
+            );
+        }
+    }
+
+    private void cancelWaterReminder() {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, WaterReminderReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
     }
 
     // ── Kaydet ──────────────────────────────────────────────────────

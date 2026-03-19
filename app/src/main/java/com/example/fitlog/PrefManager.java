@@ -13,6 +13,7 @@ public class PrefManager {
     private static final String KEY_CALORIE_GOAL = "calorie_goal";
     private static final String KEY_WATER_GOAL   = "water_goal";
     private static final String KEY_LANGUAGE     = "app_language";
+    private static final String KEY_WATER_REMINDER = "water_reminder_enabled";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -55,4 +56,7 @@ public class PrefManager {
 
     public void setLanguage(String lang) { editor.putString(KEY_LANGUAGE, lang); editor.apply(); }
     public String getLanguage()          { return sharedPreferences.getString(KEY_LANGUAGE, "en"); } // Varsayılan: İngilizce
+
+    public void setWaterReminderEnabled(boolean enabled) { editor.putBoolean(KEY_WATER_REMINDER, enabled); editor.apply(); }
+    public boolean isWaterReminderEnabled() { return sharedPreferences.getBoolean(KEY_WATER_REMINDER, false); }
 }

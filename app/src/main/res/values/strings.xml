@@ -145,6 +145,14 @@
     <string name="settings_label_water_goal">💧 Daily Water Goal</string>
     <string name="settings_hint_water">Recommended: 1500–3000 ml</string>
 
+    <string name="settings_header_notifications">Notifications</string>
+    <string name="settings_label_water_reminder">💧 Water Reminder</string>
+    <string name="settings_sub_water_reminder">Get reminded to drink water</string>
+    <string name="water_reminder_title">Time to Drink Water!</string>
+    <string name="water_reminder_text">Stay hydrated to reach your daily goal.</string>
+    <string name="water_reminder_almost_title">Almost there! 🎯</string>
+    <string name="water_reminder_almost_text">You\'re very close to your daily water goal. Just a bit more!</string>
+
     <string name="settings_header_current">Current Goals</string>
     <string name="settings_current_kcal_sub">kcal goal</string>
     <string name="settings_current_ml_sub">ml goal</string>

@@ -145,6 +145,14 @@
     <string name="settings_label_water_goal">💧 Günlük Su Hedefi</string>
     <string name="settings_hint_water">Önerilen: 1500–3000 ml</string>
 
+    <string name="settings_header_notifications">Bildirimler</string>
+    <string name="settings_label_water_reminder">💧 Su Hatırlatıcısı</string>
+    <string name="settings_sub_water_reminder">Düzenli su içmek için hatırlatıcı al</string>
+    <string name="water_reminder_title">Su İçme Vakti!</string>
+    <string name="water_reminder_text">Günlük hedefine ulaşmak için bir bardak su iç.</string>
+    <string name="water_reminder_almost_title">Çok az kaldı! 🎯</string>
+    <string name="water_reminder_almost_text">Günlük su hedefine çok yakınsın. Bir bardak daha!</string>
+
     <string name="settings_header_current">Mevcut Hedefler</string>
     <string name="settings_current_kcal_sub">kcal hedef</string>
     <string name="settings_current_ml_sub">ml hedef</string>
