@@ -140,4 +140,23 @@ public interface SupabaseApi {
             @Body Map<String, Object> updateBody      // {"is_read": true}
     );
 
+    // AI Meal Plans
+    @POST("rest/v1/ai_meal_plans")
+    Call<Void> insertAiMealPlan(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Header("Content-Type") String contentType,
+            @Header("Prefer") String prefer,
+            @Body AiMealPlan aiMealPlan
+    );
+
+    @GET("rest/v1/ai_meal_plans")
+    Call<List<AiMealPlan>> getTodayAiMealPlan(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Header("Accept") String accept,
+            @Query("user_id") String userIdFilter,
+            @Query("created_date") String dateFilter
+    );
+
 }

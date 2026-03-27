@@ -481,10 +481,14 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cardAiCoach"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/edittext_bg"
                     android:backgroundTint="#1A1A2E"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="navAiCoach"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="18dp"
@@ -494,7 +498,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="14dp"
-                        android:text="🎯"
+                        android:text="✨"
                         android:textSize="26sp" />
 
                     <LinearLayout
@@ -506,7 +510,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/home_motivation_title"
+                            android:text="@string/home_ai_coach_title"
                             android:textColor="#FFFFFF"
                             android:textSize="13sp"
                             android:textStyle="bold" />
@@ -515,7 +519,7 @@
                             android:id="@+id/tvMotivationSub"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/home_motivation_subtitle"
+                            android:text="@string/home_ai_coach_subtitle"
                             android:textColor="#9E9EBE"
                             android:textSize="12sp"
                             android:layout_marginTop="2dp" />

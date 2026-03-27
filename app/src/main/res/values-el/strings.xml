@@ -142,6 +142,8 @@
     <string name="edit_profile_goal">Στόχος</string>
     <string name="goal_lose">Απώλεια Βάρους</string>
     <string name="goal_maintain">Διατήρηση Βάρους</string>
+    <string name="home_ai_coach_title">Προπονητής AI</string>
+    <string name="home_ai_coach_subtitle">Δημιουργήστε το καθημερινό σας διατροφικό πλάνο.</string>
     <string name="goal_gain">Αύξηση Βάρους</string>
     <string name="edit_profile_label_weight">Βάρος (kg)</string>
     <string name="edit_profile_save">Αποθήκευση Αλλαγών</string>
@@ -150,6 +152,14 @@
     <string name="error_invalid_height">Παρακαλώ εισάγετε έγκυρο ύψος (50-300).</string>
     <string name="error_invalid_weight">Παρακαλώ εισάγετε έγκυρο βάρος (20-300).</string>
     <string name="msg_design_done_db_later">Φαίνεται καλό! Η λογική της βάσης δεδομένων θα προστεθεί εδώ αργότερα.</string>
+    <string name="ai_coach_title">✨ Προπονητής AI</string>
+    <string name="ai_coach_loading">Ετοιμάζουμε το καλύτερο πλάνο για εσάς...</string>
+    <string name="ai_coach_new_plan">Αίτηση Νέου Πλάνου</string>
+    <string name="ai_error_empty_profile">Παρακαλώ συμπληρώστε το ύψος, το βάρος, το φύλο και τον στόχο σας στο προφίλ σας.</string>
+    <string name="ai_error_response">Δεν ήταν δυνατή η επεξεργασία της απάντησης.</string>
+    <string name="ai_error_api">Σφάλμα API! Ελέγξτε τα logs.</string>
+    <string name="ai_error_network">Σφάλμα σύνδεσης στο διαδίκτυο.</string>
+    <string name="ai_coach_prompt">Είστε ένας επαγγελματίας διατροφολόγος. Το όνομα του πελάτη σας είναι %1$s. Προσωπικά στοιχεία: Φύλο %2$s, Ύψος %3$s cm, Βάρος %4$s kg. Στόχος: %5$s. Παρακαλώ υπολογίστε τις εκτιμώμενες θερμίδες και τις ανάγκες σε μακροθρεπτικά συστατικά για αυτόν τον χρήστη. Στη συνέχεια προτείνετε ένα ημερήσιο μενού για πρωινό, μεσημεριανό και βραδινό. Δώστε την απάντηση σε σαφή μορφή χρησιμοποιώντας markdown και κουκκίδες. Μην περιλαμβάνετε υπερβολικές λεπτομέρειες, κρατήστε το συνοπτικό για οθόνη κινητού.</string>
 
     <!-- Settings -->
     <string name="settings_title">Ρυθμίσεις</string>

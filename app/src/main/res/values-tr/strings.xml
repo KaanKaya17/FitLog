@@ -146,10 +146,21 @@
     <string name="goal_gain">Kilo Al</string>
     <string name="error_empty_name">İsim boş bırakılamaz.</string>
     <string name="error_select_gender">Lütfen bir cinsiyet seçiniz.</string>
+    <string name="home_ai_coach_title">Yapay Zeka Koçum</string>
+    <string name="home_ai_coach_subtitle">Günlük diyet planınızı oluşturun.</string>
+    <string name="desc_back">Geri</string>
     <string name="error_select_goal">Lütfen bir hedef seçiniz.</string>
     <string name="error_invalid_height">Geçerli bir boy giriniz (50-300).</string>
     <string name="error_invalid_weight">Geçerli bir kilo giriniz (20-300).</string>
     <string name="msg_design_done_db_later">Harika görünüyor! Veritabanı işlemleri daha sonra eklenecektir.</string>
+    <string name="ai_coach_title">✨ Yapay Zeka Koçum</string>
+    <string name="ai_coach_loading">Sizin için en iyi plan hazırlanıyor...</string>
+    <string name="ai_coach_new_plan">Yeni Plan İste</string>
+    <string name="ai_error_empty_profile">Lütfen profilinizdeki boy, kilo, cinsiyet ve hedef özelliklerini doldurun.</string>
+    <string name="ai_error_response">Yanıt işlenemedi.</string>
+    <string name="ai_error_api">API Hatası! Lütfen logları kontrol edin.</string>
+    <string name="ai_error_network">İnternet bağlantısı hatası.</string>
+    <string name="ai_coach_prompt">Sen profesyonel bir diyetisyensin. Danışanının adı %1$s. Kişisel Verileri: Cinsiyeti %2$s, Boyu %3$s cm, Kilosu %4$s kg. Hedefi: %5$s. Lütfen bu kullanıcının tahmini kalori ve makro ihtiyacını belirle. Ardından günlük kahvaltı, öğle, akşam yemeği menüsü öner. Yanıtı sade bir özet şeklinde, düz metin/şık madde işaretleri şeklinde ver, çok fazla aşırı detay koyma, telefonda okunacak.</string>
 
     <!-- Settings -->
     <string name="settings_title">Ayarlar</string>

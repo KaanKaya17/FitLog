@@ -72,7 +72,11 @@ public class GeminiNutritionService {
                 body.put("contents", new JSONArray().put(content));
                 body.put("generationConfig", genConfig);
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                        .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                        .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                        .build();
                 RequestBody requestBody = RequestBody.create(
                         body.toString(),
                         MediaType.get("application/json")

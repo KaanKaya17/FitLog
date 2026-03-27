@@ -63,6 +63,9 @@
         <activity
             android:name=".EditProfile"
             android:exported="false" />
+        <activity
+            android:name=".AiCoachActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

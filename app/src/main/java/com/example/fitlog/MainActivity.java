@@ -335,4 +335,9 @@ public class MainActivity extends AppCompatActivity {
         Navigation.toWaterTrack(this);
     }
 
+    public void navAiCoach(View view) {
+        android.content.Intent intent = new android.content.Intent(this, AiCoachActivity.class);
+        startActivity(intent);
+    }
+
 }
