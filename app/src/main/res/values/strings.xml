@@ -117,9 +117,9 @@
     <string name="action_ok">OK</string>
 
     <!-- Profile -->
-    <string name="profile_label_workout">Workout</string>
-    <string name="profile_label_day">Day</string>
-    <string name="profile_label_calorie">Calories</string>
+    <string name="profile_label_height">Height</string>
+    <string name="profile_label_weight">Weight</string>
+    <string name="profile_label_gender">Gender</string>
 
     <string name="profile_header_account">Account Information</string>
     <string name="profile_label_email">Email</string>
@@ -131,6 +131,20 @@
     <string name="profile_action_change_password">Change Password</string>
     <string name="profile_action_app_settings">App Settings</string>
     <string name="profile_action_logout">Log Out</string>
+
+    <!-- Edit Profile -->
+    <string name="edit_profile_title">Edit Profile</string>
+    <string name="edit_profile_gender">Gender</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="edit_profile_label_height">Height (cm)</string>
+    <string name="edit_profile_label_weight">Weight (kg)</string>
+    <string name="edit_profile_save">Save Changes</string>
+    <string name="error_empty_name">Name cannot be empty.</string>
+    <string name="error_select_gender">Please select a gender.</string>
+    <string name="error_invalid_height">Please enter a valid height (50-300).</string>
+    <string name="error_invalid_weight">Please enter a valid weight (20-300).</string>
+    <string name="msg_design_done_db_later">Looks good! Database logic will be added here later.</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>

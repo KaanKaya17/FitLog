@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 public class Profile extends AppCompatActivity {
 
     private TextView tvFullName, tvUsername, tvEmail, tvFirstName, tvLastName;
+    private TextView tvHeight, tvWeight, tvGender;
 
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
@@ -31,6 +32,9 @@ public class Profile extends AppCompatActivity {
         tvEmail     = findViewById(R.id.tvEmail);
         tvFirstName = findViewById(R.id.tvFirstName);
         tvLastName  = findViewById(R.id.tvLastName);
+        tvHeight    = findViewById(R.id.tvHeight);
+        tvWeight    = findViewById(R.id.tvWeight);
+        tvGender    = findViewById(R.id.tvGender);
 
         loadProfileFromPrefs();
 
@@ -73,6 +77,11 @@ public class Profile extends AppCompatActivity {
 
     public void navProfile(View view) {
         // Zaten Profile'dayız, tekrar açma
+    }
+
+    public void btnEditProfile(View view){
+        Intent intent = new Intent(this, EditProfile.class);
+        startActivity(intent);
     }
 
     public void btnSettings(View view){

@@ -117,9 +117,9 @@
     <string name="action_ok">ΟΚ</string>
 
     <!-- Profile -->
-    <string name="profile_label_workout">Άσκηση</string>
-    <string name="profile_label_day">Ημέρα</string>
-    <string name="profile_label_calorie">Θερμίδες</string>
+    <string name="profile_label_height">Ύψος</string>
+    <string name="profile_label_weight">Βάρος</string>
+    <string name="profile_label_gender">Φύλο</string>
 
     <string name="profile_header_account">Στοιχεία Λογαριασμού</string>
     <string name="profile_label_email">Email</string>
@@ -131,6 +131,20 @@
     <string name="profile_action_change_password">Αλλαγή Κωδικού</string>
     <string name="profile_action_app_settings">Ρυθμίσεις Εφαρμογής</string>
     <string name="profile_action_logout">Αποσύνδεση</string>
+
+    <!-- Edit Profile -->
+    <string name="edit_profile_title">Επεξεργασία Προφίλ</string>
+    <string name="edit_profile_gender">Φύλο</string>
+    <string name="gender_male">Άνδρας</string>
+    <string name="gender_female">Γυναίκα</string>
+    <string name="edit_profile_label_height">Ύψος (cm)</string>
+    <string name="edit_profile_label_weight">Βάρος (kg)</string>
+    <string name="edit_profile_save">Αποθήκευση Αλλαγών</string>
+    <string name="error_empty_name">Το όνομα δεν μπορεί να είναι κενό.</string>
+    <string name="error_select_gender">Παρακαλώ επιλέξτε φύλο.</string>
+    <string name="error_invalid_height">Παρακαλώ εισάγετε έγκυρο ύψος (50-300).</string>
+    <string name="error_invalid_weight">Παρακαλώ εισάγετε έγκυρο βάρος (20-300).</string>
+    <string name="msg_design_done_db_later">Φαίνεται καλό! Η λογική της βάσης δεδομένων θα προστεθεί εδώ αργότερα.</string>
 
     <!-- Settings -->
     <string name="settings_title">Ρυθμίσεις</string>

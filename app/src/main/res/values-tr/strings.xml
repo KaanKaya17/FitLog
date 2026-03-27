@@ -117,9 +117,9 @@
     <string name="action_ok">Tamam</string>
 
     <!-- Profile -->
-    <string name="profile_label_workout">Antrenman</string>
-    <string name="profile_label_day">Gün</string>
-    <string name="profile_label_calorie">Kalori</string>
+    <string name="profile_label_height">Boy</string>
+    <string name="profile_label_weight">Kilo</string>
+    <string name="profile_label_gender">Cinsiyet</string>
 
     <string name="profile_header_account">Hesap Bilgileri</string>
     <string name="profile_label_email">E-Posta</string>
@@ -131,6 +131,20 @@
     <string name="profile_action_change_password">Şifre Değiştir</string>
     <string name="profile_action_app_settings">Uygulama Ayarları</string>
     <string name="profile_action_logout">Çıkış Yap</string>
+
+    <!-- Edit Profile -->
+    <string name="edit_profile_title">Profili Düzenle</string>
+    <string name="edit_profile_gender">Cinsiyet</string>
+    <string name="gender_male">Erkek</string>
+    <string name="gender_female">Kadın</string>
+    <string name="edit_profile_label_height">Boy (cm)</string>
+    <string name="edit_profile_label_weight">Kilo (kg)</string>
+    <string name="edit_profile_save">Değişiklikleri Kaydet</string>
+    <string name="error_empty_name">İsim boş bırakılamaz.</string>
+    <string name="error_select_gender">Lütfen bir cinsiyet seçiniz.</string>
+    <string name="error_invalid_height">Geçerli bir boy giriniz (50-300).</string>
+    <string name="error_invalid_weight">Geçerli bir kilo giriniz (20-300).</string>
+    <string name="msg_design_done_db_later">Harika görünüyor! Veritabanı işlemleri daha sonra eklenecektir.</string>
 
     <!-- Settings -->
     <string name="settings_title">Ayarlar</string>
