@@ -31,6 +31,7 @@ public class AddMeal extends AppCompatActivity {
 
     // Son analiz sonucu (kaydetmek için saklıyoruz)
     private NutritionData lastResult = null;
+    private String selectedDate = null;
 
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
@@ -42,6 +43,8 @@ public class AddMeal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_meal);
+
+        selectedDate = getIntent().getStringExtra("selected_date");
 
         etFood      = findViewById(R.id.etFood);
         btnAnalyze  = findViewById(R.id.btnAnalyze);
@@ -154,7 +157,12 @@ public class AddMeal extends AppCompatActivity {
                 String authHeader = "Bearer " + apiKey;
 
                 PrefManager pref = new PrefManager(this);
-                MealInsertDto mealLog  = new MealInsertDto(pref.getId(), data);
+                MealInsertDto mealLog;
+                if (selectedDate != null) {
+                    mealLog = new MealInsertDto(pref.getId(), data, selectedDate + "T12:00:00Z");
+                } else {
+                    mealLog = new MealInsertDto(pref.getId(), data);
+                }
 
                 retrofit2.Response<Void> response = api.insertMealLog(
                         apiKey,

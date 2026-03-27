@@ -261,6 +261,7 @@
     <string name="history_title">Geçmiş</string>
     <string name="history_subtitle">Son 7 günlük özet</string>
     <string name="history_empty_state">Henüz geçmiş veri bulunmuyor.</string>
+    <string name="history_action_add_meal_to_day">+ Bu Güne Öğün Ekle</string>
 
     <!-- Change Password -->
     <string name="change_pwd_title">Şifreyi Güncelle</string>

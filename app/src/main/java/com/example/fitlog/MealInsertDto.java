@@ -10,6 +10,7 @@ public class MealInsertDto {
     private float fat;
     private float fiber;
     private String confidence;
+    private String eaten_at;
 
     public MealInsertDto(int userId, NutritionData data) {
         this.user_id       = userId;
@@ -23,6 +24,11 @@ public class MealInsertDto {
         this.confidence    = data.confidence;
     }
 
+    public MealInsertDto(int userId, NutritionData data, String eatenAt) {
+        this(userId, data);
+        this.eaten_at = eatenAt;
+    }
+
     public int getUser_id() { return user_id; }
     public String getFood_name() { return food_name; }
     public String getServing_size() { return serving_size; }
@@ -32,4 +38,5 @@ public class MealInsertDto {
     public float getFat() { return fat; }
     public float getFiber() { return fiber; }
     public String getConfidence() { return confidence; }
+    public String getEaten_at() { return eaten_at; }
 }

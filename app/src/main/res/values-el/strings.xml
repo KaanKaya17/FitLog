@@ -259,6 +259,7 @@
     <!-- History -->
     <string name="history_title">Ιστορικό</string>
     <string name="history_subtitle">Σύνοψη των τελευταίων 7 ημερών</string>
+    <string name="history_action_add_meal_to_day">+ Προσθήκη Γεύματος σε Αυτή την Ημέρα</string>
     <string name="history_empty_state">Δεν υπάρχουν διαθέσιμα ιστορικά δεδομένα ακόμα.</string>
 
     <!-- Change Password -->

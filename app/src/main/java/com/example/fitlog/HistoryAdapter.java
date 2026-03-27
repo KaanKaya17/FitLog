@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Button;
+import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -74,6 +76,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
                 holder.tvExpandArrow.setText("⌄");
             }
         });
+
+        holder.btnAddMealToDay.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AddMeal.class);
+            intent.putExtra("selected_date", day.date);
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -84,6 +92,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         TextView tvDayWater, tvDayProtein, tvDayCarbs, tvDayFat;
         TextView tvExpandArrow;
         LinearLayout layoutHeader, layoutDetail, layoutMeals;
+        Button btnAddMealToDay;
 
         HistoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,6 +107,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             layoutHeader   = itemView.findViewById(R.id.layoutHeader);
             layoutDetail   = itemView.findViewById(R.id.layoutDetail);
             layoutMeals    = itemView.findViewById(R.id.layoutMeals);
+            btnAddMealToDay = itemView.findViewById(R.id.btnAddMealToDay);
         }
     }
 }

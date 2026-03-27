@@ -261,6 +261,7 @@
     <string name="history_title">History</string>
     <string name="history_subtitle">Summary of the last 7 days</string>
     <string name="history_empty_state">No historical data available yet.</string>
+    <string name="history_action_add_meal_to_day">+ Add Meal to this Day</string>
 
     <!-- Change Password -->
     <string name="change_pwd_title">Update Password</string>
