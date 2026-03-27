@@ -101,6 +101,16 @@ public interface SupabaseApi {
             @Body Map<String, String> body
     );
 
+    @PATCH("rest/v1/users")
+    Call<Void> updateUserProfile(
+            @Header("apikey") String apiKey,
+            @Header("Authorization") String authHeader,
+            @Header("Content-Type") String contentType,
+            @Header("Prefer") String prefer,
+            @Query("user_id") String userIdFilter,
+            @Body Map<String, Object> body
+    );
+
     // Kullanıcıyı ID ile getir (blok kontrolü için)
     @GET("rest/v1/users")
     Call<List<User>> getUserById(

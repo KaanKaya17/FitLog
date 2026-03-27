@@ -14,6 +14,9 @@ public class PrefManager {
     private static final String KEY_WATER_GOAL   = "water_goal";
     private static final String KEY_LANGUAGE     = "app_language";
     private static final String KEY_WATER_REMINDER = "water_reminder_enabled";
+    private static final String KEY_GENDER     = "user_gender";
+    private static final String KEY_HEIGHT     = "user_height";
+    private static final String KEY_WEIGHT     = "user_weight";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -32,6 +35,9 @@ public class PrefManager {
         editor.putString(KEY_LAST_NAME, user.getLast_name());
         editor.putInt(KEY_CALORIE_GOAL, user.getCalorie_goal());
         editor.putInt(KEY_WATER_GOAL, user.getWater_goal());
+        editor.putString(KEY_GENDER, user.getGender() != null ? user.getGender() : "");
+        editor.putFloat(KEY_HEIGHT, user.getHeight_cm() != null ? user.getHeight_cm() : 0f);
+        editor.putFloat(KEY_WEIGHT, user.getWeight_kg() != null ? user.getWeight_kg() : 0f);
         editor.apply();
     }
 
@@ -41,6 +47,18 @@ public class PrefManager {
     public String getEmail()      { return sharedPreferences.getString(KEY_EMAIL, ""); }
     public String getFirstName()  { return sharedPreferences.getString(KEY_FIRST_NAME, ""); }
     public String getLastName()   { return sharedPreferences.getString(KEY_LAST_NAME, ""); }
+
+    public void setFirstName(String fName) { editor.putString(KEY_FIRST_NAME, fName).apply(); }
+    public void setLastName(String lName) { editor.putString(KEY_LAST_NAME, lName).apply(); }
+
+    public void setGender(String gender) { editor.putString(KEY_GENDER, gender).apply(); }
+    public String getGender() { return sharedPreferences.getString(KEY_GENDER, ""); }
+
+    public void setHeight(float height) { editor.putFloat(KEY_HEIGHT, height).apply(); }
+    public float getHeight() { return sharedPreferences.getFloat(KEY_HEIGHT, 0f); }
+
+    public void setWeight(float weight) { editor.putFloat(KEY_WEIGHT, weight).apply(); }
+    public float getWeight() { return sharedPreferences.getFloat(KEY_WEIGHT, 0f); }
 
     // Logout'ta hepsini temizle
     public void clearUser() {

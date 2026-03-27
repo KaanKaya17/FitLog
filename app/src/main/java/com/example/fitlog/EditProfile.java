@@ -8,8 +8,14 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -45,6 +51,17 @@ public class EditProfile extends AppCompatActivity {
         PrefManager pref = new PrefManager(this);
         etFirstName.setText(pref.getFirstName());
         etLastName.setText(pref.getLastName());
+
+        float currentHeight = pref.getHeight();
+        if(currentHeight > 0) etHeight.setText(String.valueOf(currentHeight));
+        
+        float currentWeight = pref.getWeight();
+        if(currentWeight > 0) etWeight.setText(String.valueOf(currentWeight));
+
+        String currentGender = pref.getGender();
+        if(currentGender != null && !currentGender.isEmpty()) {
+            selectGender(currentGender);
+        }
 
         cardMale.setOnClickListener(v -> selectGender("Male"));
         cardFemale.setOnClickListener(v -> selectGender("Female"));
@@ -107,9 +124,52 @@ public class EditProfile extends AppCompatActivity {
             return;
         }
 
-        // Successfully validated!
-        Toast.makeText(this, getString(R.string.msg_design_done_db_later), Toast.LENGTH_LONG).show();
-        finish();
+        float finalHeight = Float.parseFloat(hStr);
+        float finalWeight = Float.parseFloat(wStr);
+
+        btnSave.setEnabled(false);
+        Toast.makeText(this, "Değişiklikler kaydediliyor...", Toast.LENGTH_SHORT).show();
+
+        PrefManager pref = new PrefManager(this);
+        int userId = pref.getId();
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("first_name", fName);
+        updates.put("last_name", lName);
+        updates.put("gender", selectedGender);
+        updates.put("height_cm", finalHeight);
+        updates.put("weight_kg", finalWeight);
+
+        SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
+        String apiKey = BuildConfig.SUPABASE_API_KEY;
+        String authHeader = "Bearer " + apiKey;
+        String userIdFilter = "eq." + userId;
+
+        api.updateUserProfile(apiKey, authHeader, "application/json", "return=minimal", userIdFilter, updates)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        btnSave.setEnabled(true);
+                        if(response.isSuccessful()){
+                            pref.setFirstName(fName);
+                            pref.setLastName(lName);
+                            pref.setGender(selectedGender);
+                            pref.setHeight(finalHeight);
+                            pref.setWeight(finalWeight);
+
+                            Toast.makeText(EditProfile.this, "Profil bilgileri kaydedildi!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(EditProfile.this, "Kayıt başarısız!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        btnSave.setEnabled(true);
+                        Toast.makeText(EditProfile.this, "Bağlantı hatası!", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void btnBack(View view) {

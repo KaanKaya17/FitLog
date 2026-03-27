@@ -14,6 +14,9 @@ public class User {
     private int daily_calorie_goal;
     private int daily_water_goal_ml;
     private boolean is_blocked;
+    private String gender;
+    private Float height_cm;
+    private Float weight_kg;
 
     // 1. Boş Constructor (GSON'ın nesneyi oluşturabilmesi için gereklidir)
     public User() {}
@@ -63,4 +66,13 @@ public class User {
 
     public boolean isBlocked() { return is_blocked; }
     public void setBlocked(boolean blocked) { this.is_blocked = blocked; }
+
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
+
+    public Float getHeight_cm() { return height_cm; }
+    public void setHeight_cm(Float height_cm) { this.height_cm = height_cm; }
+
+    public Float getWeight_kg() { return weight_kg; }
+    public void setWeight_kg(Float weight_kg) { this.weight_kg = weight_kg; }
 }

@@ -62,6 +62,23 @@ public class Profile extends AppCompatActivity {
         tvEmail.setText(pref.getEmail());
         tvFirstName.setText(firstName.isEmpty() ? "—" : firstName);
         tvLastName.setText(lastName.isEmpty()  ? "—" : lastName);
+
+        float height = pref.getHeight();
+        float weight = pref.getWeight();
+        String gender = pref.getGender();
+
+        tvHeight.setText((height > 0) ? (height + " cm") : "— cm");
+        tvWeight.setText((weight > 0) ? (weight + " kg") : "— kg");
+
+        if (gender == null || gender.isEmpty()) {
+            tvGender.setText("—");
+        } else if (gender.equals("Male")) {
+            tvGender.setText(getString(R.string.gender_male));
+        } else if (gender.equals("Female")) {
+            tvGender.setText(getString(R.string.gender_female));
+        } else {
+            tvGender.setText(gender);
+        }
     }
 
     public void btnUserLogOut(View view){
