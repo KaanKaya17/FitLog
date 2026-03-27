@@ -140,8 +140,13 @@
     <string name="edit_profile_label_height">Height (cm)</string>
     <string name="edit_profile_label_weight">Weight (kg)</string>
     <string name="edit_profile_save">Save Changes</string>
+    <string name="edit_profile_goal">Your Goal</string>
+    <string name="goal_lose">Lose Weight</string>
+    <string name="goal_maintain">Maintain</string>
+    <string name="goal_gain">Gain Weight</string>
     <string name="error_empty_name">Name cannot be empty.</string>
     <string name="error_select_gender">Please select a gender.</string>
+    <string name="error_select_goal">Please select a goal.</string>
     <string name="error_invalid_height">Please enter a valid height (50-300).</string>
     <string name="error_invalid_weight">Please enter a valid weight (20-300).</string>
     <string name="msg_design_done_db_later">Looks good! Database logic will be added here later.</string>

@@ -140,8 +140,13 @@
     <string name="edit_profile_label_height">Boy (cm)</string>
     <string name="edit_profile_label_weight">Kilo (kg)</string>
     <string name="edit_profile_save">Değişiklikleri Kaydet</string>
+    <string name="edit_profile_goal">Hedefiniz</string>
+    <string name="goal_lose">Kilo Ver</string>
+    <string name="goal_maintain">Kilo Koru</string>
+    <string name="goal_gain">Kilo Al</string>
     <string name="error_empty_name">İsim boş bırakılamaz.</string>
     <string name="error_select_gender">Lütfen bir cinsiyet seçiniz.</string>
+    <string name="error_select_goal">Lütfen bir hedef seçiniz.</string>
     <string name="error_invalid_height">Geçerli bir boy giriniz (50-300).</string>
     <string name="error_invalid_weight">Geçerli bir kilo giriniz (20-300).</string>
     <string name="msg_design_done_db_later">Harika görünüyor! Veritabanı işlemleri daha sonra eklenecektir.</string>

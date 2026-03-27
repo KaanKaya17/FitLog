@@ -17,6 +17,7 @@ public class PrefManager {
     private static final String KEY_GENDER     = "user_gender";
     private static final String KEY_HEIGHT     = "user_height";
     private static final String KEY_WEIGHT     = "user_weight";
+    private static final String KEY_GOAL       = "user_goal";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -38,6 +39,7 @@ public class PrefManager {
         editor.putString(KEY_GENDER, user.getGender() != null ? user.getGender() : "");
         editor.putFloat(KEY_HEIGHT, user.getHeight_cm() != null ? user.getHeight_cm() : 0f);
         editor.putFloat(KEY_WEIGHT, user.getWeight_kg() != null ? user.getWeight_kg() : 0f);
+        editor.putString(KEY_GOAL, user.getGoal() != null ? user.getGoal() : "");
         editor.apply();
     }
 
@@ -59,6 +61,9 @@ public class PrefManager {
 
     public void setWeight(float weight) { editor.putFloat(KEY_WEIGHT, weight).apply(); }
     public float getWeight() { return sharedPreferences.getFloat(KEY_WEIGHT, 0f); }
+
+    public void setGoal(String goal) { editor.putString(KEY_GOAL, goal).apply(); }
+    public String getGoal() { return sharedPreferences.getString(KEY_GOAL, ""); }
 
     // Logout'ta hepsini temizle
     public void clearUser() {

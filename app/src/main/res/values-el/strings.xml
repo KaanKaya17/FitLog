@@ -138,6 +138,11 @@
     <string name="gender_male">Άνδρας</string>
     <string name="gender_female">Γυναίκα</string>
     <string name="edit_profile_label_height">Ύψος (cm)</string>
+    <string name="error_select_goal">Παρακαλώ επιλέξτε έναν στόχο.</string>
+    <string name="edit_profile_goal">Στόχος</string>
+    <string name="goal_lose">Απώλεια Βάρους</string>
+    <string name="goal_maintain">Διατήρηση Βάρους</string>
+    <string name="goal_gain">Αύξηση Βάρους</string>
     <string name="edit_profile_label_weight">Βάρος (kg)</string>
     <string name="edit_profile_save">Αποθήκευση Αλλαγών</string>
     <string name="error_empty_name">Το όνομα δεν μπορεί να είναι κενό.</string>

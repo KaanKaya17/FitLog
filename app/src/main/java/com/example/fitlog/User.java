@@ -17,6 +17,7 @@ public class User {
     private String gender;
     private Float height_cm;
     private Float weight_kg;
+    private String goal;
 
     // 1. Boş Constructor (GSON'ın nesneyi oluşturabilmesi için gereklidir)
     public User() {}
@@ -75,4 +76,7 @@ public class User {
 
     public Float getWeight_kg() { return weight_kg; }
     public void setWeight_kg(Float weight_kg) { this.weight_kg = weight_kg; }
+
+    public String getGoal() { return goal; }
+    public void setGoal(String goal) { this.goal = goal; }
 }

@@ -24,9 +24,11 @@ public class EditProfile extends AppCompatActivity {
 
     private EditText etFirstName, etLastName, etHeight, etWeight;
     private LinearLayout cardMale, cardFemale;
+    private LinearLayout cardGoalLose, cardGoalMaintain, cardGoalGain;
     private Button btnSave;
 
     private String selectedGender = "";
+    private String selectedGoal = "";
 
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
@@ -45,6 +47,9 @@ public class EditProfile extends AppCompatActivity {
         etWeight    = findViewById(R.id.etWeight);
         cardMale    = findViewById(R.id.cardMale);
         cardFemale  = findViewById(R.id.cardFemale);
+        cardGoalLose = findViewById(R.id.cardGoalLose);
+        cardGoalMaintain = findViewById(R.id.cardGoalMaintain);
+        cardGoalGain = findViewById(R.id.cardGoalGain);
         btnSave     = findViewById(R.id.btnSave);
 
         // Pre-fill existing data (Name)
@@ -63,8 +68,17 @@ public class EditProfile extends AppCompatActivity {
             selectGender(currentGender);
         }
 
+        String currentGoal = pref.getGoal();
+        if(currentGoal != null && !currentGoal.isEmpty()) {
+            selectGoal(currentGoal);
+        }
+
         cardMale.setOnClickListener(v -> selectGender("Male"));
         cardFemale.setOnClickListener(v -> selectGender("Female"));
+
+        cardGoalLose.setOnClickListener(v -> selectGoal("lose"));
+        cardGoalMaintain.setOnClickListener(v -> selectGoal("maintain"));
+        cardGoalGain.setOnClickListener(v -> selectGoal("gain"));
 
         btnSave.setOnClickListener(v -> saveProfile());
 
@@ -86,6 +100,19 @@ public class EditProfile extends AppCompatActivity {
         }
     }
 
+    private void selectGoal(String goal) {
+        selectedGoal = goal;
+        cardGoalLose.setBackgroundResource(R.drawable.edittext_bg);
+        cardGoalMaintain.setBackgroundResource(R.drawable.edittext_bg);
+        cardGoalGain.setBackgroundResource(R.drawable.edittext_bg);
+        
+        switch (goal) {
+            case "lose": cardGoalLose.setBackgroundResource(R.drawable.badge_blue); break;
+            case "maintain": cardGoalMaintain.setBackgroundResource(R.drawable.badge_blue); break;
+            case "gain": cardGoalGain.setBackgroundResource(R.drawable.badge_blue); break;
+        }
+    }
+
     private void saveProfile() {
         String fName = etFirstName.getText().toString().trim();
         String lName = etLastName.getText().toString().trim();
@@ -99,6 +126,11 @@ public class EditProfile extends AppCompatActivity {
 
         if (selectedGender.isEmpty()) {
             Toast.makeText(this, getString(R.string.error_select_gender), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (selectedGoal.isEmpty()) {
+            Toast.makeText(this, getString(R.string.error_select_goal), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -137,6 +169,7 @@ public class EditProfile extends AppCompatActivity {
         updates.put("first_name", fName);
         updates.put("last_name", lName);
         updates.put("gender", selectedGender);
+        updates.put("goal", selectedGoal);
         updates.put("height_cm", finalHeight);
         updates.put("weight_kg", finalWeight);
 
@@ -154,6 +187,7 @@ public class EditProfile extends AppCompatActivity {
                             pref.setFirstName(fName);
                             pref.setLastName(lName);
                             pref.setGender(selectedGender);
+                            pref.setGoal(selectedGoal);
                             pref.setHeight(finalHeight);
                             pref.setWeight(finalWeight);
 
