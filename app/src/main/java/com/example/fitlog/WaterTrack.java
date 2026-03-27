@@ -84,6 +84,10 @@ public class WaterTrack extends AppCompatActivity {
             Toast.makeText(this, getString(R.string.water_error_negative_amount), Toast.LENGTH_SHORT).show();
             return;
         }
+        if (amount > 3000) {
+            Toast.makeText(this, getString(R.string.water_error_too_much_once), Toast.LENGTH_SHORT).show();
+            return;
+        }
         editTextCustomAmount.setText("");
         PrefManager pref = new PrefManager(this);
         if(pref.getId() != -1){
@@ -100,6 +104,10 @@ public class WaterTrack extends AppCompatActivity {
     // ─── Su ekleme ──────────────────────────────────────────────────
 
     private void addWater(int amountMl) {
+        if (currentAmount + amountMl > 10000) {
+            Toast.makeText(this, getString(R.string.water_error_daily_limit), Toast.LENGTH_SHORT).show();
+            return;
+        }
         currentAmount += amountMl;
         updateUI(currentAmount);
         saveWaterLog(amountMl);

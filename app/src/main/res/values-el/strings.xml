@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Turkish</item>
+        <item>Greek</item>
+    </string-array>
+    <string name="app_name">FitLog</string>
+    <string name="water_title">Παρακολούθηση Νερού</string>
+    <string name="water_subtitle">Μείνε ενυδατωμένος σήμερα</string>
+    <string name="water_daily_goal">Ημερήσιος στόχος</string>
+    <string name="water_goal_label"> / 2500 ml</string>
+    <string name="water_remaining">0% ολοκληρώθηκε · 2500 ml απομένουν</string>
+    <string name="water_glasses">Ποτήρια (250 ml το καθένα)</string>
+    <string name="water_add">Γρήγορη προσθήκη</string>
+    <string name="water_reset">Επαναφορά</string>
+    <string name="moto_no_meals">Δεν έχεις προσθέσει κανένα γεύμα σήμερα.</string>
+    <string name="moto_good_start">Καλή αρχή, συνέχισε! 💪</string>
+    <string name="moto_getting_close">Πλησιάζεις στον στόχο σου!</string>
+    <string name="moto_goal_reached">Ο ημερήσιος στόχος θερμίδων επιτεύχθηκε! 🎉</string>
+
+    <!-- About Project -->
+    <string name="about_app_name">FitLog</string>
+    <string name="about_tagline">Παρακολούθησε εύκολα τη διατροφή και το νερό σου</string>
+
+    <string name="about_header_project">Έργο</string>
+    <string name="about_project_description">Το FitLog σε βοηθά να παρακολουθείς την ημερήσια πρόσληψη θερμίδων και νερού. Ο στόχος αυτού του έργου είναι να βοηθήσει τους χρήστες να αναπτύξουν υγιεινές συνήθειες και να παρακολουθούν εύκολα τη διατροφή τους.</string>
+
+    <string name="about_header_app_info">Πληροφορίες Εφαρμογής</string>
+    <string name="about_label_version">Έκδοση</string>
+    <string name="about_version_value">1.0</string>
+    <string name="about_label_developer">Προγραμματιστής</string>
+    <string name="about_developer_name">Kaan Kaya</string>
+
+    <string name="about_header_contact">Επικοινωνία</string>
+    <string name="contact_github">GitHub</string>
+    <string name="contact_website">Ιστοσελίδα</string>
+    <string name="contact_linkedin">LinkedIn</string>
+    <string name="contact_instagram">Instagram</string>
+
+    <!-- Add Meal -->
+    <string name="add_meal_title">Προσθήκη Γεύματος</string>
+    <string name="add_meal_subtitle">Ανάλυσε τις διατροφικές αξίες με ΤΝ</string>
+
+    <string name="add_meal_label_food_name">Όνομα Τροφής</string>
+    <string name="add_meal_hint_food">π.χ. 2 μερίδες ρύζι, 1 μήλο...</string>
+    <string name="add_meal_btn_analyze">🔍 Ανάλυση με ΤΝ</string>
+
+    <string name="add_meal_label_serving">Μερίδα</string>
+    <string name="add_meal_confidence_high">Υψηλή Εμπιστοσύνη</string>
+    <string name="add_meal_confidence_medium">Μέτρια Εμπιστοσύνη</string>
+
+    <string name="add_meal_macro_protein">Πρωτεΐνη</string>
+    <string name="add_meal_macro_carbs">Υδατάνθρακες</string>
+    <string name="add_meal_macro_fat">Λίπος</string>
+    <string name="add_meal_macro_fiber">🌾 Φυτικές Ίνες</string>
+
+    <string name="add_meal_btn_save">Αποθήκευση Γεύματος</string>
+
+    <string name="error_empty_food">Παρακαλώ εισάγετε το όνομα της τροφής</string>
+    <string name="msg_analyzing">Ανάλυση...</string>
+
+    <!-- Main -->
+    <string name="unit_kcal"> kcal</string>
+    <string name="unit_ml"> ml</string>
+    <string name="unit_gram">γρ</string>
+
+    <string name="home_greeting">Καλημέρα 👋</string>
+    <string name="home_greeting_nice_day">Να έχεις μια όμορφη μέρα 👋</string>
+    <string name="home_greeting_night">Καλησπέρα 👋</string>
+    <string name="home_default_user">Χρήστης</string>
+    <string name="home_label_daily_calories">ΗΜΕΡΉΣΙΕΣ ΘΕΡΜΊΔΕΣ</string>
+    <string name="home_calorie_goal_hint">/ στόχος 2000</string>
+    <string name="home_calorie_goal_format">/ στόχος %1$d</string>
+
+    <string name="home_macro_protein">Πρωτεΐνη</string>
+    <string name="home_macro_carbs">Υδατάνθρακες</string>
+    <string name="home_macro_fat">Λίπος</string>
+
+    <string name="home_action_add_meal">🍽️ + Προσθήκη Γεύματος</string>
+    <string name="home_action_add_water">💧 + Προσθήκη Νερού</string>
+
+    <string name="home_section_water">ΠΑΡΑΚΟΛΟΎΘΗΣΗ ΝΕΡΟΎ</string>
+    <string name="home_water_label">💧 Ημερήσιο Νερό</string>
+    <string name="home_water_format">0 / 2000 ml</string>
+    <string name="home_water_progress_format">%1$d / %2$d ml</string>
+    <string name="home_water_percent_format">%0 ολοκληρώθηκε</string>
+    <string name="home_water_percent_value">%%%1$d ολοκληρώθηκε</string>
+    <string name="home_action_detail">Λεπτομέρειες →</string>
+
+    <string name="home_section_meals">ΓΕΎΜΑΤΑ ΣΉΜΕΡΑ</string>
+    <string name="home_meal_count_format">0 γεύματα</string>
+    <string name="home_meal_count_value">%1$d γεύματα</string>
+    <string name="home_total_calories_value">%1$d kcal</string>
+    <string name="home_meal_sub">προστέθηκαν σήμερα</string>
+    <string name="home_action_list">Προβολή Λίστας →</string>
+
+    <string name="home_motivation_title">Συνέχισε προς τον ημερήσιο στόχο σου!</string>
+    <string name="home_motivation_subtitle">Δεν έχεις προσθέσει κανένα γεύμα σήμερα.</string>
+
+    <!-- Meal Detail -->
+    <string name="meal_detail_back">← Πίσω</string>
+    <string name="meal_detail_label_calories">Θερμίδες</string>
+    <string name="meal_detail_label_nutrients">Διατροφικές Αξίες</string>
+
+    <string name="meal_detail_macro_protein">Πρωτεΐνη</string>
+    <string name="meal_detail_macro_carbs">Υδατάνθρακες</string>
+    <string name="meal_detail_macro_fat">Λίπος</string>
+    <string name="meal_detail_macro_fiber">Φυτικές Ίνες</string>
+
+    <string name="meal_detail_action_delete">Διαγραφή Γεύματος</string>
+
+    <string name="dialog_delete_title">Διαγραφή Γεύματος</string>
+    <string name="dialog_delete_message">Είσαι σίγουρος ότι θέλεις να διαγράψεις αυτό το γεύμα;</string>
+    <string name="action_confirm">Διαγραφή</string>
+    <string name="action_cancel">Ακύρωση</string>
+    <string name="action_ok">ΟΚ</string>
+
+    <!-- Profile -->
+    <string name="profile_label_workout">Άσκηση</string>
+    <string name="profile_label_day">Ημέρα</string>
+    <string name="profile_label_calorie">Θερμίδες</string>
+
+    <string name="profile_header_account">Στοιχεία Λογαριασμού</string>
+    <string name="profile_label_email">Email</string>
+    <string name="profile_label_firstname">Όνομα</string>
+    <string name="profile_label_lastname">Επώνυμο</string>
+
+    <string name="profile_header_settings">Ρυθμίσεις</string>
+    <string name="profile_action_edit">Επεξεργασία Προφίλ</string>
+    <string name="profile_action_change_password">Αλλαγή Κωδικού</string>
+    <string name="profile_action_app_settings">Ρυθμίσεις Εφαρμογής</string>
+    <string name="profile_action_logout">Αποσύνδεση</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ρυθμίσεις</string>
+    <string name="settings_subtitle">Ορίστε τους ημερήσιους στόχους σας</string>
+
+    <string name="settings_header_language">Γλώσσα</string>
+    <string name="settings_label_app_language">🌍 Γλώσσα Εφαρμογής</string>
+    <string name="settings_sub_app_language">Επιλέξτε τη γλώσσα της εφαρμογής</string>
+
+    <string name="settings_header_goals">Ημερήσιοι Στόχοι</string>
+    <string name="settings_label_calorie_goal">🔥 Ημερήσιος Στόχος Θερμίδων</string>
+    <string name="settings_hint_calorie">Συνιστάται: 1500–2500 kcal</string>
+    <string name="settings_label_water_goal">💧 Ημερήσιος Στόχος Νερού</string>
+    <string name="settings_hint_water">Συνιστάται: 1500–3000 ml</string>
+
+    <string name="settings_header_notifications">Ειδοποιήσεις</string>
+    <string name="settings_label_water_reminder">💧 Υπενθύμιση Νερού</string>
+    <string name="settings_sub_water_reminder">Λάβε υπενθύμιση για να πιεις νερό</string>
+    <string name="water_reminder_title">Ώρα να πιεις νερό!</string>
+    <string name="water_reminder_text">Μείνε ενυδατωμένος για να πετύχεις τον ημερήσιο στόχο σου.</string>
+    <string name="water_reminder_almost_title">Σχεδόν εκεί! 🎯</string>
+    <string name="water_reminder_almost_text">Είσαι πολύ κοντά στον ημερήσιο στόχο νερού. Λίγο ακόμα!</string>
+
+    <string name="settings_header_current">Τρέχοντες Στόχοι</string>
+    <string name="settings_current_kcal_sub">στόχος kcal</string>
+    <string name="settings_current_ml_sub">στόχος ml</string>
+
+    <string name="settings_action_save">Αποθήκευση Στόχων</string>
+
+    <string name="settings_header_about">Σχετικά</string>
+    <string name="settings_label_about_app">ℹ️ Σχετικά με την Εφαρμογή</string>
+    <string name="settings_sub_about_app">Πληροφορίες εφαρμογής και προγραμματιστής</string>
+
+    <!-- User Login -->
+    <string name="login_welcome_back">Καλώς ήρθες ξανά</string>
+    <string name="login_subtitle">Συνδέσου στον λογαριασμό σου</string>
+
+    <string name="login_label_email">Email</string>
+    <string name="login_hint_email">Εισάγετε το email σας</string>
+
+    <string name="login_label_password">Κωδικός</string>
+    <string name="login_hint_password">Εισάγετε τον κωδικό σας</string>
+
+    <string name="login_action_forgot_password">Ξεχάσατε τον κωδικό;</string>
+    <string name="login_action_login">Σύνδεση</string>
+
+    <string name="login_divider_or">ή</string>
+
+    <string name="login_footer_no_account">Δεν έχετε λογαριασμό;</string>
+    <string name="login_action_register">Εγγραφή</string>
+
+    <!-- User Register -->
+    <string name="register_title">Δημιουργία Λογαριασμού</string>
+    <string name="register_subtitle">Συμπλήρωσε τα στοιχεία σου</string>
+
+    <string name="register_label_username">Όνομα χρήστη</string>
+    <string name="register_hint_username">Εισάγετε το όνομα χρήστη σας</string>
+
+    <string name="register_label_firstname">Όνομα</string>
+    <string name="register_hint_firstname">Το όνομά σου</string>
+
+    <string name="register_label_lastname">Επώνυμο</string>
+    <string name="register_hint_lastname">Το επώνυμό σου</string>
+
+    <string name="register_action_register">Εγγραφή</string>
+    <string name="register_footer_has_account">Έχεις ήδη λογαριασμό;</string>
+
+    <!-- Water Track -->
+    <string name="water_goal_divider">/ %s ml</string>
+    <string name="water_status_percent">%d%% ολοκληρώθηκε</string>
+
+    <string name="water_header_quick_add">Γρήγορη Προσθήκη</string>
+    <string name="water_btn_200">200 ml</string>
+    <string name="water_btn_300">300 ml</string>
+    <string name="water_btn_500">500 ml</string>
+
+    <string name="water_header_manual">Χειροκίνητη Εισαγωγή</string>
+    <string name="water_hint_amount">Ποσότητα (ml)</string>
+    <string name="water_action_add">Προσθήκη</string>
+    <string name="water_action_reset">Επαναφορά Ημέρας</string>
+
+    <!-- History Day -->
+    <string name="history_today">Σήμερα</string>
+    <string name="history_yesterday">Χθες</string>
+    <string name="history_label_meals">Γεύματα</string>
+    <string name="history_label_water_icon">💧 Νερό</string>
+    <string name="history_label_protein">Πρωτεΐνη</string>
+    <string name="history_label_carbs">Υδατάνθρακες</string>
+    <string name="history_label_fat">Λίπος</string>
+
+    <string name="format_kcal">%1$s kcal</string>
+    <string name="format_ml">%1$s ml</string>
+    <string name="format_gram">%1$s γρ</string>
+
+    <!-- History Meal Row -->
+    <string name="meal_row_default_name">Όνομα Τροφής</string>
+    <string name="meal_row_kcal_format">%1$d kcal</string>
+
+    <!-- Item Meal -->
+    <string name="food_label_default_name">Όνομα Τροφής</string>
+    <string name="food_label_serving">1 μερίδα</string>
+
+    <string name="food_format_protein">%1$s γρ Π</string>
+    <string name="food_format_carbs">%1$s γρ Υ</string>
+    <string name="food_format_fat">%1$s γρ Λ</string>
+
+    <!-- Nav Bar -->
+    <string name="nav_home">Αρχική</string>
+    <string name="nav_statistics">Στατιστικά</string>
+    <string name="nav_meals">Γεύματα</string>
+    <string name="nav_profile">Προφίλ</string>
+
+    <!-- Meal List -->
+    <string name="meal_list_title">Τα Γεύματά μου</string>
+    <string name="meal_list_subtitle_format">%1$d γεύματα προστέθηκαν σήμερα</string>
+
+    <string name="meal_list_header_today">Σήμερα</string>
+    <string name="meal_list_empty_title">Δεν έχουν προστεθεί γεύματα ακόμα</string>
+    <string name="meal_list_empty_subtitle">Πάτα το κουμπί + για να προσθέσεις ένα γεύμα</string>
+
+    <string name="label_kcal">kcal</string>
+    <string name="label_protein">πρωτεΐνη</string>
+    <string name="label_carbs">υδατάνθρακες</string>
+    <string name="label_fat">λίπος</string>
+
+    <!-- History -->
+    <string name="history_title">Ιστορικό</string>
+    <string name="history_subtitle">Σύνοψη των τελευταίων 7 ημερών</string>
+    <string name="history_empty_state">Δεν υπάρχουν διαθέσιμα ιστορικά δεδομένα ακόμα.</string>
+
+    <!-- Change Password -->
+    <string name="change_pwd_title">Ενημέρωση Κωδικού</string>
+    <string name="change_pwd_subtitle">Παρακαλώ επιλέξτε έναν ισχυρό κωδικό για την ασφάλειά σας.</string>
+
+    <string name="label_current_password">Τρέχων Κωδικός</string>
+    <string name="hint_current_password">Εισάγετε τον παλιό κωδικό</string>
+
+    <string name="label_new_password">Νέος Κωδικός</string>
+    <string name="hint_new_password">Εισάγετε νέο κωδικό</string>
+
+    <string name="label_confirm_password">Επιβεβαίωση Νέου Κωδικού</string>
+    <string name="hint_confirm_password">Επαναλάβετε τον νέο κωδικό</string>
+
+    <string name="action_save_password">ΑΠΟΘΗΚΕΥΣΗ ΚΩΔΙΚΟΥ</string>
+    <string name="error_password_mismatch">Οι κωδικοί δεν ταιριάζουν!</string>
+
+    <!-- General Error / History -->
+    <string name="error_data_load_failed">Αποτυχία φόρτωσης δεδομένων.</string>
+    <string name="history_no_meals_today">Δεν έχουν προστεθεί γεύματα για αυτή την ημέρα.</string>
+    <string name="format_gram_float">%1$.1fγρ</string>
+    <string name="food_format_protein_float">%1$.1fγρ Π</string>
+    <string name="food_format_carbs_float">%1$.1fγρ Υ</string>
+    <string name="food_format_fat_float">%1$.1fγρ Λ</string>
+    <string name="dialog_delete_confirm_format">Διαγραφή %1$s;</string>
+    <string name="msg_meal_deleted">✅ Το γεύμα διαγράφηκε.</string>
+    <string name="error_delete_failed_format">Αποτυχία διαγραφής: %1$d</string>
+    <string name="error_connection">Σφάλμα σύνδεσης.</string>
+
+    <!-- Water Track Errors/Messages -->
+    <string name="water_error_empty_amount">Παρακαλώ εισάγετε μια ποσότητα.</string>
+    <string name="water_error_invalid_number">Παρακαλώ εισάγετε έναν έγκυρο αριθμό.</string>
+    <string name="water_error_negative_amount">Παρακαλώ εισάγετε έγκυρη ποσότητα.</string>
+    <string name="water_msg_reset">Η ημέρα επαναφέρθηκε.</string>
+    <string name="water_msg_goal_reached">🎉 Ο ημερήσιος στόχος επιτεύχθηκε!</string>
+    <string name="error_record_failed">Παρουσιάστηκε σφάλμα κατά την αποθήκευση.</string>
+    <string name="water_error_too_much_once">Δεν μπορείτε να προσθέσετε περισσότερα από 3000 ml κάθε φορά.</string>
+    <string name="water_error_daily_limit">Έχετε φτάσει το ημερήσιο μέγιστο όριο (10000 ml).</string>
+    <string name="error_connection_with_msg">Σφάλμα σύνδεσης: %1$s</string>
+    <string name="error_data_load_with_msg">Αποτυχία φόρτωσης δεδομένων: %1$s</string>
+</resources>

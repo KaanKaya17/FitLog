@@ -3,6 +3,7 @@
     <string-array name="languages">
         <item>English</item>
         <item>Turkish</item>
+        <item>Greek</item>
     </string-array>
     <string name="app_name">FitLog</string>
     <string name="water_title">Water Tracker</string>
@@ -293,6 +294,8 @@
     <string name="water_error_empty_amount">Please enter an amount.</string>
     <string name="water_error_invalid_number">Please enter a valid number.</string>
     <string name="water_error_negative_amount">Please enter a valid amount.</string>
+    <string name="water_error_too_much_once">You can\'t add more than 3000 ml at once.</string>
+    <string name="water_error_daily_limit">You have reached the daily maximum limit (10000 ml).</string>
     <string name="water_msg_reset">Day has been reset.</string>
     <string name="water_msg_goal_reached">🎉 Daily goal reached!</string>
     <string name="error_record_failed">Error occurred while saving.</string>
