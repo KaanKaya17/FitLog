@@ -333,4 +333,8 @@
     <string name="error_connection_with_msg">Bağlantı hatası: %1$s</string>
     <string name="error_data_load_with_msg">Veri yüklenemedi: %1$s</string>
 
+    <!-- No Internet UI -->
+    <string name="no_internet_title">İnternet Bağlantısı Yok</string>
+    <string name="no_internet_subtitle">Yapay zeka özelliklerini kullanmak için lütfen internet bağlantınızı kontrol edin.</string>
+    <string name="action_retry">Tekrar Dene</string>
 </resources>

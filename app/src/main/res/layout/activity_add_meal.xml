@@ -41,7 +41,12 @@
                 android:textColor="#9E9E9E"
                 android:layout_marginBottom="32dp" />
 
+            <include
+                android:id="@+id/includeNoInternet"
+                layout="@layout/layout_no_internet" />
+
             <LinearLayout
+                android:id="@+id/layoutInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

@@ -24,6 +24,9 @@ public class AddMeal extends AppCompatActivity {
     private ProgressBar progressBar;
     private LinearLayout cardResult;
     private GeminiNutritionService service;
+    private View includeNoInternet;
+    private Button btnRetryInternet;
+    private LinearLayout layoutInput;
 
     // Sonuç view'ları
     private TextView tvFoodName, tvServingSize, tvConfidence;
@@ -51,6 +54,11 @@ public class AddMeal extends AppCompatActivity {
         btnSave     = findViewById(R.id.btnSave);
         progressBar = findViewById(R.id.progressBar);
         cardResult  = findViewById(R.id.cardResult);
+        includeNoInternet = findViewById(R.id.includeNoInternet);
+        btnRetryInternet = includeNoInternet.findViewById(R.id.btnRetryInternet);
+        layoutInput = findViewById(R.id.layoutInput);
+
+        btnRetryInternet.setOnClickListener(v -> checkInternetState());
 
         tvFoodName    = findViewById(R.id.tvFoodName);
         tvServingSize = findViewById(R.id.tvServingSize);
@@ -71,7 +79,7 @@ public class AddMeal extends AppCompatActivity {
                 return;
             }
             if (!NetworkUtils.isNetworkAvailable(this)) {
-                Toast.makeText(this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+                checkInternetState();
                 return;
             }
             startLoading();
@@ -99,7 +107,7 @@ public class AddMeal extends AppCompatActivity {
         // Kaydet
         btnSave.setOnClickListener(v -> {
             if (!NetworkUtils.isNetworkAvailable(this)) {
-                Toast.makeText(this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+                checkInternetState();
                 return;
             }
             if (lastResult != null) {
@@ -112,9 +120,24 @@ public class AddMeal extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        checkInternetState();
     }
 
     // ─── UI Güncelleme ──────────────────────────────────────────────
+
+    private void checkInternetState() {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            if (layoutInput != null) layoutInput.setVisibility(View.GONE);
+            if (cardResult != null) cardResult.setVisibility(View.GONE);
+            if (btnSave != null) btnSave.setVisibility(View.GONE);
+            if (progressBar != null) progressBar.setVisibility(View.GONE);
+            if (includeNoInternet != null) includeNoInternet.setVisibility(View.VISIBLE);
+        } else {
+            if (includeNoInternet != null) includeNoInternet.setVisibility(View.GONE);
+            if (layoutInput != null) layoutInput.setVisibility(View.VISIBLE);
+        }
+    }
 
     private void showResult(NutritionData data) {
         tvFoodName.setText(data.foodName);

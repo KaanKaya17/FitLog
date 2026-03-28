@@ -35,6 +35,8 @@ public class AiCoachActivity extends AppCompatActivity {
     private NestedScrollView scrollPlan;
     private FrameLayout bottomBar;
     private Button btnRegenerate;
+    private View includeNoInternet;
+    private Button btnRetryInternet;
     private String todayDate;
     private PrefManager prefManager;
 
@@ -55,11 +57,14 @@ public class AiCoachActivity extends AppCompatActivity {
         scrollPlan = findViewById(R.id.scrollPlan);
         bottomBar = findViewById(R.id.bottomBar);
         btnRegenerate = findViewById(R.id.btnRegenerate);
+        includeNoInternet = findViewById(R.id.includeNoInternet);
+        btnRetryInternet = includeNoInternet.findViewById(R.id.btnRetryInternet);
 
         prefManager = new PrefManager(this);
         todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         btnRegenerate.setOnClickListener(v -> fetchPlanFromGemini());
+        btnRetryInternet.setOnClickListener(v -> checkExistingPlan());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -71,6 +76,7 @@ public class AiCoachActivity extends AppCompatActivity {
     }
 
     private void showLoading(boolean isLoading) {
+        if (includeNoInternet != null) includeNoInternet.setVisibility(View.GONE);
         if(isLoading) {
             progressBar.setVisibility(View.VISIBLE);
             tvLoading.setVisibility(View.VISIBLE);
@@ -84,9 +90,17 @@ public class AiCoachActivity extends AppCompatActivity {
         }
     }
 
+    private void showNoInternet() {
+        progressBar.setVisibility(View.GONE);
+        tvLoading.setVisibility(View.GONE);
+        scrollPlan.setVisibility(View.GONE);
+        bottomBar.setVisibility(View.GONE);
+        if (includeNoInternet != null) includeNoInternet.setVisibility(View.VISIBLE);
+    }
+
     private void checkExistingPlan() {
         if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+            showNoInternet();
             return;
         }
         showLoading(true);
@@ -120,7 +134,7 @@ public class AiCoachActivity extends AppCompatActivity {
 
     private void fetchPlanFromGemini() {
         if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+            showNoInternet();
             return;
         }
         showLoading(true);
