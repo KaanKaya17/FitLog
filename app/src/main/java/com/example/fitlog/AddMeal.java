@@ -70,6 +70,10 @@ public class AddMeal extends AppCompatActivity {
                 Toast.makeText(this, "Please Enter A Meal", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (!NetworkUtils.isNetworkAvailable(this)) {
+                Toast.makeText(this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+                return;
+            }
             startLoading();
             service.analyzeTextFood(food, new NutritionCallback() {
                 @Override
@@ -94,6 +98,10 @@ public class AddMeal extends AppCompatActivity {
 
         // Kaydet
         btnSave.setOnClickListener(v -> {
+            if (!NetworkUtils.isNetworkAvailable(this)) {
+                Toast.makeText(this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (lastResult != null) {
                 saveMealToSupabase(lastResult);
             }

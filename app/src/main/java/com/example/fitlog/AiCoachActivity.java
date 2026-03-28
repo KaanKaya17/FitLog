@@ -85,6 +85,10 @@ public class AiCoachActivity extends AppCompatActivity {
     }
 
     private void checkExistingPlan() {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            Toast.makeText(this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+            return;
+        }
         showLoading(true);
         SupabaseApi authApi = RetrofitClient.getClient().create(SupabaseApi.class);
         String apiKey = BuildConfig.SUPABASE_API_KEY;
@@ -115,6 +119,10 @@ public class AiCoachActivity extends AppCompatActivity {
     }
 
     private void fetchPlanFromGemini() {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            Toast.makeText(this, getString(R.string.error_connection), Toast.LENGTH_SHORT).show();
+            return;
+        }
         showLoading(true);
 
         String name = prefManager.getFirstName();
