@@ -8,6 +8,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.view.LayoutInflater;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +33,8 @@ import retrofit2.Response;
 public class AiCoachActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
-    private TextView tvLoading, tvPlanContent;
+    private TextView tvLoading;
+    private LinearLayout llPlanContainer;
     private NestedScrollView scrollPlan;
     private FrameLayout bottomBar;
     private Button btnRegenerate;
@@ -53,7 +56,7 @@ public class AiCoachActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
         tvLoading = findViewById(R.id.tvLoading);
-        tvPlanContent = findViewById(R.id.tvPlanContent);
+        llPlanContainer = findViewById(R.id.llPlanContainer);
         scrollPlan = findViewById(R.id.scrollPlan);
         bottomBar = findViewById(R.id.bottomBar);
         btnRegenerate = findViewById(R.id.btnRegenerate);
@@ -117,7 +120,7 @@ public class AiCoachActivity extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                             // Ekrandaki içeriği güncelle
                             AiMealPlan plan = response.body().get(0);
-                            tvPlanContent.setText(plan.getPlan_content());
+                            renderPlanToCards(plan.getPlan_content());
                             showLoading(false);
                         } else {
                             // Yoksa yeni plan oluştur
@@ -179,7 +182,7 @@ public class AiCoachActivity extends AppCompatActivity {
                                 .getAsJsonObject("content").getAsJsonArray("parts").get(0)
                                 .getAsJsonObject().get("text").getAsString();
 
-                        tvPlanContent.setText(generatedText);
+                        renderPlanToCards(generatedText);
                         savePlanToDatabase(generatedText);
 
                     } catch (Exception e) {
@@ -237,6 +240,50 @@ public class AiCoachActivity extends AppCompatActivity {
         } catch (Exception e) {
             return "";
         }
+    }
+
+    private void renderPlanToCards(String markdownText) {
+        llPlanContainer.removeAllViews();
+        String[] lines = markdownText.split("\n");
+        StringBuilder currentContent = new StringBuilder();
+        String currentTitle = "Nutrition Plan";
+        LayoutInflater inflater = LayoutInflater.from(this);
+        boolean hasTitle = false;
+
+        for (String line : lines) {
+            String trimmedLine = line.trim();
+            if (trimmedLine.startsWith("#")) {
+                // Save previous card if it has content
+                if (hasTitle || currentContent.length() > 0) {
+                    addCardToContainer(inflater, currentTitle, currentContent.toString().trim());
+                    currentContent.setLength(0);
+                }
+                currentTitle = trimmedLine.replaceAll("^#+\\s*", "").replaceAll("\\*\\*", "");
+                hasTitle = true;
+            } else if (!trimmedLine.isEmpty()) {
+                currentContent.append(line).append("\n");
+            }
+        }
+        
+        // Add last card
+        if (hasTitle || currentContent.length() > 0) {
+            addCardToContainer(inflater, currentTitle, currentContent.toString().trim());
+        }
+    }
+
+    private void addCardToContainer(LayoutInflater inflater, String title, String content) {
+        if (title.isEmpty() && content.isEmpty()) return;
+        View cardView = inflater.inflate(R.layout.item_ai_coach_card, llPlanContainer, false);
+        TextView tvTitle = cardView.findViewById(R.id.tvCardTitle);
+        TextView tvContent = cardView.findViewById(R.id.tvCardContent);
+        
+        tvTitle.setText(title);
+        // Clean up markdown bold markers for simpler look
+        String formattedContent = content.replaceAll("\\*\\*(.*?)\\*\\*", "$1");
+        formattedContent = formattedContent.replaceAll("\\*(.*?)\\*", "$1");
+        tvContent.setText(formattedContent);
+        
+        llPlanContainer.addView(cardView);
     }
 
     public void btnBack(View view) {

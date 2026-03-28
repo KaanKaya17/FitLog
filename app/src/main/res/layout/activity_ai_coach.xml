@@ -15,7 +15,11 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="24dp"
+        android:background="@drawable/ai_coach_header_bg"
+        android:paddingTop="48dp"
+        android:paddingBottom="24dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -25,16 +29,16 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="btnBack"
-            app:tint="#1A1A2E"
+            app:tint="#FFFFFF"
             android:contentDescription="@string/desc_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ai_coach_title"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="#1A1A2E"
+            android:textColor="#FFFFFF"
             android:layout_marginStart="16dp" />
     </LinearLayout>
 
@@ -75,16 +79,15 @@
         android:layout_height="0dp"
         android:visibility="gone"
         android:padding="24dp"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintBottom_toTopOf="@id/bottomBar">
 
-        <TextView
-            android:id="@+id/tvPlanContent"
+        <LinearLayout
+            android:id="@+id/llPlanContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textColor="#1A1A2E"
-            android:lineSpacingExtra="6dp" />
+            android:orientation="vertical" />
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
@@ -105,7 +108,8 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="@null"
+            android:background="@drawable/ai_regenerate_btn_bg"
             style="@style/Widget.MaterialComponents.Button" />
     </FrameLayout>
 
