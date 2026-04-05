@@ -63,18 +63,61 @@
                     android:textColor="#1A1A2E"
                     android:layout_marginBottom="8dp" />
 
-                <EditText
-                    android:id="@+id/etFood"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:hint="@string/add_meal_hint_food"
-                    android:textSize="15sp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:background="@drawable/edittext_bg"
-                    android:textColor="#1A1A2E"
-                    android:inputType="text"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <EditText
+                        android:id="@+id/etFood"
+                        android:layout_width="0dp"
+                        android:layout_height="52dp"
+                        android:layout_weight="1"
+                        android:hint="@string/add_meal_hint_food"
+                        android:textSize="15sp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:background="@drawable/edittext_bg"
+                        android:textColor="#1A1A2E"
+                        android:inputType="text" />
+
+                    <ImageButton
+                        android:id="@+id/btnCamera"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:src="@android:drawable/ic_menu_camera"
+                        app:tint="#1A1A2E"
+                        android:contentDescription="Fotoğraf Çek" />
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/layoutPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:scaleType="centerCrop" />
+
+                    <ImageButton
+                        android:id="@+id/btnRemoveImage"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="top|end"
+                        android:layout_margin="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:src="@android:drawable/ic_menu_close_clear_cancel"
+                        app:tint="#1A1A2E"
+                        android:contentDescription="Fotoğrafı Sil" />
+                </FrameLayout>
 
                 <Button
                     android:id="@+id/btnAnalyze"

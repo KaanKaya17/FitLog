@@ -66,7 +66,7 @@ public class GeminiNutritionService {
                 content.put("parts", parts);
 
                 JSONObject genConfig = new JSONObject();
-                genConfig.put("response_mime_type", "application/json");
+                genConfig.put("responseMimeType", "application/json");
 
                 JSONObject body = new JSONObject();
                 body.put("contents", new JSONArray().put(content));
@@ -92,6 +92,75 @@ public class GeminiNutritionService {
                 String responseString = response.body().string();
 
                 android.util.Log.d("GEMINI_RAW", responseString);
+
+                NutritionData data = parseResponse(responseString);
+                callback.onSuccess(data);
+
+            } catch (Exception e) {
+                callback.onError(e.getMessage());
+            }
+        }).start();
+    }
+
+    public void analyzeImageFood(String base64Image, NutritionCallback callback) {
+        new Thread(() -> {
+            try {
+                String prompt = "You are a professional nutritionist. Provide the nutritional values for the food shown in this image EXACTLY in this JSON format, do not write any other text or explanation:\n" +
+                        "{\n" +
+                        "  \"food_name\": \"name of the food\",\n" +
+                        "  \"serving_size\": \"serving amount (e.g., 1 portion or 100g)\",\n" +
+                        "  \"calories\": 0,\n" +
+                        "  \"protein\": 0.0,\n" +
+                        "  \"carbohydrates\": 0.0,\n" +
+                        "  \"fat\": 0.0,\n" +
+                        "  \"fiber\": 0.0,\n" +
+                        "  \"confidence\": \"high/medium/low\"\n" +
+                        "}";
+
+                JSONObject textPart = new JSONObject();
+                textPart.put("text", prompt);
+
+                JSONObject inlineData = new JSONObject();
+                inlineData.put("mimeType", "image/jpeg");
+                inlineData.put("data", base64Image);
+
+                JSONObject imagePart = new JSONObject();
+                imagePart.put("inlineData", inlineData);
+
+                JSONArray parts = new JSONArray();
+                parts.put(textPart);
+                parts.put(imagePart);
+
+                JSONObject content = new JSONObject();
+                content.put("parts", parts);
+
+                JSONObject genConfig = new JSONObject();
+                genConfig.put("responseMimeType", "application/json");
+
+                JSONObject body = new JSONObject();
+                body.put("contents", new JSONArray().put(content));
+                body.put("generationConfig", genConfig);
+
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                        .readTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                        .writeTimeout(60, java.util.concurrent.TimeUnit.SECONDS)
+                        .build();
+                RequestBody requestBody = RequestBody.create(
+                        body.toString(),
+                        MediaType.get("application/json")
+                );
+
+                Request request = new Request.Builder()
+                        .url(BASE_URL + apiKey)
+                        .post(requestBody)
+                        .build();
+
+                Response response = client.newCall(request).execute();
+                if (response.body() == null) throw new Exception("Sunucudan boş yanıt alındı.");
+                String responseString = response.body().string();
+
+                android.util.Log.d("GEMINI_RAW_IMG", responseString);
 
                 NutritionData data = parseResponse(responseString);
                 callback.onSuccess(data);

@@ -12,6 +12,18 @@ import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -30,6 +42,14 @@ public class AddMeal extends AppCompatActivity {
     private View includeNoInternet;
     private Button btnRetryInternet;
     private LinearLayout layoutInput;
+
+    private ImageButton btnCamera;
+    private ImageView ivPreview;
+    private android.widget.FrameLayout layoutPreview;
+    private ImageButton btnRemoveImage;
+    private String base64Image = null;
+    private ActivityResultLauncher<Intent> cameraLauncher;
+    private ActivityResultLauncher<String> requestPermissionLauncher;
 
     // Sonuç view'ları
     private TextView tvFoodName, tvServingSize, tvConfidence;
@@ -65,6 +85,17 @@ public class AddMeal extends AppCompatActivity {
 
         btnRetryInternet.setOnClickListener(v -> checkInternetState());
 
+        btnCamera     = findViewById(R.id.btnCamera);
+        ivPreview     = findViewById(R.id.ivPreview);
+        layoutPreview = findViewById(R.id.layoutPreview);
+        btnRemoveImage = findViewById(R.id.btnRemoveImage);
+
+        btnRemoveImage.setOnClickListener(v -> {
+            ivPreview.setImageBitmap(null);
+            layoutPreview.setVisibility(View.GONE);
+            base64Image = null;
+        });
+
         tvFoodName    = findViewById(R.id.tvFoodName);
         tvServingSize = findViewById(R.id.tvServingSize);
         tvConfidence  = findViewById(R.id.tvConfidence);
@@ -76,11 +107,41 @@ public class AddMeal extends AppCompatActivity {
 
         service = new GeminiNutritionService(this);
 
+        requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+            if (isGranted) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "Camera permission is required to take photos.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        cameraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                Bundle extras = result.getData().getExtras();
+                if (extras != null) {
+                    Bitmap imageBitmap = (Bitmap) extras.get("data");
+                    if (imageBitmap != null) {
+                        ivPreview.setImageBitmap(imageBitmap);
+                        layoutPreview.setVisibility(View.VISIBLE);
+                        base64Image = bitmapToBase64(imageBitmap);
+                    }
+                }
+            }
+        });
+
+        btnCamera.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                requestPermissionLauncher.launch(android.Manifest.permission.CAMERA);
+            }
+        });
+
         // Analiz Et
         btnAnalyze.setOnClickListener(v -> {
             String food = etFood.getText().toString().trim();
-            if (food.isEmpty()) {
-                Toast.makeText(this, "Please Enter A Meal", Toast.LENGTH_SHORT).show();
+            if (food.isEmpty() && base64Image == null) {
+                Toast.makeText(this, "Please Enter A Meal Or Take a Photo", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!NetworkUtils.isNetworkAvailable(this)) {
@@ -88,32 +149,30 @@ public class AddMeal extends AppCompatActivity {
                 return;
             }
             startLoading();
-            service.analyzeTextFood(food, new NutritionCallback() {
-                @Override
-                public void onSuccess(NutritionData data) {
-                    runOnUiThread(() -> {
-                        if (isFinishing() || isDestroyed()) return;
-                        stopLoading();
-                        lastResult = data;
-                        showResult(data);
-
-                        // Firebase Analytics: Yemek analiz edildi
-                        Bundle analyticsBundle = new Bundle();
-                        analyticsBundle.putString("food_name", data.foodName);
-                        analyticsBundle.putInt("calories", data.calories);
-                        analyticsBundle.putString("confidence", data.confidence);
-                        firebaseAnalytics.logEvent("meal_analyzed", analyticsBundle);
-                    });
-                }
-                @Override
-                public void onError(String errorMessage) {
-                    runOnUiThread(() -> {
-                        if (isFinishing() || isDestroyed()) return;
-                        stopLoading();
-                        Toast.makeText(AddMeal.this, "Hata: " + errorMessage, Toast.LENGTH_LONG).show();
-                    });
-                }
-            });
+            
+            if (base64Image != null) {
+                service.analyzeImageFood(base64Image, new NutritionCallback() {
+                    @Override
+                    public void onSuccess(NutritionData data) {
+                        runOnUiThread(() -> handleAnalyzeSuccess(data));
+                    }
+                    @Override
+                    public void onError(String errorMessage) {
+                        runOnUiThread(() -> handleAnalyzeError(errorMessage));
+                    }
+                });
+            } else {
+                service.analyzeTextFood(food, new NutritionCallback() {
+                    @Override
+                    public void onSuccess(NutritionData data) {
+                        runOnUiThread(() -> handleAnalyzeSuccess(data));
+                    }
+                    @Override
+                    public void onError(String errorMessage) {
+                        runOnUiThread(() -> handleAnalyzeError(errorMessage));
+                    }
+                });
+            }
         });
 
         // Kaydet
@@ -134,6 +193,41 @@ public class AddMeal extends AppCompatActivity {
         });
 
         checkInternetState();
+    }
+
+    private void openCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            cameraLauncher.launch(takePictureIntent);
+        } else {
+            Toast.makeText(this, "No camera app found", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String bitmapToBase64(Bitmap bitmap) {
+        java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+        byte[] byteArray = outputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
+    }
+
+    private void handleAnalyzeSuccess(NutritionData data) {
+        if (isFinishing() || isDestroyed()) return;
+        stopLoading();
+        lastResult = data;
+        showResult(data);
+
+        Bundle analyticsBundle = new Bundle();
+        analyticsBundle.putString("food_name", data.foodName);
+        analyticsBundle.putInt("calories", data.calories);
+        analyticsBundle.putString("confidence", data.confidence);
+        firebaseAnalytics.logEvent("meal_analyzed", analyticsBundle);
+    }
+
+    private void handleAnalyzeError(String errorMessage) {
+        if (isFinishing() || isDestroyed()) return;
+        stopLoading();
+        Toast.makeText(AddMeal.this, "Error: " + errorMessage, Toast.LENGTH_LONG).show();
     }
 
     // ─── UI Güncelleme ──────────────────────────────────────────────
@@ -232,6 +326,9 @@ public class AddMeal extends AppCompatActivity {
 
                         // Formu temizle
                         etFood.setText("");
+                        if (layoutPreview != null) layoutPreview.setVisibility(View.GONE);
+                        if (ivPreview != null) ivPreview.setImageBitmap(null);
+                        base64Image = null;
                         cardResult.setVisibility(View.GONE);
                         btnSave.setVisibility(View.GONE);
                         lastResult = null;
