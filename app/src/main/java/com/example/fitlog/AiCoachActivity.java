@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
+import com.airbnb.lottie.LottieAnimationView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.LinearLayout;
@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 public class AiCoachActivity extends AppCompatActivity {
 
-    private ProgressBar progressBar;
+    private LottieAnimationView lottieAnimationView;
     private TextView tvLoading;
     private LinearLayout llPlanContainer;
     private NestedScrollView scrollPlan;
@@ -57,7 +57,7 @@ public class AiCoachActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_ai_coach);
 
-        progressBar = findViewById(R.id.progressBar);
+        lottieAnimationView = findViewById(R.id.lottieAnimationView);
         tvLoading = findViewById(R.id.tvLoading);
         llPlanContainer = findViewById(R.id.llPlanContainer);
         scrollPlan = findViewById(R.id.scrollPlan);
@@ -86,12 +86,12 @@ public class AiCoachActivity extends AppCompatActivity {
     private void showLoading(boolean isLoading) {
         if (includeNoInternet != null) includeNoInternet.setVisibility(View.GONE);
         if(isLoading) {
-            progressBar.setVisibility(View.VISIBLE);
+            lottieAnimationView.setVisibility(View.VISIBLE);
             tvLoading.setVisibility(View.VISIBLE);
             scrollPlan.setVisibility(View.GONE);
             bottomBar.setVisibility(View.GONE);
         } else {
-            progressBar.setVisibility(View.GONE);
+            lottieAnimationView.setVisibility(View.GONE);
             tvLoading.setVisibility(View.GONE);
             scrollPlan.setVisibility(View.VISIBLE);
             bottomBar.setVisibility(View.VISIBLE);
@@ -99,7 +99,7 @@ public class AiCoachActivity extends AppCompatActivity {
     }
 
     private void showNoInternet() {
-        progressBar.setVisibility(View.GONE);
+        lottieAnimationView.setVisibility(View.GONE);
         tvLoading.setVisibility(View.GONE);
         scrollPlan.setVisibility(View.GONE);
         bottomBar.setVisibility(View.GONE);

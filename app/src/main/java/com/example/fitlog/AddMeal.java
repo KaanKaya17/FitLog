@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import com.airbnb.lottie.LottieAnimationView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +24,7 @@ public class AddMeal extends AppCompatActivity {
     private EditText etFood;
     private Button btnAnalyze;
     private Button btnSave;
-    private ProgressBar progressBar;
+    private LottieAnimationView lottieAnimationView;
     private LinearLayout cardResult;
     private GeminiNutritionService service;
     private View includeNoInternet;
@@ -57,7 +57,7 @@ public class AddMeal extends AppCompatActivity {
         etFood      = findViewById(R.id.etFood);
         btnAnalyze  = findViewById(R.id.btnAnalyze);
         btnSave     = findViewById(R.id.btnSave);
-        progressBar = findViewById(R.id.progressBar);
+        lottieAnimationView = findViewById(R.id.lottieAnimationView);
         cardResult  = findViewById(R.id.cardResult);
         includeNoInternet = findViewById(R.id.includeNoInternet);
         btnRetryInternet = includeNoInternet.findViewById(R.id.btnRetryInternet);
@@ -143,7 +143,7 @@ public class AddMeal extends AppCompatActivity {
             if (layoutInput != null) layoutInput.setVisibility(View.GONE);
             if (cardResult != null) cardResult.setVisibility(View.GONE);
             if (btnSave != null) btnSave.setVisibility(View.GONE);
-            if (progressBar != null) progressBar.setVisibility(View.GONE);
+            if (lottieAnimationView != null) lottieAnimationView.setVisibility(View.GONE);
             if (includeNoInternet != null) includeNoInternet.setVisibility(View.VISIBLE);
         } else {
             if (includeNoInternet != null) includeNoInternet.setVisibility(View.GONE);
@@ -177,7 +177,7 @@ public class AddMeal extends AppCompatActivity {
 
     private void startLoading() {
         btnAnalyze.setEnabled(false);
-        progressBar.setVisibility(View.VISIBLE);
+        lottieAnimationView.setVisibility(View.VISIBLE);
         cardResult.setVisibility(View.GONE);
         btnSave.setVisibility(View.GONE);
         lastResult = null;
@@ -185,7 +185,7 @@ public class AddMeal extends AppCompatActivity {
 
     private void stopLoading() {
         btnAnalyze.setEnabled(true);
-        progressBar.setVisibility(View.GONE);
+        lottieAnimationView.setVisibility(View.GONE);
     }
 
     // ─── Supabase Kaydet ────────────────────────────────────────────
