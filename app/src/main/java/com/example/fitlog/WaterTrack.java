@@ -9,12 +9,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
 public class WaterTrack extends AppCompatActivity {
 
+    private FirebaseAnalytics firebaseAnalytics;
     private int dailyGoal;
     ProgressBar progressWater;
     TextView tvCurrentAmount;
@@ -32,6 +35,8 @@ public class WaterTrack extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_water_track);
+        
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         progressWater       = findViewById(R.id.progressWater);
         tvCurrentAmount     = findViewById(R.id.tvCurrentAmount);
@@ -111,6 +116,11 @@ public class WaterTrack extends AppCompatActivity {
         currentAmount += amountMl;
         updateUI(currentAmount);
         saveWaterLog(amountMl);
+        
+        // Firebase Analytics: Su eklendi
+        Bundle waterBundle = new Bundle();
+        waterBundle.putInt("amount_ml", amountMl);
+        firebaseAnalytics.logEvent("water_logged", waterBundle);
     }
 
     // ─── Animasyonlu UI güncelleme ──────────────────────────────────

@@ -11,6 +11,8 @@ import android.widget.Toast;
 import android.widget.LinearLayout;
 import android.view.LayoutInflater;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -42,6 +44,7 @@ public class AiCoachActivity extends AppCompatActivity {
     private Button btnRetryInternet;
     private String todayDate;
     private PrefManager prefManager;
+    private FirebaseAnalytics firebaseAnalytics;
 
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
@@ -62,6 +65,8 @@ public class AiCoachActivity extends AppCompatActivity {
         btnRegenerate = findViewById(R.id.btnRegenerate);
         includeNoInternet = findViewById(R.id.includeNoInternet);
         btnRetryInternet = includeNoInternet.findViewById(R.id.btnRetryInternet);
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         prefManager = new PrefManager(this);
         todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -184,6 +189,11 @@ public class AiCoachActivity extends AppCompatActivity {
 
                         renderPlanToCards(generatedText);
                         savePlanToDatabase(generatedText);
+                        
+                        // Firebase Analytics: AI Coach kullanıldı
+                        Bundle aiBundle = new Bundle();
+                        aiBundle.putString("goal", goal);
+                        firebaseAnalytics.logEvent("ai_coach_used", aiBundle);
 
                     } catch (Exception e) {
                         Log.e("GEMINI_ERROR", e.toString());

@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -16,6 +18,7 @@ import java.util.List;
 
 public class UserRegister extends AppCompatActivity {
 
+    private FirebaseAnalytics firebaseAnalytics;
     EditText editTextEmail;
     EditText editTextPassword;
     EditText editTextFirstName;
@@ -33,6 +36,8 @@ public class UserRegister extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_register);
+        
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -147,6 +152,11 @@ public class UserRegister extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
                     runOnUiThread(() -> {
+                        // Firebase Analytics: Kullanıcı kaydı başarılı
+                        Bundle registerBundle = new Bundle();
+                        registerBundle.putString(FirebaseAnalytics.Param.METHOD, "email");
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, registerBundle);
+
                         Toast.makeText(this, "Kayıt başarılı!", Toast.LENGTH_SHORT).show();
                         Navigation.toLogin(this);
                         finish();

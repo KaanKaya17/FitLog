@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -17,6 +19,7 @@ import java.util.List;
 
 public class UserLogin extends AppCompatActivity {
 
+    private FirebaseAnalytics firebaseAnalytics;
     EditText editTextEmail;
     EditText editTextPassword;
 
@@ -30,6 +33,9 @@ public class UserLogin extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_login);
+        
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -105,6 +111,11 @@ public class UserLogin extends AppCompatActivity {
                     if (foundUser.getPassword_hash().equals(userPassword)) {
                         // Giriş başarılı
                         runOnUiThread(() -> {
+                            // Firebase Analytics: Kullanıcı girişi başarılı
+                            Bundle loginBundle = new Bundle();
+                            loginBundle.putString(FirebaseAnalytics.Param.METHOD, "email");
+                            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, loginBundle);
+
                             Toast.makeText(this, "Hoş geldin " + foundUser.getFirst_name(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(this, MainActivity.class);
                             intent.putExtra("username", foundUser.getUsername());

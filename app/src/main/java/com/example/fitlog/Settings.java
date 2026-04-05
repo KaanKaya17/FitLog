@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -42,6 +44,7 @@ public class Settings extends AppCompatActivity {
     private TextView tvCurrentCalorieGoal, tvCurrentWaterGoal;
     private PrefManager pref;
     private Switch switchWaterReminder;
+    private FirebaseAnalytics firebaseAnalytics;
 
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
@@ -67,6 +70,8 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         pref = new PrefManager(this);
 
@@ -104,6 +109,12 @@ public class Settings extends AppCompatActivity {
                 if (!selectedLang.equals(currentLang)) {
                     // Dili kaydet ve uygulamayı yeniden başlat
                     pref.setLanguage(selectedLang);
+                    
+                    // Firebase Analytics: Dil değişimi
+                    Bundle langBundle = new Bundle();
+                    langBundle.putString("new_language", selectedLang);
+                    firebaseAnalytics.logEvent("language_changed", langBundle);
+                    
                     restartApp();
                 }
             }
@@ -210,9 +221,19 @@ public class Settings extends AppCompatActivity {
                     pref.setWaterReminderEnabled(true);
                     scheduleWaterReminder();
                 }
+                
+                // Analytics: Bildirim açıldı
+                Bundle notifBundle = new Bundle();
+                notifBundle.putBoolean("water_reminder_enabled", true);
+                firebaseAnalytics.logEvent("settings_reminder_changed", notifBundle);
             } else {
                 pref.setWaterReminderEnabled(false);
                 cancelWaterReminder();
+                
+                // Analytics: Bildirim kapatıldı
+                Bundle notifBundle = new Bundle();
+                notifBundle.putBoolean("water_reminder_enabled", false);
+                firebaseAnalytics.logEvent("settings_reminder_changed", notifBundle);
             }
         });
     }
@@ -260,6 +281,12 @@ public class Settings extends AppCompatActivity {
         // Özet kartını güncelle
         tvCurrentCalorieGoal.setText(String.valueOf(calorieGoal));
         tvCurrentWaterGoal.setText(String.valueOf(waterGoal));
+
+        // Firebase Analytics: Hedefler Değiştirildi
+        Bundle goalsBundle = new Bundle();
+        goalsBundle.putInt("new_calorie_goal", calorieGoal);
+        goalsBundle.putInt("new_water_goal", waterGoal);
+        firebaseAnalytics.logEvent("goals_updated", goalsBundle);
 
         // Supabase'e kaydet
         saveToSupabase(calorieGoal, waterGoal);

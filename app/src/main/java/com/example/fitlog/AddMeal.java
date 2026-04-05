@@ -10,6 +10,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -18,6 +20,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class AddMeal extends AppCompatActivity {
 
+    private FirebaseAnalytics firebaseAnalytics;
     private EditText etFood;
     private Button btnAnalyze;
     private Button btnSave;
@@ -46,6 +49,8 @@ public class AddMeal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_meal);
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         selectedDate = getIntent().getStringExtra("selected_date");
 
@@ -91,6 +96,13 @@ public class AddMeal extends AppCompatActivity {
                         stopLoading();
                         lastResult = data;
                         showResult(data);
+
+                        // Firebase Analytics: Yemek analiz edildi
+                        Bundle analyticsBundle = new Bundle();
+                        analyticsBundle.putString("food_name", data.foodName);
+                        analyticsBundle.putInt("calories", data.calories);
+                        analyticsBundle.putString("confidence", data.confidence);
+                        firebaseAnalytics.logEvent("meal_analyzed", analyticsBundle);
                     });
                 }
                 @Override
@@ -208,6 +220,16 @@ public class AddMeal extends AppCompatActivity {
                     btnSave.setEnabled(true);
                     if (response.isSuccessful()) {
                         Toast.makeText(this, "✅ Saved Successfully", Toast.LENGTH_SHORT).show();
+
+                        // Firebase Analytics: Yemek kaydedildi
+                        Bundle saveBundle = new Bundle();
+                        saveBundle.putString("food_name", data.foodName);
+                        saveBundle.putInt("calories", data.calories);
+                        saveBundle.putFloat("protein", data.protein);
+                        saveBundle.putFloat("carbs", data.carbohydrates);
+                        saveBundle.putFloat("fat", data.fat);
+                        firebaseAnalytics.logEvent("meal_saved", saveBundle);
+
                         // Formu temizle
                         etFood.setText("");
                         cardResult.setVisibility(View.GONE);
