@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(this, "Id : " + manager.getId(), Toast.LENGTH_LONG).show();
         // ────────────────────────────────────────────────────────────
         checkAdminNotifications();
+        checkFcmToken();
 
         initViews();
         setupGreeting();
@@ -234,6 +235,51 @@ public class MainActivity extends AppCompatActivity {
         animator.setDuration(700);
         animator.setInterpolator(new DecelerateInterpolator());
         animator.start();
+    }
+
+    private void checkFcmToken() {
+        PrefManager pref = new PrefManager(this);
+        int userId = pref.getId();
+        if (userId == -1) return;
+
+        com.google.firebase.messaging.FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.w("FCM", "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+                String token = task.getResult();
+                String savedToken = pref.getFcmToken();
+                if (token != null && !token.equals(savedToken)) {
+                    pref.setFcmToken(token);
+                    updateTokenInSupabase(userId, token);
+                }
+            });
+    }
+
+    private void updateTokenInSupabase(int userId, String token) {
+        new Thread(() -> {
+            try {
+                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
+                String apiKey = BuildConfig.SUPABASE_API_KEY;
+                String authHeader = "Bearer " + apiKey;
+
+                Map<String, Object> update = new HashMap<>();
+                update.put("fcm_token", token);
+
+                api.updateUserProfile(
+                        apiKey,
+                        authHeader,
+                        "application/json",
+                        "return=minimal",
+                        "eq." + userId,
+                        update
+                ).execute();
+                Log.d("FCM", "Token Supabase'e güncellendi.");
+            } catch (Exception e) {
+                Log.e("FCM", "Token güncelleme hatası: " + e.getMessage());
+            }
+        }).start();
     }
 
     // ── Mevcut nav metodları (dokunma) ──────────────────────────────

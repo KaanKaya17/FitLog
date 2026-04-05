@@ -18,6 +18,7 @@ public class PrefManager {
     private static final String KEY_HEIGHT     = "user_height";
     private static final String KEY_WEIGHT     = "user_weight";
     private static final String KEY_GOAL       = "user_goal";
+    private static final String KEY_FCM_TOKEN  = "fcm_token";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -82,4 +83,7 @@ public class PrefManager {
 
     public void setWaterReminderEnabled(boolean enabled) { editor.putBoolean(KEY_WATER_REMINDER, enabled); editor.apply(); }
     public boolean isWaterReminderEnabled() { return sharedPreferences.getBoolean(KEY_WATER_REMINDER, false); }
+
+    public void setFcmToken(String token) { editor.putString(KEY_FCM_TOKEN, token).apply(); }
+    public String getFcmToken() { return sharedPreferences.getString(KEY_FCM_TOKEN, null); }
 }
