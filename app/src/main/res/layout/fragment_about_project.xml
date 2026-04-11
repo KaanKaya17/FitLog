@@ -195,6 +195,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <include layout="@layout/nav_bar" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

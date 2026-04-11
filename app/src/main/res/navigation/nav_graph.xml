@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <!-- Home / Dashboard -->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.fitlog.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action android:id="@+id/action_home_to_profile" app:destination="@id/profileFragment" />
+        <action android:id="@+id/action_home_to_addMeal" app:destination="@id/addMealFragment" />
+        <action android:id="@+id/action_home_to_waterTrack" app:destination="@id/waterTrackFragment" />
+        <action android:id="@+id/action_home_to_aiCoach" app:destination="@id/aiCoachFragment" />
+        <action android:id="@+id/action_home_to_mealList" app:destination="@id/mealListFragment" />
+        <action android:id="@+id/action_home_to_history" app:destination="@id/historyFragment" />
+    </fragment>
+
+    <!-- Profile -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.fitlog.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+        <action android:id="@+id/action_profile_to_editProfile" app:destination="@id/editProfileFragment" />
+        <action android:id="@+id/action_profile_to_settings" app:destination="@id/settingsFragment" />
+        <action android:id="@+id/action_profile_to_changePassword" app:destination="@id/changePasswordFragment" />
+        <action android:id="@+id/action_profile_to_login" app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Settings -->
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.fitlog.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings">
+        <action android:id="@+id/action_settings_to_aboutProject" app:destination="@id/aboutProjectFragment" />
+    </fragment>
+
+    <!-- History / Statistics -->
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.fitlog.HistoryFragment"
+        android:label="History"
+        tools:layout="@layout/fragment_history" />
+
+    <!-- Add Meal -->
+    <fragment
+        android:id="@+id/addMealFragment"
+        android:name="com.example.fitlog.AddMealFragment"
+        android:label="Add Meal"
+        tools:layout="@layout/fragment_add_meal" />
+
+    <!-- Meal List -->
+    <fragment
+        android:id="@+id/mealListFragment"
+        android:name="com.example.fitlog.MealListFragment"
+        android:label="Meal List"
+        tools:layout="@layout/fragment_meal_list">
+        <action android:id="@+id/action_mealList_to_mealDetail" app:destination="@id/mealDetailFragment" />
+        <action android:id="@+id/action_mealList_to_addMeal" app:destination="@id/addMealFragment" />
+    </fragment>
+
+    <!-- Meal Detail -->
+    <fragment
+        android:id="@+id/mealDetailFragment"
+        android:name="com.example.fitlog.MealDetailFragment"
+        android:label="Meal Detail"
+        tools:layout="@layout/fragment_meal_detail" />
+
+    <!-- Water Track -->
+    <fragment
+        android:id="@+id/waterTrackFragment"
+        android:name="com.example.fitlog.WaterTrackFragment"
+        android:label="Water Track"
+        tools:layout="@layout/fragment_water_track" />
+
+    <!-- AI Coach -->
+    <fragment
+        android:id="@+id/aiCoachFragment"
+        android:name="com.example.fitlog.AiCoachFragment"
+        android:label="AI Coach"
+        tools:layout="@layout/fragment_ai_coach" />
+
+    <!-- Edit Profile -->
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.fitlog.EditProfileFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile" />
+
+    <!-- Change Password -->
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.fitlog.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password" />
+
+    <!-- About Project -->
+    <fragment
+        android:id="@+id/aboutProjectFragment"
+        android:name="com.example.fitlog.AboutProjectFragment"
+        android:label="About Project"
+        tools:layout="@layout/fragment_about_project" />
+
+    <!-- Login -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.fitlog.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_user_login">
+        <action android:id="@+id/action_login_to_register" app:destination="@id/registerFragment" />
+        <action android:id="@+id/action_login_to_home" app:destination="@id/homeFragment"
+            app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- Register -->
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.fitlog.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_user_register">
+        <action android:id="@+id/action_register_to_login" app:destination="@id/loginFragment" />
+    </fragment>
+
+</navigation>

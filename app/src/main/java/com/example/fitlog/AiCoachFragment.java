@@ -2,26 +2,24 @@ package com.example.fitlog;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import com.airbnb.lottie.LottieAnimationView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.LinearLayout;
-import android.view.LayoutInflater;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.analytics.FirebaseAnalytics;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.widget.NestedScrollView;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AiCoachActivity extends AppCompatActivity {
+public class AiCoachFragment extends Fragment {
 
     private LottieAnimationView lottieAnimationView;
     private TextView tvLoading;
@@ -46,46 +44,42 @@ public class AiCoachActivity extends AppCompatActivity {
     private PrefManager prefManager;
     private FirebaseAnalytics firebaseAnalytics;
 
+    @Nullable
     @Override
-    protected void attachBaseContext(android.content.Context newBase) {
-        super.attachBaseContext(LocaleHelper.setLocale(newBase));
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_ai_coach, container, false);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_ai_coach);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (getContext() == null) return;
 
-        lottieAnimationView = findViewById(R.id.lottieAnimationView);
-        tvLoading = findViewById(R.id.tvLoading);
-        llPlanContainer = findViewById(R.id.llPlanContainer);
-        scrollPlan = findViewById(R.id.scrollPlan);
-        bottomBar = findViewById(R.id.bottomBar);
-        btnRegenerate = findViewById(R.id.btnRegenerate);
-        includeNoInternet = findViewById(R.id.includeNoInternet);
-        btnRetryInternet = includeNoInternet.findViewById(R.id.btnRetryInternet);
+        lottieAnimationView = view.findViewById(R.id.lottieAnimationView);
+        tvLoading       = view.findViewById(R.id.tvLoading);
+        llPlanContainer = view.findViewById(R.id.llPlanContainer);
+        scrollPlan      = view.findViewById(R.id.scrollPlan);
+        bottomBar       = view.findViewById(R.id.bottomBar);
+        btnRegenerate   = view.findViewById(R.id.btnRegenerate);
+        includeNoInternet = view.findViewById(R.id.includeNoInternet);
+        btnRetryInternet  = includeNoInternet.findViewById(R.id.btnRetryInternet);
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        prefManager = new PrefManager(this);
+        firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+        prefManager = new PrefManager(getContext());
         todayDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         btnRegenerate.setOnClickListener(v -> fetchPlanFromGemini());
         btnRetryInternet.setOnClickListener(v -> checkExistingPlan());
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        View btnBack = view.findViewById(R.id.btnBack);
+        if (btnBack != null) btnBack.setOnClickListener(v -> requireActivity().onBackPressed());
 
         checkExistingPlan();
     }
 
     private void showLoading(boolean isLoading) {
         if (includeNoInternet != null) includeNoInternet.setVisibility(View.GONE);
-        if(isLoading) {
+        if (isLoading) {
             lottieAnimationView.setVisibility(View.VISIBLE);
             tvLoading.setVisibility(View.VISIBLE);
             scrollPlan.setVisibility(View.GONE);
@@ -107,44 +101,36 @@ public class AiCoachActivity extends AppCompatActivity {
     }
 
     private void checkExistingPlan() {
-        if (!NetworkUtils.isNetworkAvailable(this)) {
-            showNoInternet();
-            return;
-        }
+        if (getContext() == null) return;
+        if (!NetworkUtils.isNetworkAvailable(getContext())) { showNoInternet(); return; }
         showLoading(true);
+
         SupabaseApi authApi = RetrofitClient.getClient().create(SupabaseApi.class);
         String apiKey = BuildConfig.SUPABASE_API_KEY;
         String authHeader = "Bearer " + apiKey;
-        String userIdFilter = "eq." + prefManager.getId();
-        String dateFilter = "eq." + todayDate;
 
-        authApi.getTodayAiMealPlan(apiKey, authHeader, "application/json", userIdFilter, dateFilter)
+        authApi.getTodayAiMealPlan(apiKey, authHeader, "application/json", "eq." + prefManager.getId(), "eq." + todayDate)
                 .enqueue(new Callback<List<AiMealPlan>>() {
                     @Override
                     public void onResponse(Call<List<AiMealPlan>> call, Response<List<AiMealPlan>> response) {
+                        if (!isAdded()) return;
                         if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                            // Ekrandaki içeriği güncelle
-                            AiMealPlan plan = response.body().get(0);
-                            renderPlanToCards(plan.getPlan_content());
+                            renderPlanToCards(response.body().get(0).getPlan_content());
                             showLoading(false);
                         } else {
-                            // Yoksa yeni plan oluştur
                             fetchPlanFromGemini();
                         }
                     }
-
                     @Override
                     public void onFailure(Call<List<AiMealPlan>> call, Throwable t) {
-                        fetchPlanFromGemini(); // Hata olsa da API'yi zorla deneyelim
+                        if (isAdded()) fetchPlanFromGemini();
                     }
                 });
     }
 
     private void fetchPlanFromGemini() {
-        if (!NetworkUtils.isNetworkAvailable(this)) {
-            showNoInternet();
-            return;
-        }
+        if (getContext() == null) return;
+        if (!NetworkUtils.isNetworkAvailable(getContext())) { showNoInternet(); return; }
         showLoading(true);
 
         String name = prefManager.getFirstName();
@@ -154,15 +140,13 @@ public class AiCoachActivity extends AppCompatActivity {
         String goal = prefManager.getGoal();
 
         if (gender == null || gender.isEmpty() || weight == 0 || height == 0 || goal == null || goal.isEmpty()) {
-            Toast.makeText(this, getString(R.string.ai_error_empty_profile), Toast.LENGTH_LONG).show();
-            finish();
+            Toast.makeText(getContext(), getString(R.string.ai_error_empty_profile), Toast.LENGTH_LONG).show();
+            requireActivity().onBackPressed();
             return;
         }
 
-        // Prompt (İstem)
         String prompt = getString(R.string.ai_coach_prompt, name, gender, String.valueOf(height), String.valueOf(weight), goal);
 
-        // JSON formatına çevirme
         JsonObject requestBody = new JsonObject();
         JsonArray contents = new JsonArray();
         JsonObject part = new JsonObject();
@@ -175,47 +159,36 @@ public class AiCoachActivity extends AppCompatActivity {
         requestBody.add("contents", contents);
 
         GeminiApi geminiApi = GeminiApiClient.getClient().create(GeminiApi.class);
-        String geminiApiKey = BuildConfig.GEMINI_API_KEY;
 
-        geminiApi.generateContent(geminiApiKey, requestBody).enqueue(new Callback<JsonObject>() {
+        geminiApi.generateContent(BuildConfig.GEMINI_API_KEY, requestBody).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if(response.isSuccessful() && response.body() != null) {
+                if (!isAdded()) return;
+                if (response.isSuccessful() && response.body() != null) {
                     try {
-                        String generatedText = response.body()
-                                .getAsJsonArray("candidates").get(0).getAsJsonObject()
+                        String text = response.body().getAsJsonArray("candidates").get(0).getAsJsonObject()
                                 .getAsJsonObject("content").getAsJsonArray("parts").get(0)
                                 .getAsJsonObject().get("text").getAsString();
+                        renderPlanToCards(text);
+                        savePlanToDatabase(text);
 
-                        renderPlanToCards(generatedText);
-                        savePlanToDatabase(generatedText);
-                        
-                        // Firebase Analytics: AI Coach kullanıldı
                         Bundle aiBundle = new Bundle();
                         aiBundle.putString("goal", goal);
                         firebaseAnalytics.logEvent("ai_coach_used", aiBundle);
-
                     } catch (Exception e) {
                         Log.e("GEMINI_ERROR", e.toString());
-                        Toast.makeText(AiCoachActivity.this, getString(R.string.ai_error_response), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), getString(R.string.ai_error_response), Toast.LENGTH_SHORT).show();
                         showLoading(false);
                     }
                 } else {
-                    try {
-                        String errorString = response.errorBody() != null ? response.errorBody().string() : "Bilinmeyen API Hatası";
-                        Log.e("GEMINI_API_ERROR", errorString);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    Toast.makeText(AiCoachActivity.this, getString(R.string.ai_error_api), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.ai_error_api), Toast.LENGTH_LONG).show();
                     showLoading(false);
                 }
             }
-
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.e("GEMINI_NET_ERROR", t.toString());
-                Toast.makeText(AiCoachActivity.this, getString(R.string.ai_error_network), Toast.LENGTH_SHORT).show();
+                if (!isAdded()) return;
+                Toast.makeText(getContext(), getString(R.string.ai_error_network), Toast.LENGTH_SHORT).show();
                 showLoading(false);
             }
         });
@@ -225,36 +198,25 @@ public class AiCoachActivity extends AppCompatActivity {
         SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
         AiMealPlan newPlan = new AiMealPlan(prefManager.getId(), planContent);
         String apiKey = BuildConfig.SUPABASE_API_KEY;
-        String authHeader = "Bearer " + apiKey;
 
-        api.insertAiMealPlan(apiKey, authHeader, "application/json", "return=minimal", newPlan)
+        api.insertAiMealPlan(apiKey, "Bearer " + apiKey, "application/json", "return=minimal", newPlan)
                 .enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        showLoading(false);
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        showLoading(false);
-                    }
+                    @Override public void onResponse(Call<Void> call, Response<Void> r) { if (isAdded()) showLoading(false); }
+                    @Override public void onFailure(Call<Void> call, Throwable t) { if (isAdded()) showLoading(false); }
                 });
     }
-
-
 
     private void renderPlanToCards(String markdownText) {
         llPlanContainer.removeAllViews();
         String[] lines = markdownText.split("\n");
         StringBuilder currentContent = new StringBuilder();
         String currentTitle = "Nutrition Plan";
-        LayoutInflater inflater = LayoutInflater.from(this);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
         boolean hasTitle = false;
 
         for (String line : lines) {
             String trimmedLine = line.trim();
             if (trimmedLine.startsWith("#")) {
-                // Save previous card if it has content
                 if (hasTitle || currentContent.length() > 0) {
                     addCardToContainer(inflater, currentTitle, currentContent.toString().trim());
                     currentContent.setLength(0);
@@ -265,8 +227,6 @@ public class AiCoachActivity extends AppCompatActivity {
                 currentContent.append(line).append("\n");
             }
         }
-        
-        // Add last card
         if (hasTitle || currentContent.length() > 0) {
             addCardToContainer(inflater, currentTitle, currentContent.toString().trim());
         }
@@ -277,17 +237,9 @@ public class AiCoachActivity extends AppCompatActivity {
         View cardView = inflater.inflate(R.layout.item_ai_coach_card, llPlanContainer, false);
         TextView tvTitle = cardView.findViewById(R.id.tvCardTitle);
         TextView tvContent = cardView.findViewById(R.id.tvCardContent);
-        
         tvTitle.setText(title);
-        // Clean up markdown bold markers for simpler look
-        String formattedContent = content.replaceAll("\\*\\*(.*?)\\*\\*", "$1");
-        formattedContent = formattedContent.replaceAll("\\*(.*?)\\*", "$1");
-        tvContent.setText(formattedContent);
-        
+        String formatted = content.replaceAll("\\*\\*(.*?)\\*\\*", "$1").replaceAll("\\*(.*?)\\*", "$1");
+        tvContent.setText(formatted);
         llPlanContainer.addView(cardView);
-    }
-
-    public void btnBack(View view) {
-        finish();
     }
 }

@@ -18,58 +18,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitLog">
-        <activity
-            android:name=".ChangePassword"
-            android:exported="false" />
-        <receiver android:name=".WaterReminderReceiver" android:exported="false" />
-        <activity
-            android:name=".History"
-            android:exported="false" />
-        <activity
-            android:name=".AboutProject"
-            android:exported="false" />
-        <activity
-            android:name=".MealListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".UserLogin"
-            android:exported="false" />
-        <activity
-            android:name=".UserRegister"
-            android:exported="false" />
-        <activity
-            android:name=".AddMeal"
-            android:exported="false" />
-        <activity
-            android:name=".WaterTrack"
-            android:exported="false" />
-        <activity
-            android:name=".Settings"
-            android:exported="false" />
-        <activity
-            android:name=".Profile"
-            android:exported="false" />
-        <activity
-            android:name=".TrackYourWeight"
-            android:exported="false" />
-        <activity
-            android:name=".MealDetail"
-            android:exported="false" />
+
+        <!-- Single Activity: All UI is now handled via Fragments -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".EditProfile"
-            android:exported="false" />
-        <activity
-            android:name=".AiCoachActivity"
-            android:exported="false" />
+
+        <receiver android:name=".WaterReminderReceiver" android:exported="false" />
 
         <service
             android:name=".MyFirebaseMessagingService"

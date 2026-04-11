@@ -78,9 +78,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         });
 
         holder.btnAddMealToDay.setOnClickListener(v -> {
-            Intent intent = new Intent(context, AddMeal.class);
-            intent.putExtra("selected_date", day.date);
-            context.startActivity(intent);
+            if (context instanceof MainActivity) {
+                android.os.Bundle args = new android.os.Bundle();
+                args.putString("selected_date", day.date);
+                androidx.navigation.NavController navController = ((MainActivity) context).getNavController();
+                if (navController != null) {
+                    navController.navigate(R.id.addMealFragment, args);
+                }
+            }
         });
     }
 
