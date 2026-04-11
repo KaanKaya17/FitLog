@@ -19,3 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Gson & Retrofit Data Models
+-keep class com.example.fitlog.User { *; }
+-keep class com.example.fitlog.UserInsertDto { *; }
+-keep class com.example.fitlog.WaterLog { *; }
+-keep class com.example.fitlog.MealLog { *; }
+-keep class com.example.fitlog.MealInsertDto { *; }
+-keep class com.example.fitlog.AdminNotification { *; }
+-keep class com.example.fitlog.AiMealPlan { *; }
+-keep class com.example.fitlog.NutritionData { *; }
+-keep class com.example.fitlog.DayHistory { *; }
+
+# Generic Rules for Retrofit/Gson
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
