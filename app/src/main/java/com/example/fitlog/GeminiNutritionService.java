@@ -22,23 +22,14 @@ public class GeminiNutritionService {
                     "gemini-2.5-flash:generateContent?key=";
 
     public GeminiNutritionService(Context context) {
-        this.apiKey = loadApiKey(context);
+        this.apiKey = BuildConfig.GEMINI_API_KEY;
     }
 
     public String getApiKey() {
         return apiKey;
     }
 
-    private String loadApiKey(Context context) {
-        try {
-            InputStream is = context.getAssets().open("config.properties");
-            Properties props = new Properties();
-            props.load(is);
-            return props.getProperty("GEMINI_API_KEY");
-        } catch (Exception e) {
-            return "";
-        }
-    }
+
 
     public void analyzeTextFood(String foodDescription, NutritionCallback callback) {
         new Thread(() -> {

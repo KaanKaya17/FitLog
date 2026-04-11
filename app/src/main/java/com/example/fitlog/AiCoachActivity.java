@@ -175,7 +175,7 @@ public class AiCoachActivity extends AppCompatActivity {
         requestBody.add("contents", contents);
 
         GeminiApi geminiApi = GeminiApiClient.getClient().create(GeminiApi.class);
-        String geminiApiKey = loadApiKey();
+        String geminiApiKey = BuildConfig.GEMINI_API_KEY;
 
         geminiApi.generateContent(geminiApiKey, requestBody).enqueue(new Callback<JsonObject>() {
             @Override
@@ -241,16 +241,7 @@ public class AiCoachActivity extends AppCompatActivity {
                 });
     }
 
-    private String loadApiKey() {
-        try {
-            java.io.InputStream is = getAssets().open("config.properties");
-            java.util.Properties props = new java.util.Properties();
-            props.load(is);
-            return props.getProperty("GEMINI_API_KEY");
-        } catch (Exception e) {
-            return "";
-        }
-    }
+
 
     private void renderPlanToCards(String markdownText) {
         llPlanContainer.removeAllViews();
