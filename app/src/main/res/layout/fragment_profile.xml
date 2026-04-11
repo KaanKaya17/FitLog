@@ -297,7 +297,6 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:clickable="true"
-                    android:onClick="btnEditProfile"
                     android:focusable="true">
 
                     <TextView
@@ -328,7 +327,6 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:clickable="true"
-                    android:onClick="btnChangePassword"
                     android:focusable="true">
 
                     <TextView
@@ -362,7 +360,6 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="16dp"
                 android:clickable="true"
-                android:onClick="btnSettings"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground">
 
@@ -403,8 +400,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:backgroundTint="#E53935"
-                android:onClick="btnUserLogOut" />
+                android:backgroundTint="#E53935" />
 
         </LinearLayout>
 

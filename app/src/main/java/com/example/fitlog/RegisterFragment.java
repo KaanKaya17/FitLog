@@ -44,8 +44,11 @@ public class RegisterFragment extends Fragment {
         // btnAddUser has android:id in XML
         view.findViewById(R.id.btnAddUser).setOnClickListener(v -> btnAddUser());
 
-        // "Login" link uses android:onClick="btnUserLogin" - handled by MainActivity
-        // We don't need to set it here since MainActivity handles it via navigateTo
+        // "Login" link
+        View tvGoToLogin = view.findViewById(R.id.tvGoToLogin);
+        if (tvGoToLogin != null) {
+            tvGoToLogin.setOnClickListener(v -> androidx.navigation.Navigation.findNavController(v).navigate(R.id.loginFragment));
+        }
     }
 
     private void btnAddUser() {

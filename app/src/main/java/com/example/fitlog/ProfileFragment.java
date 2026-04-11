@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,23 @@ public class ProfileFragment extends Fragment {
         tvHeight    = view.findViewById(R.id.tvHeight);
         tvWeight    = view.findViewById(R.id.tvWeight);
         tvGender    = view.findViewById(R.id.tvGender);
+
+        view.findViewById(R.id.btnEditProfile).setOnClickListener(v -> 
+            androidx.navigation.Navigation.findNavController(v).navigate(R.id.editProfileFragment));
+            
+        view.findViewById(R.id.btnChangePassword).setOnClickListener(v -> 
+            androidx.navigation.Navigation.findNavController(v).navigate(R.id.changePasswordFragment));
+            
+        view.findViewById(R.id.btnSettings).setOnClickListener(v -> 
+            androidx.navigation.Navigation.findNavController(v).navigate(R.id.settingsFragment));
+            
+        view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
+            PrefManager manager = new PrefManager(requireContext());
+            manager.clearUser();
+            Toast.makeText(getContext(), "Çıkış Yapıldı", Toast.LENGTH_SHORT).show();
+            // UserStatusChecker will handle navigation on Resume, but to be sure:
+            androidx.navigation.Navigation.findNavController(v).navigate(R.id.loginFragment);
+        });
 
         loadProfileFromPrefs();
     }

@@ -122,8 +122,7 @@
                     android:textStyle="bold"
                     android:textColor="#4CAF50"
                     android:backgroundTint="#E8F5E9"
-                    android:layout_marginEnd="8dp"
-                    android:onClick="btnAdd200" />
+                    android:layout_marginEnd="8dp" />
 
                 <Button
                     android:id="@+id/btn300ml"
@@ -135,8 +134,7 @@
                     android:textStyle="bold"
                     android:textColor="#4CAF50"
                     android:backgroundTint="#E8F5E9"
-                    android:layout_marginEnd="8dp"
-                    android:onClick="btnAdd300" />
+                    android:layout_marginEnd="8dp" />
 
                 <Button
                     android:id="@+id/btn500ml"
@@ -147,8 +145,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:textColor="#4CAF50"
-                    android:backgroundTint="#E8F5E9"
-                    android:onClick="btnAdd500" />
+                    android:backgroundTint="#E8F5E9" />
             </LinearLayout>
 
             <TextView
@@ -191,8 +188,7 @@
                     android:textColor="#FFFFFF"
                     android:backgroundTint="#4CAF50"
                     android:paddingStart="24dp"
-                    android:paddingEnd="24dp"
-                    android:onClick="btnAddCustom" />
+                    android:paddingEnd="24dp" />
             </LinearLayout>
 
             <Button
@@ -204,7 +200,6 @@
                 android:textStyle="bold"
                 android:textColor="#9E9E9E"
                 android:backgroundTint="#F0F0F0"
-                android:onClick="btnReset"
                 android:layout_marginBottom="24dp" />
 
         </LinearLayout>

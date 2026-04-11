@@ -34,7 +34,6 @@
                     android:src="?attr/homeAsUpIndicator"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="btnBack"
                     app:tint="#1A1A2E"
                     android:contentDescription="Back" />
 

@@ -101,6 +101,10 @@ public class SettingsFragment extends Fragment {
         setupReminders();
 
         view.findViewById(R.id.btnSaveSettings).setOnClickListener(v -> saveSettings());
+        View btnAboutProject = view.findViewById(R.id.layoutAbout);
+        if (btnAboutProject != null) {
+            btnAboutProject.setOnClickListener(v -> androidx.navigation.Navigation.findNavController(v).navigate(R.id.aboutProjectFragment));
+        }
     }
 
     private void restartApp() {

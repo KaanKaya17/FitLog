@@ -187,8 +187,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:backgroundTint="#4CAF50"
-                android:onClick="btnAddUser" />
+                android:backgroundTint="#4CAF50" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -206,7 +205,7 @@
                     android:textColor="#9E9E9E"
                     android:layout_marginEnd="4dp" />
 
-                <TextView
+                <TextView android:id="@+id/tvGoToLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/login_action_login"
@@ -214,8 +213,7 @@
                     android:textStyle="bold"
                     android:textColor="#4CAF50"
                     android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="btnUserLogin" />
+                    android:focusable="true" />
             </LinearLayout>
 
         </LinearLayout>

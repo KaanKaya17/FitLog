@@ -28,7 +28,6 @@
             android:src="?attr/homeAsUpIndicator"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="btnBack"
             app:tint="#FFFFFF"
             android:contentDescription="@string/desc_back" />
 

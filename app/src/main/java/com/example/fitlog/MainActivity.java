@@ -66,20 +66,6 @@ public class MainActivity extends AppCompatActivity {
         navigateTo(R.id.historyFragment);
     }
 
-    // ── Called from HomeFragment card clicks and other xml onClick ────────
-
-    public void navAddMeal(View view) {
-        navigateTo(R.id.addMealFragment);
-    }
-
-    public void navWaterTrack(View view) {
-        navigateTo(R.id.waterTrackFragment);
-    }
-
-    public void navAiCoach(View view) {
-        navigateTo(R.id.aiCoachFragment);
-    }
-
     // ── Helper: safe navigate avoiding duplicate destinations ─────────────
 
     private void navigateTo(int destinationId) {
@@ -110,65 +96,4 @@ public class MainActivity extends AppCompatActivity {
     public void closeInformation(View view) {
         InformationCard.getInstance().hide();
     }
-
-    public void btnBack(View view) {
-        onBackPressed();
-    }
-
-    public void btnUserLogOut(View view) {
-        PrefManager manager = new PrefManager(this);
-        manager.clearUser();
-        if (navController != null) {
-            navController.navigate(R.id.loginFragment);
-        }
-    }
-
-    public void btnEditProfile(View view) {
-        navigateTo(R.id.editProfileFragment);
-    }
-
-    public void btnSettings(View view) {
-        navigateTo(R.id.settingsFragment);
-    }
-
-    public void btnChangePassword(View view) {
-        navigateTo(R.id.changePasswordFragment);
-    }
-
-    public void btnAboutProject(View view) {
-        navigateTo(R.id.aboutProjectFragment);
-    }
-
-    // Water track button handlers (called from activity_water_track.xml)
-    public void btnAdd200(View view) {
-        // Delegated to WaterTrackFragment via view click listeners
-    }
-    public void btnAdd300(View view) {}
-    public void btnAdd500(View view) {}
-    public void btnAddCustom(View view) {}
-    public void btnReset(View view) {}
-
-    // AddMeal button handlers
-    public void btnNavAddMeal(View view) {
-        navigateTo(R.id.addMealFragment);
-    }
-    public void btnNavAddWater(View view) {
-        navigateTo(R.id.waterTrackFragment);
-    }
-
-    // Login/Register buttons
-    public void btnLogin(View view) {}
-    public void btnUserRegister(View view) {
-        navigateTo(R.id.registerFragment);
-    }
-    public void btnAddUser(View view) {}
-    public void btnUserLogin(View view) {
-        navigateTo(R.id.loginFragment);
-    }
-
-    // Social buttons from About page
-    public void btnWebsite(View view) {}
-    public void btnGithub(View view) {}
-    public void btnInstagram(View view) {}
-    public void btnLinkedin(View view) {}
 }
