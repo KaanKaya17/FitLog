@@ -38,7 +38,7 @@ public class SettingsFragment extends BaseFragment {
 
     private SeekBar seekBarCalorie, seekBarWater;
     private TextView tvCalorieGoalValue, tvWaterGoalValue, tvCurrentCalorieGoal, tvCurrentWaterGoal;
-    private Switch switchWaterReminder;
+    private Switch switchWaterReminder, switchMealReminder;
     private View layoutReminderOptions;
     private PrefManager pref;
     private FirebaseAnalytics analytics;
@@ -50,6 +50,13 @@ public class SettingsFragment extends BaseFragment {
                 switchWaterReminder.setChecked(granted);
                 ReminderScheduler.apply(requireContext());
                 updateReminderOptions();
+            });
+
+    private final ActivityResultLauncher<String> mealNotificationPermission =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+                pref.setMealReminderEnabled(granted);
+                switchMealReminder.setChecked(granted);
+                MealReminderReceiver.apply(requireContext());
             });
 
     @Nullable
@@ -217,6 +224,19 @@ public class SettingsFragment extends BaseFragment {
         NotificationHelper.createNotificationChannel(requireContext());
         switchWaterReminder.setChecked(pref.isWaterReminderEnabled());
         updateReminderOptions();
+
+        switchMealReminder = view.findViewById(R.id.switchMealReminder);
+        switchMealReminder.setChecked(pref.isMealReminderEnabled());
+        switchMealReminder.setOnCheckedChangeListener((b, checked) -> {
+            if (checked && ContextCompat.checkSelfPermission(requireContext(),
+                    android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                switchMealReminder.setChecked(false);
+                mealNotificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS);
+                return;
+            }
+            pref.setMealReminderEnabled(checked);
+            MealReminderReceiver.apply(requireContext());
+        });
 
         switchWaterReminder.setOnCheckedChangeListener((b, checked) -> {
             if (checked && ContextCompat.checkSelfPermission(requireContext(),

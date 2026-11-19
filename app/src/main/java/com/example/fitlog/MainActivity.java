@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         String flow = AuthManager.pendingFlow(appCtx);
         String code = data.getQueryParameter("code");
         // Hata parametreleri sorguda ya da # sonrasında gelebilir (ör. süresi geçmiş bağlantı).
-        Uri fragment = data.getFragment() != null ? Uri.parse("x:?" + data.getFragment()) : null;
+        Uri fragment = data.getFragment() != null ? Uri.parse("x://h?" + data.getFragment()) : null;
         String error = firstNonNull(data.getQueryParameter("error"),
                 fragment != null ? fragment.getQueryParameter("error") : null);
         String errorCode = firstNonNull(data.getQueryParameter("error_code"),

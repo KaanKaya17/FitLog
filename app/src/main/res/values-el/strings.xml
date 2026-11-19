@@ -521,4 +521,12 @@
     <string name="settings_label_analytics">Στατιστικά χρήσης και αναφορές σφαλμάτων</string>
     <string name="settings_sub_analytics">Ανώνυμα δεδομένα που βοηθούν στη βελτίωση της εφαρμογής</string>
     <string name="settings_sub_privacy_policy">Ποια δεδομένα συλλέγουμε και γιατί</string>
+    <string name="settings_label_meal_reminder">Υπενθυμίσεις γευμάτων</string>
+    <string name="settings_sub_meal_reminder">Υπενθύμιση στις 10:00, 14:00 και 20:00 αν δεν έχει καταχωρηθεί γεύμα</string>
+    <string name="notif_channel_meal">Υπενθυμίσεις γευμάτων</string>
+    <string name="notif_channel_meal_desc">Υπενθυμίσεις για γεύματα που δεν έχετε καταχωρήσει</string>
+    <string name="meal_reminder_title">Καταχωρήστε το γεύμα σας</string>
+    <string name="meal_reminder_breakfast">Δεν έχετε καταχωρήσει πρωινό σήμερα.</string>
+    <string name="meal_reminder_lunch">Δεν έχετε καταχωρήσει μεσημεριανό σήμερα.</string>
+    <string name="meal_reminder_dinner">Δεν έχετε καταχωρήσει βραδινό σήμερα.</string>
 </resources>

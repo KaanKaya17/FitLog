@@ -44,6 +44,7 @@ android {
 
     testOptions {
         unitTests.isReturnDefaultValues = true
+        animationsDisabled = true
     }
 
     // Release imzası: keystore ve şifreler repoya girmez. local.properties ya da

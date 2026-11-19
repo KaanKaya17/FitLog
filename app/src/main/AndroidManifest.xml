@@ -42,6 +42,7 @@
         </activity>
 
         <receiver android:name=".WaterReminderReceiver" android:exported="false" />
+        <receiver android:name=".MealReminderReceiver" android:exported="false" />
 
         <service
             android:name=".WaterTileService"

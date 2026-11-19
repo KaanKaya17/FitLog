@@ -525,4 +525,12 @@
     <string name="settings_sub_analytics">Anonymous data that helps improve the app</string>
     <string name="settings_sub_privacy_policy">What data we collect and why</string>
     <string name="privacy_policy_url" translatable="false">https://github.com/KaanKaya17/FitLog/blob/master/PRIVACY.md</string>
+    <string name="settings_label_meal_reminder">Meal reminders</string>
+    <string name="settings_sub_meal_reminder">Reminds you at 10:00, 14:00 and 20:00 if a meal is not logged</string>
+    <string name="notif_channel_meal">Meal reminders</string>
+    <string name="notif_channel_meal_desc">Reminders for meals you have not logged yet</string>
+    <string name="meal_reminder_title">Log your meal</string>
+    <string name="meal_reminder_breakfast">You have not logged breakfast yet today.</string>
+    <string name="meal_reminder_lunch">You have not logged lunch yet today.</string>
+    <string name="meal_reminder_dinner">You have not logged dinner yet today.</string>
 </resources>

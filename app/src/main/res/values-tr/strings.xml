@@ -524,4 +524,12 @@
     <string name="settings_label_analytics">Kullanım istatistikleri ve hata raporları</string>
     <string name="settings_sub_analytics">Uygulamayı geliştirmeye yardımcı anonim veriler</string>
     <string name="settings_sub_privacy_policy">Hangi verileri neden topladığımız</string>
+    <string name="settings_label_meal_reminder">Öğün hatırlatıcıları</string>
+    <string name="settings_sub_meal_reminder">Öğün girilmemişse 10:00, 14:00 ve 20:00’de hatırlatır</string>
+    <string name="notif_channel_meal">Öğün hatırlatıcıları</string>
+    <string name="notif_channel_meal_desc">Henüz girmediğiniz öğünler için hatırlatmalar</string>
+    <string name="meal_reminder_title">Öğününü kaydet</string>
+    <string name="meal_reminder_breakfast">Bugün henüz kahvaltı girmediniz.</string>
+    <string name="meal_reminder_lunch">Bugün henüz öğle yemeği girmediniz.</string>
+    <string name="meal_reminder_dinner">Bugün henüz akşam yemeği girmediniz.</string>
 </resources>
