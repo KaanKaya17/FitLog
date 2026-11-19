@@ -529,4 +529,11 @@
     <string name="meal_reminder_breakfast">Δεν έχετε καταχωρήσει πρωινό σήμερα.</string>
     <string name="meal_reminder_lunch">Δεν έχετε καταχωρήσει μεσημεριανό σήμερα.</string>
     <string name="meal_reminder_dinner">Δεν έχετε καταχωρήσει βραδινό σήμερα.</string>
+    <string name="widget_label">FitLog σήμερα</string>
+    <string name="widget_description">Θερμίδες και νερό της ημέρας, με γρήγορο κουμπί +250 ml</string>
+    <string name="widget_title">ΣΗΜΕΡΑ</string>
+    <string name="widget_kcal_format">%1$d / %2$d kcal</string>
+    <string name="widget_ml_format">%1$d / %2$d ml νερό</string>
+    <string name="widget_placeholder">–</string>
+    <string name="widget_sign_in">Συνδεθείτε στο FitLog για να δείτε την πρόοδο της ημέρας</string>
 </resources>

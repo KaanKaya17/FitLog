@@ -532,4 +532,11 @@
     <string name="meal_reminder_breakfast">Bugün henüz kahvaltı girmediniz.</string>
     <string name="meal_reminder_lunch">Bugün henüz öğle yemeği girmediniz.</string>
     <string name="meal_reminder_dinner">Bugün henüz akşam yemeği girmediniz.</string>
+    <string name="widget_label">FitLog bugün</string>
+    <string name="widget_description">Bugünün kalorisi ve suyu, hızlı +250 ml düğmesiyle</string>
+    <string name="widget_title">BUGÜN</string>
+    <string name="widget_kcal_format">%1$d / %2$d kcal</string>
+    <string name="widget_ml_format">%1$d / %2$d ml su</string>
+    <string name="widget_placeholder">–</string>
+    <string name="widget_sign_in">Bugünkü ilerlemeyi görmek için FitLog\'a giriş yapın</string>
 </resources>

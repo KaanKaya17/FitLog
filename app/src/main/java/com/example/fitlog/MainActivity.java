@@ -55,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        // Uygulamada yapılan değişiklikler ana ekran widget'ına yansısın.
+        TodayWidget.refresh(this);
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);

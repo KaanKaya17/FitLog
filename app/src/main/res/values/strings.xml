@@ -533,4 +533,11 @@
     <string name="meal_reminder_breakfast">You have not logged breakfast yet today.</string>
     <string name="meal_reminder_lunch">You have not logged lunch yet today.</string>
     <string name="meal_reminder_dinner">You have not logged dinner yet today.</string>
+    <string name="widget_label">FitLog today</string>
+    <string name="widget_description">Today\'s calories and water, with a quick +250 ml button</string>
+    <string name="widget_title">TODAY</string>
+    <string name="widget_kcal_format">%1$d / %2$d kcal</string>
+    <string name="widget_ml_format">%1$d / %2$d ml water</string>
+    <string name="widget_placeholder">–</string>
+    <string name="widget_sign_in">Sign in to FitLog to see today\'s progress</string>
 </resources>

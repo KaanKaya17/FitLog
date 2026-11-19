@@ -42,4 +42,12 @@ public class MealReminderTest {
         assertEquals(MealReminderReceiver.MEALS.length, MealReminderReceiver.HOURS.length);
         assertEquals(MealType.BREAKFAST, MealReminderReceiver.MEALS[0]);
     }
+
+    @Test
+    public void widgetPercent_isClampedAndSafe() {
+        assertEquals(0, TodayWidget.percent(500, 0));
+        assertEquals(0, TodayWidget.percent(-10, 2000));
+        assertEquals(25, TodayWidget.percent(500, 2000));
+        assertEquals(100, TodayWidget.percent(3000, 2000));
+    }
 }
