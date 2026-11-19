@@ -25,7 +25,8 @@ public final class ServiceLocator {
                             () -> new PrefManager(app).getId(),
                             ZoneId::systemDefault,
                             OfflineQueue.get(app),
-                            new OpenFoodFactsClient());
+                            new OpenFoodFactsClient(),
+                            OfflineQueue.get(app));
                 }
             }
         }

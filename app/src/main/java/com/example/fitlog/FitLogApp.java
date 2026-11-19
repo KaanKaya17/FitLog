@@ -26,6 +26,9 @@ public class FitLogApp extends Application {
         FirebaseAnalytics.getInstance(this);
 
         // Önceki oturumdan kalan çevrimdışı kayıt varsa bağlantı gelince gönder.
-        if (AuthManager.hasSession(this)) OfflineQueue.get(this).scheduleSync();
+        if (AuthManager.hasSession(this)) {
+            OfflineQueue.get(this).scheduleSync();
+            com.example.fitlog.data.WeeklySummaryWorker.schedule(this);
+        }
     }
 }

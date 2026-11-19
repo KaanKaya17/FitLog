@@ -43,15 +43,45 @@ public class FitLogRepository {
     private final Supplier<ZoneId> zone;
     private final PendingWriteStore offline;
     private final OpenFoodFactsClient foodFacts;
+    private final ReadCache cache;
     private final Gson gson = new Gson();
 
     public FitLogRepository(SupabaseApi api, IntSupplier userId, Supplier<ZoneId> zone,
                             PendingWriteStore offline, OpenFoodFactsClient foodFacts) {
+        this(api, userId, zone, offline, foodFacts, ReadCache.NONE);
+    }
+
+    public FitLogRepository(SupabaseApi api, IntSupplier userId, Supplier<ZoneId> zone,
+                            PendingWriteStore offline, OpenFoodFactsClient foodFacts, ReadCache cache) {
         this.api = api;
         this.userId = userId;
         this.zone = zone;
         this.offline = offline;
         this.foodFacts = foodFacts;
+        this.cache = cache;
+    }
+
+    /** Ağdan okur ve önbelleğe yazar; ağ yoksa son başarılı sonucu döndürür. */
+    private interface Fetch<T> { T run() throws IOException, ApiException; }
+
+    private <T> T cached(String key, java.lang.reflect.Type type, Fetch<T> fetch, boolean[] stale)
+            throws IOException, ApiException {
+        String fullKey = "u" + userId.getAsInt() + ":" + key;
+        try {
+            T value = fetch.run();
+            try { cache.put(fullKey, gson.toJson(value)); } catch (RuntimeException ignored) {}
+            return value;
+        } catch (IOException e) {
+            String json;
+            try { json = cache.get(fullKey); } catch (RuntimeException ex) { json = null; }
+            if (json == null) throw e;
+            if (stale != null) stale[0] = true;
+            return gson.fromJson(json, type);
+        }
+    }
+
+    private static java.lang.reflect.Type listOf(Class<?> c) {
+        return com.google.gson.reflect.TypeToken.getParameterized(List.class, c).getType();
     }
 
     /** Yazma sonucu: sunucuya kaydedildi ya da çevrimdışı kuyruğa alındı. */
@@ -65,7 +95,11 @@ public class FitLogRepository {
     public static final class RangeData {
         public final List<MealLog> meals;
         public final List<WaterLog> water;
-        RangeData(List<MealLog> meals, List<WaterLog> water) { this.meals = meals; this.water = water; }
+        /** true: ağ yoktu, önbellekteki son veriler döndü. */
+        public final boolean stale;
+        RangeData(List<MealLog> meals, List<WaterLog> water, boolean stale) {
+            this.meals = meals; this.water = water; this.stale = stale;
+        }
     }
 
     private String me() {
@@ -93,19 +127,27 @@ public class FitLogRepository {
 
     public RangeData getRange(LocalDate from, LocalDate toInclusive) throws IOException, ApiException {
         List<String> range = DateRanges.rangeFilter(from, toInclusive, zone.get());
-        List<MealLog> meals = ApiException.bodyOrThrow(api.getMealLogs(me(), range).execute());
-        List<WaterLog> water = ApiException.bodyOrThrow(api.getWaterLogs(me(), range).execute());
-        return new RangeData(nonNull(meals), nonNull(water));
+        String me = me();
+        // Anahtar aralığın uzunluğuna göre: ertesi gün çevrimdışıyken de son veri gösterilebilsin.
+        long days = java.time.temporal.ChronoUnit.DAYS.between(from, toInclusive) + 1;
+        boolean[] stale = {false};
+        List<MealLog> meals = cached("range" + days + ":meals", listOf(MealLog.class),
+                () -> ApiException.bodyOrThrow(api.getMealLogs(me, range).execute()), stale);
+        List<WaterLog> water = cached("range" + days + ":water", listOf(WaterLog.class),
+                () -> ApiException.bodyOrThrow(api.getWaterLogs(me, range).execute()), stale);
+        return new RangeData(nonNull(meals), nonNull(water), stale[0]);
     }
 
     public List<MealLog> getMeals(LocalDate day) throws IOException, ApiException {
-        return nonNull(ApiException.bodyOrThrow(
-                api.getMealLogs(me(), DateRanges.dayFilter(day, zone.get())).execute()));
+        String me = me();
+        return nonNull(cached("meals:" + day, listOf(MealLog.class), () -> ApiException.bodyOrThrow(
+                api.getMealLogs(me, DateRanges.dayFilter(day, zone.get())).execute()), null));
     }
 
     public List<WaterLog> getWater(LocalDate day) throws IOException, ApiException {
-        return nonNull(ApiException.bodyOrThrow(
-                api.getWaterLogs(me(), DateRanges.dayFilter(day, zone.get())).execute()));
+        String me = me();
+        return nonNull(cached("water:" + day, listOf(WaterLog.class), () -> ApiException.bodyOrThrow(
+                api.getWaterLogs(me, DateRanges.dayFilter(day, zone.get())).execute()), null));
     }
 
     // ── Su ─────────────────────────────────────────────────────────────
@@ -126,6 +168,10 @@ public class FitLogRepository {
 
     /** Tek bir su kaydını geri alır (zaman damgasıyla eşleştirilir). */
     public void undoWater(WaterLog log) throws IOException, ApiException {
+        if (log.getLog_id() != null) {
+            ApiException.checkOk(api.deleteWaterLog("eq." + log.getLog_id()).execute());
+            return;
+        }
         if (log.getConsumed_at() == null) throw new IllegalArgumentException("consumed_at");
         ApiException.checkOk(api.deleteWaterLogs(me(),
                 Collections.singletonList("eq." + log.getConsumed_at())).execute());
@@ -187,7 +233,9 @@ public class FitLogRepository {
     // ── Kilo ───────────────────────────────────────────────────────────
 
     public List<WeightLog> getWeights(int limit) throws IOException, ApiException {
-        return nonNull(ApiException.bodyOrThrow(api.getWeightLogs(me(), limit).execute()));
+        String me = me();
+        return nonNull(cached("weights:" + limit, listOf(WeightLog.class),
+                () -> ApiException.bodyOrThrow(api.getWeightLogs(me, limit).execute()), null));
     }
 
     /** Kilo kaydı ekler ve profildeki güncel kiloyu günceller. */

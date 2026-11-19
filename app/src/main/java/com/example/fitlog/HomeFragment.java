@@ -46,6 +46,7 @@ public class HomeFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         pref = new PrefManager(requireContext());
         vm = new ViewModelProvider(this).get(HomeViewModel.class);
+        bindCommon(vm);
 
         initViews(view);
         setupGreeting();

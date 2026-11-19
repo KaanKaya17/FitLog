@@ -48,6 +48,7 @@ public class HistoryFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         vm = new ViewModelProvider(this).get(HistoryViewModel.class);
+        bindCommon(vm);
 
         recyclerHistory    = view.findViewById(R.id.recyclerHistory);
         progressBarHistory = view.findViewById(R.id.progressBarHistory);

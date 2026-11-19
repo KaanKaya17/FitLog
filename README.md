@@ -1,5 +1,7 @@
 # FitLog 🏋️‍♂️🍏
 
+[![Android CI](https://github.com/KaanKaya17/FitLog/actions/workflows/android.yml/badge.svg)](https://github.com/KaanKaya17/FitLog/actions/workflows/android.yml)
+
 FitLog, yapay zeka destekli bir Android beslenme, su ve kilo takip uygulamasıdır. Öğünlerini fotoğrafla, metinle ya da barkodla kaydedersin; hedeflerini profiline göre hesaplar, ilerlemeni grafiklerle gösterir ve son 7 gününü bilen bir AI koçla konuşmanı sağlar.
 
 ## 🌟 Özellikler
@@ -19,6 +21,7 @@ FitLog, yapay zeka destekli bir Android beslenme, su ve kilo takip uygulamasıd�
 **Su**
 - Hızlı ekleme, **geri al**, günü sıfırlama
 - Ayarlanabilir hatırlatma sıklığı ve **sessiz saatler**; cihaz yeniden başlayınca hatırlatıcı yeniden kurulur
+- Bildirim panelinde **"+250 ml su" hızlı ayar kutucuğu** (uygulamayı açmadan ekleme)
 
 **AI Koç**
 - Profilin ve son 7 günün verisiyle kişiselleştirilmiş günlük plan
@@ -28,7 +31,9 @@ FitLog, yapay zeka destekli bir Android beslenme, su ve kilo takip uygulamasıd�
 - E-posta/şifre ve **Google ile giriş** (Supabase Auth, OAuth + PKCE), şifre sıfırlama
 - Uygulama içinden **hesap silme** (tüm veriler sunucudan silinir)
 - **Açık / koyu / sistem** teması; Türkçe, İngilizce, Yunanca
-- **Çevrimdışı kayıt**: su, öğün ve kilo bağlantı yokken cihazda kuyruğa alınır, bağlantı gelince otomatik gönderilir
+- **Çevrimdışı çalışma**: su, öğün ve kilo bağlantı yokken kuyruğa alınır ve sonra otomatik gönderilir; ekranlar son kaydedilen verilerle açılır
+- **Haftalık özet bildirimi** (her pazar 20:00)
+- **Verilerini dışa aktar**: öğün, su ve kilo geçmişi CSV olarak (ZIP) paylaşılabilir
 
 ## 🔐 Güvenlik
 

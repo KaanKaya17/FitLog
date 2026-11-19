@@ -1,6 +1,8 @@
 package com.example.fitlog;
 
 public class WaterLog {
+    /** Sunucu atar; Gson null alanları göndermediği için eklemede boş kalır. */
+    private Long log_id;
     private int user_id;
     private int amount_ml;
 
@@ -13,6 +15,7 @@ public class WaterLog {
         this.amount_ml = amount_ml;
     }
 
+    public Long getLog_id()          { return log_id; }
     public int getUser_id()          { return user_id; }
     public void setUser_id(int id)   { this.user_id = id; }
 

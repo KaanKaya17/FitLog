@@ -18,6 +18,9 @@
 alter table public.users
     add column if not exists auth_id uuid unique references auth.users(id) on delete cascade;
 
+-- Aynı e-postayla iki hesap açılamasın (trigger e-postayla eşleştirir).
+create unique index if not exists users_email_lower_uq on public.users (lower(email));
+
 -- Yeni kayıtlar artık şifre tutmayacak; NOT NULL kısıtı varsa kaldır.
 do $$
 begin
@@ -65,7 +68,7 @@ create trigger on_auth_user_created
 
 -- 3) Oturumdaki kullanıcının (engelli değilse) user_id'si --------------
 create or replace function public.current_user_id()
-returns integer
+returns bigint
 language sql
 stable
 security definer
@@ -93,13 +96,13 @@ grant update (first_name, last_name, gender, goal, height_cm, weight_kg,
 drop policy if exists users_select_own on public.users;
 create policy users_select_own on public.users
     for select to authenticated
-    using (auth_id = auth.uid());          -- engelli kullanıcı da kendi is_blocked durumunu görebilsin
+    using (auth_id = (select auth.uid()));          -- engelli kullanıcı da kendi is_blocked durumunu görebilsin
 
 drop policy if exists users_update_own on public.users;
 create policy users_update_own on public.users
     for update to authenticated
-    using (auth_id = auth.uid() and coalesce(is_blocked, false) = false)
-    with check (auth_id = auth.uid());
+    using (auth_id = (select auth.uid()) and coalesce(is_blocked, false) = false)
+    with check (auth_id = (select auth.uid()));
 
 -- 5) RLS: kullanıcıya ait veri tabloları -------------------------------
 do $$
@@ -114,8 +117,8 @@ begin
         execute format('drop policy if exists %I on public.%I', t || '_own', t);
         execute format(
             'create policy %I on public.%I for all to authenticated '
-            'using (user_id = public.current_user_id()) '
-            'with check (user_id = public.current_user_id())',
+            'using (user_id = (select public.current_user_id())) '
+            'with check (user_id = (select public.current_user_id()))',
             t || '_own', t);
     end loop;
 end $$;
@@ -130,10 +133,10 @@ grant update (is_read) on public.admin_notifications to authenticated;
 drop policy if exists notifications_select_own on public.admin_notifications;
 create policy notifications_select_own on public.admin_notifications
     for select to authenticated
-    using (user_id = public.current_user_id());
+    using (user_id = (select public.current_user_id()));
 
 drop policy if exists notifications_mark_read_own on public.admin_notifications;
 create policy notifications_mark_read_own on public.admin_notifications
     for update to authenticated
-    using (user_id = public.current_user_id())
-    with check (user_id = public.current_user_id());
+    using (user_id = (select public.current_user_id()))
+    with check (user_id = (select public.current_user_id()));

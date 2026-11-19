@@ -502,4 +502,12 @@
     <string name="notif_channel_water">Water reminder</string>
     <string name="notif_channel_water_desc">Reminders to drink water</string>
     <string name="history_subtitle_format">Summary of the last %1$d days</string>
+    <string name="msg_offline_cached">Offline — showing your last saved data.</string>
+    <string name="settings_export_data">Export my data (CSV)</string>
+    <string name="export_subject">FitLog data export</string>
+    <string name="weekly_summary_title">Your week in FitLog 📊</string>
+    <string name="weekly_summary_text">You logged %1$d of 7 days, averaging %2$d kcal. Water goal met on %3$d days, calories on target on %4$d days.</string>
+    <string name="notif_channel_weekly">Weekly summary</string>
+    <string name="notif_channel_weekly_desc">A short summary of your week every Sunday</string>
+    <string name="tile_add_water">+250 ml water</string>
 </resources>

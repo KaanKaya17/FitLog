@@ -52,7 +52,10 @@ public interface SupabaseApi {
             @Query("consumed_at") List<String> rangeFilters
     );
 
-    /** Belirli kaydı (geri al) ya da bir günü (sıfırla) siler. */
+    @DELETE("rest/v1/water_log")
+    Call<Void> deleteWaterLog(@Query("log_id") String logIdFilter);
+
+    /** Belirli zamandaki kaydı ya da bir günü (sıfırla) siler. */
     @DELETE("rest/v1/water_log")
     Call<Void> deleteWaterLogs(
             @Query("user_id") String userIdFilter,

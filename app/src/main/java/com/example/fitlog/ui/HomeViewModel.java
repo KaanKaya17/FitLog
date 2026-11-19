@@ -26,9 +26,14 @@ public class HomeViewModel extends BaseViewModel {
         public final DayHistory today;
         public final int mealStreak;
         public final Float latestWeight;
+        public final boolean stale;
 
         public Dashboard(DayHistory today, int mealStreak, Float latestWeight) {
-            this.today = today; this.mealStreak = mealStreak; this.latestWeight = latestWeight;
+            this(today, mealStreak, latestWeight, false);
+        }
+
+        Dashboard(DayHistory today, int mealStreak, Float latestWeight, boolean stale) {
+            this.today = today; this.mealStreak = mealStreak; this.latestWeight = latestWeight; this.stale = stale;
         }
     }
 
@@ -43,7 +48,11 @@ public class HomeViewModel extends BaseViewModel {
     public LiveData<Event<AdminNotification>> notification() { return notification; }
 
     public void refresh() {
-        load(dashboard, () -> build(repo, LocalDate.now(), ZoneId.systemDefault()));
+        load(dashboard, () -> {
+            Dashboard d = build(repo, LocalDate.now(), ZoneId.systemDefault());
+            if (d.stale) postMessage(com.example.fitlog.R.string.msg_offline_cached);
+            return d;
+        });
     }
 
     static Dashboard build(FitLogRepository repo, LocalDate today, ZoneId zone) throws Exception {
@@ -61,7 +70,7 @@ public class HomeViewModel extends BaseViewModel {
         } catch (Exception ignored) {
             // Kilo tablosu henüz yoksa (migration çalışmadıysa) ana sayfa yine açılsın.
         }
-        return new Dashboard(days.get(0), StreakCalculator.currentStreak(logged, today), weight);
+        return new Dashboard(days.get(0), StreakCalculator.currentStreak(logged, today), weight, data.stale);
     }
 
     public void checkNotifications() {

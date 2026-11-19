@@ -65,6 +65,11 @@ begin
         );
     end loop;
 
+    -- Güvenlik: bağlanamayan kullanıcı varsa şifreleri silmeden dur.
+    if exists (select 1 from public.users where auth_id is null) then
+        raise exception 'Bazı kullanıcılar Auth''a bağlanamadı; şifreler silinmedi.';
+    end if;
+
     -- Düz metin şifreleri kalıcı olarak sil.
     execute 'update public.users set password_hash = null';
     execute 'alter table public.users drop column password_hash';

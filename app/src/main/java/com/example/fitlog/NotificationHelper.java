@@ -69,4 +69,30 @@ public class NotificationHelper {
             manager.notify(1002, builder.build());
         }
     }
+
+    private static final String WEEKLY_CHANNEL_ID = "weekly_summary_channel";
+
+    /** Haftalık özet; ayrı kanal sayesinde kullanıcı sistem ayarlarından yalnızca bunu kapatabilir. */
+    public static void showWeeklySummary(Context context, String title, String text) {
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (manager == null) return;
+        NotificationChannel channel = new NotificationChannel(WEEKLY_CHANNEL_ID,
+                context.getString(R.string.notif_channel_weekly), NotificationManager.IMPORTANCE_DEFAULT);
+        channel.setDescription(context.getString(R.string.notif_channel_weekly_desc));
+        manager.createNotificationChannel(channel);
+
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 2, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        manager.notify(1003, new NotificationCompat.Builder(context, WEEKLY_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(text)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .build());
+    }
 }

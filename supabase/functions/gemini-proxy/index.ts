@@ -48,15 +48,6 @@ Deno.serve(async (req) => {
   const { data: appUserId, error: rpcError } = await supabase.rpc("current_user_id");
   if (rpcError || appUserId === null) return json(403, { error: { message: "Forbidden" } });
 
-  // Günlük kullanım kotası (maliyet ve kötüye kullanım sınırı)
-  const { data: allowed, error: quotaError } = await supabase.rpc("consume_ai_quota", {
-    daily_limit: DAILY_LIMIT,
-  });
-  if (quotaError) return json(500, { error: { message: "Quota check failed" } });
-  if (allowed !== true) {
-    return json(429, { error: { message: "Daily AI limit reached", code: "quota_exceeded" } });
-  }
-
   // 2) Gövdeyi doğrula
   const raw = await req.text();
   if (raw.length > MAX_BODY_BYTES) return json(413, { error: { message: "Request too large" } });
@@ -79,11 +70,23 @@ Deno.serve(async (req) => {
     // Yalnızca güvenli alanlar; çıktı uzunluğu sunucuda sınırlanır.
     const g = body.generationConfig as Record<string, unknown>;
     const cfg: Record<string, unknown> = { maxOutputTokens: 8192 };
-    if (typeof g.responseMimeType === "string") cfg.responseMimeType = g.responseMimeType;
+    if (g.responseMimeType === "application/json" || g.responseMimeType === "text/plain") {
+      cfg.responseMimeType = g.responseMimeType;
+    }
     if (typeof g.temperature === "number") cfg.temperature = Math.min(Math.max(g.temperature, 0), 1.5);
     forwarded.generationConfig = cfg;
   } else {
     forwarded.generationConfig = { maxOutputTokens: 8192 };
+  }
+
+  // Geçerli istek: şimdi kotadan düş (geçersiz istekler kota harcamaz).
+  // Günlük kullanım kotası (maliyet ve kötüye kullanım sınırı)
+  const { data: allowed, error: quotaError } = await supabase.rpc("consume_ai_quota", {
+    daily_limit: DAILY_LIMIT,
+  });
+  if (quotaError) return json(500, { error: { message: "Quota check failed" } });
+  if (allowed !== true) {
+    return json(429, { error: { message: "Daily AI limit reached", code: "quota_exceeded" } });
   }
 
   // 3) Gemini'ye ilet (anahtar URL yerine header'da)

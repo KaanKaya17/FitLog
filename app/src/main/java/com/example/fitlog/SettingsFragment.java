@@ -88,9 +88,35 @@ public class SettingsFragment extends BaseFragment {
             TargetsDialog.show(requireContext(), t, () -> vm.applyTargets(t), null);
         });
         vm.targetsApplied().observe(getViewLifecycleOwner(), e -> { if (e.consume() != null) loadCurrentGoals(); });
+        setupExport(view);
 
         View about = view.findViewById(R.id.layoutAbout);
         if (about != null) about.setOnClickListener(v -> navigate(R.id.aboutProjectFragment));
+    }
+
+    // ── Veri dışa aktarma ──────────────────────────────────────────────
+
+    private void setupExport(View view) {
+        com.example.fitlog.ui.ExportViewModel exportVm =
+                new ViewModelProvider(this).get(com.example.fitlog.ui.ExportViewModel.class);
+        View btn = view.findViewById(R.id.btnExportData);
+        btn.setOnClickListener(v -> {
+            if (pref.getId() == -1) { toast(R.string.error_not_logged_in); return; }
+            exportVm.start();
+        });
+        exportVm.export().observe(getViewLifecycleOwner(), res -> {
+            btn.setEnabled(!res.isLoading());
+            if (res.isError()) com.example.fitlog.ui.ErrorMessages.toast(requireContext(), res.error);
+            if (res.isSuccess() && res.data != null) {
+                Intent share = new Intent(Intent.ACTION_SEND)
+                        .setType("application/zip")
+                        .putExtra(Intent.EXTRA_STREAM, res.data)
+                        .putExtra(Intent.EXTRA_SUBJECT, getString(R.string.export_subject))
+                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(share, getString(R.string.settings_export_data)));
+                analytics.logEvent("data_exported", null);
+            }
+        });
     }
 
     // ── Dil / tema ─────────────────────────────────────────────────────

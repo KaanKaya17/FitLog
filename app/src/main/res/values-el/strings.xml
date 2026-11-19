@@ -499,4 +499,12 @@
     <string name="notif_channel_water">Υπενθύμιση νερού</string>
     <string name="notif_channel_water_desc">Υπενθυμίσεις για να πίνεις νερό</string>
     <string name="history_subtitle_format">Σύνοψη των τελευταίων %1$d ημερών</string>
+    <string name="msg_offline_cached">Εκτός σύνδεσης — εμφανίζονται τα τελευταία αποθηκευμένα δεδομένα.</string>
+    <string name="settings_export_data">Εξαγωγή δεδομένων (CSV)</string>
+    <string name="export_subject">Εξαγωγή δεδομένων FitLog</string>
+    <string name="weekly_summary_title">Η εβδομάδα σου στο FitLog 📊</string>
+    <string name="weekly_summary_text">Κατέγραψες %1$d από 7 ημέρες, μέσος όρος %2$d kcal. Στόχος νερού %3$d ημέρες, θερμίδες στον στόχο %4$d ημέρες.</string>
+    <string name="notif_channel_weekly">Εβδομαδιαία σύνοψη</string>
+    <string name="notif_channel_weekly_desc">Σύντομη σύνοψη κάθε Κυριακή</string>
+    <string name="tile_add_water">+250 ml νερό</string>
 </resources>

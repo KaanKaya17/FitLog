@@ -78,11 +78,13 @@ end $$;
 
 create index if not exists meal_log_user_eaten_idx   on public.meal_log  (user_id, eaten_at desc);
 create index if not exists water_log_user_consumed_idx on public.water_log (user_id, consumed_at desc);
+create index if not exists ai_meal_plans_user_date_idx on public.ai_meal_plans (user_id, created_date);
+create index if not exists admin_notifications_user_idx on public.admin_notifications (user_id) where is_read = false;
 
 -- 3) Kilo kayıtları -------------------------------------------------------
 create table if not exists public.weight_log (
     id         bigint generated always as identity primary key,
-    user_id    integer not null references public.users(user_id) on delete cascade,
+    user_id    bigint  not null references public.users(user_id) on delete cascade,
     weight_kg  real    not null check (weight_kg between 20 and 400),
     logged_at  timestamptz not null default now()
 );
@@ -91,7 +93,7 @@ create index if not exists weight_log_user_logged_idx on public.weight_log (user
 -- 4) Favori öğünler -------------------------------------------------------
 create table if not exists public.favorite_meals (
     id            bigint generated always as identity primary key,
-    user_id       integer not null references public.users(user_id) on delete cascade,
+    user_id       bigint  not null references public.users(user_id) on delete cascade,
     food_name     text    not null check (length(food_name) between 1 and 200),
     serving_size  text,
     calories      integer not null check (calories between 0 and 10000),
@@ -116,15 +118,15 @@ begin
         execute format('drop policy if exists %I on public.%I', t || '_own', t);
         execute format(
             'create policy %I on public.%I for all to authenticated '
-            'using (user_id = public.current_user_id()) '
-            'with check (user_id = public.current_user_id())',
+            'using (user_id = (select public.current_user_id())) '
+            'with check (user_id = (select public.current_user_id()))',
             t || '_own', t);
     end loop;
 end $$;
 
 -- 5) AI kullanım kotası (maliyet / kötüye kullanım sınırı) ---------------
 create table if not exists public.ai_usage (
-    user_id  integer not null references public.users(user_id) on delete cascade,
+    user_id  bigint  not null references public.users(user_id) on delete cascade,
     day      date    not null,
     count    integer not null default 0,
     primary key (user_id, day)
@@ -140,7 +142,7 @@ security definer
 set search_path = ''
 as $$
 declare
-    uid integer := public.current_user_id();
+    uid bigint := public.current_user_id();
     new_count integer;
 begin
     if uid is null then
@@ -166,7 +168,7 @@ set search_path = ''
 as $$
 declare
     auth_uid uuid := auth.uid();
-    uid integer;
+    uid bigint;
 begin
     if auth_uid is null then
         raise exception 'not authenticated';

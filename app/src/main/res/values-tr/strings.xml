@@ -502,4 +502,12 @@
     <string name="notif_channel_water">Su hatırlatıcısı</string>
     <string name="notif_channel_water_desc">Su içme hatırlatma bildirimleri</string>
     <string name="history_subtitle_format">Son %1$d günün özeti</string>
+    <string name="msg_offline_cached">Çevrimdışı — son kaydedilen veriler gösteriliyor.</string>
+    <string name="settings_export_data">Verilerimi dışa aktar (CSV)</string>
+    <string name="export_subject">FitLog veri dışa aktarımı</string>
+    <string name="weekly_summary_title">FitLog\'da haftan 📊</string>
+    <string name="weekly_summary_text">7 günün %1$d gününde kayıt girdin, ortalama %2$d kcal. Su hedefi %3$d gün, kalori hedefi %4$d gün tuttu.</string>
+    <string name="notif_channel_weekly">Haftalık özet</string>
+    <string name="notif_channel_weekly_desc">Her pazar haftanın kısa özeti</string>
+    <string name="tile_add_water">+250 ml su</string>
 </resources>

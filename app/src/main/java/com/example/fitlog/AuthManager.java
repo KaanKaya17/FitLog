@@ -100,6 +100,7 @@ public final class AuthManager {
             throw new AuthException("user_blocked", R.string.auth_error_blocked);
         }
         new PrefManager(ctx).saveUser(user);
+        try { com.example.fitlog.data.WeeklySummaryWorker.schedule(ctx); } catch (RuntimeException ignored) {}
         return user;
     }
 
@@ -170,6 +171,7 @@ public final class AuthManager {
 
     public static void clearLocalSession(Context ctx) {
         new PrefManager(ctx).clearUser();
+        try { com.example.fitlog.data.WeeklySummaryWorker.cancel(ctx); } catch (RuntimeException ignored) {}
     }
 
     public static boolean hasSession(Context ctx) {

@@ -119,6 +119,21 @@ public class FitLogRepositoryTest {
     }
 
     @Test
+    public void undoWater_prefersPrimaryKey() throws Exception {
+        server.enqueue(new MockResponse().setResponseCode(201)
+                .setBody("[{\"log_id\":42,\"user_id\":7,\"amount_ml\":200,\"consumed_at\":\"2026-11-19T10:00:00+00:00\"}]"));
+        server.enqueue(new MockResponse().setResponseCode(204));
+
+        WaterLog saved = repo.addWater(200).value;
+        assertFalse("ekleme isteği log_id göndermemeli (identity ALWAYS)",
+                server.takeRequest().getBody().readUtf8().contains("log_id"));
+
+        repo.undoWater(saved);
+        RecordedRequest del = server.takeRequest();
+        assertEquals("/rest/v1/water_log?log_id=eq.42", del.getPath());
+    }
+
+    @Test
     public void addWater_offlineIsQueued() throws Exception {
         server.shutdown(); // bağlantı reddedilir → IOException
 
@@ -213,6 +228,60 @@ public class FitLogRepositoryTest {
     public void notLoggedIn_failsFast() throws Exception {
         FitLogRepository anon = new FitLogRepository(null, () -> -1, () -> ISTANBUL, (k, j) -> {}, null);
         anon.getMeals(LocalDate.now());
+    }
+
+    // ── Çevrimdışı okuma önbelleği ─────────────────────────────────────
+
+    @Test
+    public void range_fallsBackToCacheWhenOffline() throws Exception {
+        java.util.Map<String, String> store = new java.util.HashMap<>();
+        ReadCache mem = new ReadCache() {
+            @Override public void put(String k, String j) { store.put(k, j); }
+            @Override public String get(String k) { return store.get(k); }
+        };
+        OkHttpClient http = new OkHttpClient.Builder().readTimeout(2, TimeUnit.SECONDS).build();
+        SupabaseApi api = new Retrofit.Builder().baseUrl(server.url("/")).client(http)
+                .addConverterFactory(GsonConverterFactory.create()).build().create(SupabaseApi.class);
+        FitLogRepository cachedRepo = new FitLogRepository(api, () -> 7, () -> ISTANBUL, (k, j) -> {}, null, mem);
+
+        server.enqueue(new MockResponse().setBody("[{\"food_name\":\"a\",\"calories\":420}]"));
+        server.enqueue(new MockResponse().setBody("[{\"amount_ml\":500}]"));
+        LocalDate d = LocalDate.of(2026, 11, 19);
+        FitLogRepository.RangeData online = cachedRepo.getRange(d.minusDays(6), d);
+        assertFalse(online.stale);
+        assertTrue(store.containsKey("u7:range7:meals"));
+
+        server.shutdown();
+        FitLogRepository.RangeData offline = cachedRepo.getRange(d.minusDays(5), d.plusDays(1)); // ertesi gün, aynı uzunluk
+        assertTrue(offline.stale);
+        assertEquals(420, offline.meals.get(0).getCalories());
+        assertEquals(500, offline.water.get(0).getAmount_ml());
+    }
+
+    @Test(expected = IOException.class)
+    public void range_offlineWithoutCacheStillFails() throws Exception {
+        server.shutdown();
+        repo.getRange(LocalDate.of(2026, 11, 13), LocalDate.of(2026, 11, 19));
+    }
+
+    @Test
+    public void cache_isPerUser() throws Exception {
+        java.util.Map<String, String> store = new java.util.HashMap<>();
+        ReadCache mem = new ReadCache() {
+            @Override public void put(String k, String j) { store.put(k, j); }
+            @Override public String get(String k) { return store.get(k); }
+        };
+        store.put("u99:weights:365", "[{\"weight_kg\":50}]"); // başka kullanıcının verisi
+        server.shutdown();
+        FitLogRepository other = new FitLogRepository(new Retrofit.Builder().baseUrl(server.url("/"))
+                .addConverterFactory(GsonConverterFactory.create()).build().create(SupabaseApi.class),
+                () -> 7, () -> ISTANBUL, (k, j) -> {}, null, mem);
+        try {
+            other.getWeights(365);
+            fail("u7, u99'un önbelleğini görmemeli");
+        } catch (IOException expected) {
+            // beklenen
+        }
     }
 
     // ── Open Food Facts ────────────────────────────────────────────────

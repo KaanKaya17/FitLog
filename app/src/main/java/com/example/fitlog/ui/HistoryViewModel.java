@@ -31,10 +31,11 @@ public class HistoryViewModel extends BaseViewModel {
         public final int currentStreak;
         public final int bestStreak;
         public final int waterStreak;
+        public final boolean stale;
 
-        History(List<DayHistory> days, int currentStreak, int bestStreak, int waterStreak) {
+        History(List<DayHistory> days, int currentStreak, int bestStreak, int waterStreak, boolean stale) {
             this.days = days; this.currentStreak = currentStreak;
-            this.bestStreak = bestStreak; this.waterStreak = waterStreak;
+            this.bestStreak = bestStreak; this.waterStreak = waterStreak; this.stale = stale;
         }
     }
 
@@ -49,7 +50,11 @@ public class HistoryViewModel extends BaseViewModel {
     public void setPeriod(int days) { periodDays.setValue(days); }
 
     public void refresh(int waterGoal) {
-        load(history, () -> build(repo, LocalDate.now(), ZoneId.systemDefault(), waterGoal));
+        load(history, () -> {
+            History h = build(repo, LocalDate.now(), ZoneId.systemDefault(), waterGoal);
+            if (h.stale) postMessage(com.example.fitlog.R.string.msg_offline_cached);
+            return h;
+        });
     }
 
     static History build(FitLogRepository repo, LocalDate today, ZoneId zone, int waterGoal) throws Exception {
@@ -67,6 +72,6 @@ public class HistoryViewModel extends BaseViewModel {
         return new History(days,
                 StreakCalculator.currentStreak(mealDays, today),
                 StreakCalculator.bestStreak(mealDays),
-                StreakCalculator.currentStreak(waterDays, today));
+                StreakCalculator.currentStreak(waterDays, today), data.stale);
     }
 }
