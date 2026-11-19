@@ -11,6 +11,12 @@ public class AiMealPlan {
         this.plan_content = plan_content;
     }
 
+    /** created_date kullanıcının yerel tarihidir (sunucunun UTC günü değil). */
+    public AiMealPlan(int user_id, String plan_content, String createdDate) {
+        this(user_id, plan_content);
+        this.created_date = createdDate;
+    }
+
     public int getId() {
         return id;
     }

@@ -1,9 +1,57 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.FitLog" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- Açık/koyu tema: renkler values/colors.xml ve values-night/colors.xml'den gelir. -->
+    <style name="Base.Theme.FitLog" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brand_green</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/brand_navy</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:colorBackground">@color/bg_screen</item>
+        <item name="android:windowBackground">@color/bg_screen</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_secondary</item>
+        <item name="colorControlActivated">@color/brand_green</item>
     </style>
 
     <style name="Theme.FitLog" parent="Base.Theme.FitLog" />
+
+    <!-- Yeni ekranlarda ortak metin stilleri -->
+    <style name="FitLog.Title" parent="">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="FitLog.Subtitle" parent="">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="FitLog.SectionLabel" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+
+    <style name="FitLog.Card" parent="">
+        <item name="android:background">@drawable/card_bg</item>
+        <item name="android:padding">18dp</item>
+    </style>
+
+    <style name="FitLog.PrimaryButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/brand_green</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:minHeight">52dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="FitLog.SecondaryButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="strokeColor">@color/outline</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:minHeight">52dp</item>
+    </style>
 </resources>

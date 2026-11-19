@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="@color/bg_screen"
     tools:context=".MealDetail">
 
     <androidx.core.widget.NestedScrollView
@@ -31,7 +31,7 @@
                 android:text="@string/meal_detail_back"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#4CAF50"
+                android:textColor="@color/brand_green"
                 android:layout_marginBottom="24dp"
                 android:clickable="true"
                 android:focusable="true" />
@@ -43,7 +43,7 @@
                 android:text="@string/add_meal_label_food_name"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="4dp" />
 
             <LinearLayout
@@ -60,7 +60,7 @@
                     android:layout_weight="1"
                     android:text="@string/add_meal_label_serving"
                     android:textSize="14sp"
-                    android:textColor="#9E9E9E" />
+                    android:textColor="@color/text_secondary" />
 
                 <TextView
                     android:id="@+id/tvConfidence"
@@ -69,7 +69,7 @@
                     android:text="@string/add_meal_confidence_high"
                     android:textSize="11sp"
                     android:textStyle="bold"
-                    android:textColor="#4CAF50"
+                    android:textColor="@color/brand_green"
                     android:background="@drawable/badge_green"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
@@ -84,7 +84,7 @@
                 android:text="@string/meal_detail_label_calories"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="6dp" />
 
             <LinearLayout
@@ -103,14 +103,14 @@
                     android:text="0"
                     android:textSize="56sp"
                     android:textStyle="bold"
-                    android:textColor="#4CAF50" />
+                    android:textColor="@color/brand_green" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/unit_kcal"
                     android:textSize="16sp"
-                    android:textColor="#9E9E9E" />
+                    android:textColor="@color/text_secondary" />
 
             </LinearLayout>
 
@@ -120,7 +120,7 @@
                 android:text="@string/meal_detail_label_nutrients"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="6dp" />
 
             <LinearLayout
@@ -151,7 +151,7 @@
                         android:text="@string/meal_detail_macro_protein"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E" />
+                        android:textColor="@color/text_primary" />
 
                     <TextView
                         android:id="@+id/tvProtein"
@@ -159,12 +159,12 @@
                         android:layout_height="wrap_content"
                         android:text="0g"
                         android:textSize="15sp"
-                        android:textColor="#9E9E9E" />
+                        android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
 
                 <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:background="#F0F0F0" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
+                    android:background="@color/divider" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -187,7 +187,7 @@
                         android:text="@string/meal_detail_macro_carbs"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E" />
+                        android:textColor="@color/text_primary" />
 
                     <TextView
                         android:id="@+id/tvCarbs"
@@ -195,12 +195,12 @@
                         android:layout_height="wrap_content"
                         android:text="0g"
                         android:textSize="15sp"
-                        android:textColor="#9E9E9E" />
+                        android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
 
                 <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:background="#F0F0F0" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
+                    android:background="@color/divider" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -223,7 +223,7 @@
                         android:text="@string/meal_detail_macro_fat"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E" />
+                        android:textColor="@color/text_primary" />
 
                     <TextView
                         android:id="@+id/tvFat"
@@ -231,12 +231,12 @@
                         android:layout_height="wrap_content"
                         android:text="0g"
                         android:textSize="15sp"
-                        android:textColor="#9E9E9E" />
+                        android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
 
                 <View android:layout_width="match_parent" android:layout_height="1dp"
-                    android:background="#F0F0F0" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
+                    android:background="@color/divider" android:layout_marginStart="16dp" android:layout_marginEnd="16dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -259,7 +259,7 @@
                         android:text="@string/meal_detail_macro_fiber"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E" />
+                        android:textColor="@color/text_primary" />
 
                     <TextView
                         android:id="@+id/tvFiber"
@@ -267,7 +267,7 @@
                         android:layout_height="wrap_content"
                         android:text="0g"
                         android:textSize="15sp"
-                        android:textColor="#9E9E9E" />
+                        android:textColor="@color/text_secondary" />
 
                 </LinearLayout>
 
@@ -280,8 +280,8 @@
                 android:text="@string/meal_detail_action_delete"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#E53935"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/error"
                 android:layout_marginTop="8dp" />
 
         </LinearLayout>

@@ -31,7 +31,12 @@ public final class AuthManager {
     /** Kullanıcıya gösterilebilir hata. */
     public static class AuthException extends Exception {
         public final String code;
-        AuthException(String code, String message) { super(message); this.code = code; }
+        @androidx.annotation.StringRes public final int messageRes;
+        AuthException(String code, @androidx.annotation.StringRes int messageRes) {
+            super(code);
+            this.code = code;
+            this.messageRes = messageRes;
+        }
     }
 
     private static SupabaseAuthApi api() {
@@ -47,17 +52,52 @@ public final class AuthManager {
         if (!r.isSuccessful() || r.body() == null || r.body().accessToken == null) {
             throw toAuthException(r);
         }
-        saveSession(ctx, r.body());
+        return completeSignIn(ctx, r.body());
+    }
 
-        String authId = r.body().user != null ? r.body().user.id : null;
+    // ── Google ile giriş (OAuth + PKCE) ────────────────────────────────
+
+    public static final String OAUTH_REDIRECT = "fitlog://auth-callback";
+
+    /**
+     * Tarayıcıda açılacak Google giriş adresini üretir. code_verifier cihazda
+     * saklanır; token'lar URL'de taşınmaz, yalnızca tek kullanımlık kod döner.
+     */
+    public static String googleAuthorizeUrl(Context ctx) {
+        String verifier = com.example.fitlog.domain.Pkce.newVerifier();
+        new PrefManager(ctx).setPkceVerifier(verifier);
+        return okhttp3.HttpUrl.get(BuildConfig.SUPABASE_URL + "/auth/v1/authorize").newBuilder()
+                .addQueryParameter("provider", "google")
+                .addQueryParameter("redirect_to", OAUTH_REDIRECT)
+                .addQueryParameter("code_challenge", com.example.fitlog.domain.Pkce.challenge(verifier))
+                .addQueryParameter("code_challenge_method", "s256")
+                .build().toString();
+    }
+
+    /** OAuth dönüşündeki kodu oturuma çevirir. */
+    public static User exchangeOAuthCode(Context ctx, String code) throws IOException, AuthException {
+        String verifier = new PrefManager(ctx).takePkceVerifier();
+        if (verifier == null || code == null || code.isEmpty()) {
+            throw new AuthException("pkce_missing", R.string.auth_error_oauth_expired);
+        }
+        Response<SupabaseAuthApi.AuthResponse> r =
+                api().exchangeCode(new SupabaseAuthApi.PkceGrant(code, verifier)).execute();
+        if (!r.isSuccessful() || r.body() == null || r.body().accessToken == null) throw toAuthException(r);
+        return completeSignIn(ctx, r.body());
+    }
+
+    private static User completeSignIn(Context ctx, SupabaseAuthApi.AuthResponse session)
+            throws IOException, AuthException {
+        saveSession(ctx, session);
+        String authId = session.user != null ? session.user.id : null;
         User user = fetchProfile(authId);
         if (user == null) {
             clearLocalSession(ctx);
-            throw new AuthException("profile_missing", "Profil bulunamadı.");
+            throw new AuthException("profile_missing", R.string.auth_error_profile_missing);
         }
         if (user.isBlocked()) {
             signOut(ctx);
-            throw new AuthException("user_blocked", "Hesabınız engellenmiştir.");
+            throw new AuthException("user_blocked", R.string.auth_error_blocked);
         }
         new PrefManager(ctx).saveUser(user);
         return user;
@@ -100,7 +140,7 @@ public final class AuthManager {
         Response<SupabaseAuthApi.AuthResponse> check =
                 api().signInWithPassword(new SupabaseAuthApi.PasswordGrant(email, currentPassword)).execute();
         if (!check.isSuccessful() || check.body() == null || check.body().accessToken == null) {
-            throw new AuthException("invalid_credentials", "Mevcut şifreniz yanlış.");
+            throw new AuthException("invalid_credentials", R.string.auth_error_current_password);
         }
         saveSession(ctx, check.body());
 
@@ -217,22 +257,32 @@ public final class AuthManager {
             }
         } catch (Exception ignored) {}
 
+        return mapError(code, r.code());
+    }
+
+    /** Sunucu hata kodunu yerelleştirilmiş mesaja eşler (test edilebilir). */
+    static AuthException mapError(String code, int httpCode) {
         switch (code) {
             case "invalid_credentials":
             case "invalid_grant":
-                return new AuthException(code, "E-posta veya şifre hatalı.");
+                return new AuthException(code, R.string.auth_error_invalid_credentials);
             case "email_not_confirmed":
-                return new AuthException(code, "Lütfen önce e-posta adresinizi onaylayın.");
+                return new AuthException(code, R.string.auth_error_email_not_confirmed);
             case "user_already_exists":
             case "email_exists":
-                return new AuthException(code, "Bu mail adresi zaten kayıtlı.");
+                return new AuthException(code, R.string.auth_error_email_exists);
             case "weak_password":
-                return new AuthException(code, "Şifre çok zayıf.");
+                return new AuthException(code, R.string.auth_error_weak_password);
             case "over_request_rate_limit":
             case "over_email_send_rate_limit":
-                return new AuthException(code, "Çok fazla deneme yapıldı, lütfen biraz bekleyin.");
+                return new AuthException(code, R.string.auth_error_rate_limited);
+            case "flow_state_not_found":
+            case "flow_state_expired":
+            case "bad_code_verifier":
+                return new AuthException(code, R.string.auth_error_oauth_expired);
             default:
-                return new AuthException(code, msg.isEmpty() ? "Bir hata oluştu (" + r.code() + ")." : msg);
+                return new AuthException(code.isEmpty() ? "http_" + httpCode : code,
+                        httpCode >= 500 ? R.string.error_server : R.string.error_generic);
         }
     }
 }

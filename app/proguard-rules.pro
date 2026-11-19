@@ -30,6 +30,8 @@
 -keep class com.example.fitlog.AiMealPlan { *; }
 -keep class com.example.fitlog.NutritionData { *; }
 -keep class com.example.fitlog.DayHistory { *; }
+-keep class com.example.fitlog.WeightLog { *; }
+-keep class com.example.fitlog.FavoriteMeal { *; }
 
 # Generic Rules for Retrofit/Gson
 -keepattributes Signature

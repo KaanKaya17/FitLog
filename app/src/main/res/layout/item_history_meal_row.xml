@@ -22,7 +22,7 @@
         android:layout_weight="1"
         android:text="@string/meal_row_default_name"
         android:textSize="14sp"
-        android:textColor="#1A1A2E"
+        android:textColor="@color/text_primary"
         android:maxLines="1"
         android:ellipsize="end"
         tools:text="Izgara Tavuk Göğsü" />
@@ -34,7 +34,7 @@
         android:text="0 kcal"
         android:textSize="13sp"
         android:textStyle="bold"
-        android:textColor="#4CAF50"
+        android:textColor="@color/brand_green"
         android:layout_marginStart="8dp"
         tools:text="350 kcal" />
 

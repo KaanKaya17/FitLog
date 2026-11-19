@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Sabit renkler -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#4CAF50</color>
+
+    <!-- Marka -->
+    <color name="brand_green">#4CAF50</color>
+    <color name="brand_green_dark">#2E7D32</color>
+    <color name="brand_navy">#1A1A2E</color>
+    <color name="brand_navy_variant">#2E2E4E</color>
+    <color name="on_navy">#FFFFFF</color>
+    <color name="on_navy_secondary">#9E9EBE</color>
+    <color name="on_navy_tertiary">#7B7B9E</color>
+
+    <!-- Yüzeyler ve metin (values-night'ta koyu karşılıkları var) -->
+    <color name="bg_screen">#F8F9FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_input">#F5F5F5</color>
+    <color name="outline">#CCCCCC</color>
+    <color name="divider">#F0F0F0</color>
+    <color name="track">#E0E0E0</color>
+    <color name="text_primary">#1A1A2E</color>
+    <color name="text_secondary">#9E9E9E</color>
+    <color name="text_tertiary">#64748B</color>
+
+    <!-- Açık tonlu arka planlar -->
+    <color name="tint_blue_bg">#E3F2FD</color>
+    <color name="tint_green_bg">#E8F5E9</color>
+    <color name="tint_pink_bg">#FCE4EC</color>
+    <color name="tint_orange_bg">#FFF3E0</color>
+
+    <!-- Vurgular -->
+    <color name="accent_blue">#3B82F6</color>
+    <color name="accent_orange">#F97316</color>
+    <color name="accent_yellow">#EAB308</color>
+    <color name="error">#E53935</color>
 </resources>

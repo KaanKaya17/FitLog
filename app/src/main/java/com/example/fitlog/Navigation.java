@@ -9,13 +9,22 @@ public class Navigation {
 
     /** Login ekranına gider ve geri tuşuyla korumalı ekranlara dönülmesini engeller. */
     public static void toLoginAndClear(Activity activity) {
+        navigateClearing(activity, R.id.loginFragment);
+    }
+
+    /** Girişten sonra ana sayfaya gider; geri tuşu login'e dönmez. */
+    public static void toHomeAndClear(Activity activity) {
+        navigateClearing(activity, R.id.homeFragment);
+    }
+
+    private static void navigateClearing(Activity activity, int destination) {
         if (activity instanceof MainActivity) {
-            NavController navController = ((MainActivity) activity).getNavController();
-            if (navController != null) {
+            NavController nav = ((MainActivity) activity).getNavController();
+            if (nav != null) {
                 NavOptions options = new NavOptions.Builder()
-                        .setPopUpTo(navController.getGraph().getId(), true)
+                        .setPopUpTo(nav.getGraph().getId(), true)
                         .build();
-                navController.navigate(R.id.loginFragment, null, options);
+                nav.navigate(destination, null, options);
             }
         }
     }

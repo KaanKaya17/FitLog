@@ -1,34 +1,42 @@
 package com.example.fitlog;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.example.fitlog.domain.NutritionCalculator;
+import com.example.fitlog.ui.BaseFragment;
+import com.example.fitlog.ui.ProfileViewModel;
+import com.example.fitlog.ui.TargetsDialog;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.time.Year;
 
-public class EditProfileFragment extends Fragment {
+public class EditProfileFragment extends BaseFragment {
 
-    private EditText etFirstName, etLastName, etHeight, etWeight;
+    private static final NutritionCalculator.Activity[] ACTIVITIES = NutritionCalculator.Activity.values();
+    private static final int[] ACTIVITY_LABELS = {
+            R.string.activity_sedentary, R.string.activity_light, R.string.activity_moderate,
+            R.string.activity_active, R.string.activity_very_active
+    };
+
+    private EditText etFirstName, etLastName, etHeight, etWeight, etBirthYear, etTargetWeight;
+    private Spinner spinnerActivity;
     private LinearLayout cardMale, cardFemale;
     private LinearLayout cardGoalLose, cardGoalMaintain, cardGoalGain;
     private Button btnSave;
     private String selectedGender = "";
     private String selectedGoal = "";
+    private ProfileViewModel vm;
 
     @Nullable
     @Override
@@ -39,12 +47,16 @@ public class EditProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getContext() == null) return;
+        vm = new ViewModelProvider(this).get(ProfileViewModel.class);
+        bindCommon(vm);
 
         etFirstName = view.findViewById(R.id.etFirstName);
         etLastName  = view.findViewById(R.id.etLastName);
         etHeight    = view.findViewById(R.id.etHeight);
         etWeight    = view.findViewById(R.id.etWeight);
+        etBirthYear = view.findViewById(R.id.etBirthYear);
+        etTargetWeight = view.findViewById(R.id.etTargetWeight);
+        spinnerActivity = view.findViewById(R.id.spinnerActivity);
         cardMale    = view.findViewById(R.id.cardMale);
         cardFemale  = view.findViewById(R.id.cardFemale);
         cardGoalLose = view.findViewById(R.id.cardGoalLose);
@@ -52,19 +64,13 @@ public class EditProfileFragment extends Fragment {
         cardGoalGain = view.findViewById(R.id.cardGoalGain);
         btnSave     = view.findViewById(R.id.btnSave);
 
-        PrefManager pref = new PrefManager(getContext());
-        etFirstName.setText(pref.getFirstName());
-        etLastName.setText(pref.getLastName());
+        String[] labels = new String[ACTIVITY_LABELS.length];
+        for (int i = 0; i < labels.length; i++) labels[i] = getString(ACTIVITY_LABELS[i]);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, labels);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerActivity.setAdapter(adapter);
 
-        float currentHeight = pref.getHeight();
-        if (currentHeight > 0) etHeight.setText(String.valueOf(currentHeight));
-        float currentWeight = pref.getWeight();
-        if (currentWeight > 0) etWeight.setText(String.valueOf(currentWeight));
-
-        String currentGender = pref.getGender();
-        if (currentGender != null && !currentGender.isEmpty()) selectGender(currentGender);
-        String currentGoal = pref.getGoal();
-        if (currentGoal != null && !currentGoal.isEmpty()) selectGoal(currentGoal);
+        if (savedInstanceState == null) fillFromPrefs();
 
         cardMale.setOnClickListener(v -> selectGender("Male"));
         cardFemale.setOnClickListener(v -> selectGender("Female"));
@@ -73,95 +79,95 @@ public class EditProfileFragment extends Fragment {
         cardGoalGain.setOnClickListener(v -> selectGoal("gain"));
         btnSave.setOnClickListener(v -> saveProfile());
 
-        // Back button
         View btnBack = view.findViewById(R.id.btnBack);
-        if (btnBack != null) btnBack.setOnClickListener(v -> androidx.navigation.fragment.NavHostFragment.findNavController(this).navigateUp());
+        if (btnBack != null) btnBack.setOnClickListener(v -> navigateUp());
+
+        vm.saved().observe(getViewLifecycleOwner(), e -> {
+            if (e.consume() == null) return;
+            btnSave.setEnabled(true);
+            toast(R.string.profile_saved);
+            NutritionCalculator.Targets t = vm.suggestTargets();
+            if (t != null) TargetsDialog.show(requireContext(), t, () -> vm.applyTargets(t), this::navigateUp);
+            else navigateUp();
+        });
+        vm.targetsApplied().observe(getViewLifecycleOwner(), e -> { if (e.consume() != null) navigateUp(); });
+        vm.errors().observe(getViewLifecycleOwner(), e -> btnSave.setEnabled(true));
+    }
+
+    private void fillFromPrefs() {
+        PrefManager pref = new PrefManager(requireContext());
+        etFirstName.setText(pref.getFirstName());
+        etLastName.setText(pref.getLastName());
+        if (pref.getHeight() > 0) etHeight.setText(trim(pref.getHeight()));
+        if (pref.getWeight() > 0) etWeight.setText(trim(pref.getWeight()));
+        if (pref.getBirthYear() > 0) etBirthYear.setText(String.valueOf(pref.getBirthYear()));
+        if (pref.getTargetWeight() > 0) etTargetWeight.setText(trim(pref.getTargetWeight()));
+        spinnerActivity.setSelection(NutritionCalculator.Activity.fromKey(pref.getActivityLevel()).ordinal());
+        if (!pref.getGender().isEmpty()) selectGender(pref.getGender());
+        if (!pref.getGoal().isEmpty()) selectGoal(pref.getGoal());
+    }
+
+    private static String trim(float f) {
+        return f == Math.rint(f) ? String.valueOf((int) f) : String.valueOf(f);
     }
 
     private void selectGender(String gender) {
         selectedGender = gender;
-        if (gender.equals("Male")) {
-            cardMale.setBackgroundResource(R.drawable.badge_blue);
-            cardFemale.setBackgroundResource(R.drawable.edittext_bg);
-        } else {
-            cardFemale.setBackgroundResource(R.drawable.badge_pink);
-            cardMale.setBackgroundResource(R.drawable.edittext_bg);
-        }
+        boolean male = "Male".equals(gender);
+        cardMale.setBackgroundResource(male ? R.drawable.badge_blue : R.drawable.edittext_bg);
+        cardFemale.setBackgroundResource(male ? R.drawable.edittext_bg : R.drawable.badge_pink);
     }
 
     private void selectGoal(String goal) {
         selectedGoal = goal;
-        cardGoalLose.setBackgroundResource(R.drawable.edittext_bg);
-        cardGoalMaintain.setBackgroundResource(R.drawable.edittext_bg);
-        cardGoalGain.setBackgroundResource(R.drawable.edittext_bg);
-        switch (goal) {
-            case "lose":     cardGoalLose.setBackgroundResource(R.drawable.badge_blue); break;
-            case "maintain": cardGoalMaintain.setBackgroundResource(R.drawable.badge_blue); break;
-            case "gain":     cardGoalGain.setBackgroundResource(R.drawable.badge_blue); break;
-        }
+        cardGoalLose.setBackgroundResource("lose".equals(goal) ? R.drawable.badge_blue : R.drawable.edittext_bg);
+        cardGoalMaintain.setBackgroundResource("maintain".equals(goal) ? R.drawable.badge_blue : R.drawable.edittext_bg);
+        cardGoalGain.setBackgroundResource("gain".equals(goal) ? R.drawable.badge_blue : R.drawable.edittext_bg);
     }
 
     private void saveProfile() {
-        if (getContext() == null) return;
-        String fName = etFirstName.getText().toString().trim();
-        String lName = etLastName.getText().toString().trim();
-        String hStr  = etHeight.getText().toString().trim();
-        String wStr  = etWeight.getText().toString().trim();
+        ProfileViewModel.ProfileForm f = new ProfileViewModel.ProfileForm();
+        f.firstName = etFirstName.getText().toString().trim();
+        f.lastName  = etLastName.getText().toString().trim();
+        f.gender = selectedGender;
+        f.goal = selectedGoal;
+        f.activity = ACTIVITIES[spinnerActivity.getSelectedItemPosition()].key();
 
-        if (fName.isEmpty() || lName.isEmpty()) {
-            Toast.makeText(getContext(), getString(R.string.error_empty_name), Toast.LENGTH_SHORT).show(); return;
-        }
-        if (selectedGender.isEmpty()) {
-            Toast.makeText(getContext(), getString(R.string.error_select_gender), Toast.LENGTH_SHORT).show(); return;
-        }
-        if (selectedGoal.isEmpty()) {
-            Toast.makeText(getContext(), getString(R.string.error_select_goal), Toast.LENGTH_SHORT).show(); return;
-        }
-        try {
-            float h = Float.parseFloat(hStr);
-            if (h < 50 || h > 300) { Toast.makeText(getContext(), getString(R.string.error_invalid_height), Toast.LENGTH_SHORT).show(); return; }
-        } catch (NumberFormatException e) { Toast.makeText(getContext(), getString(R.string.error_invalid_height), Toast.LENGTH_SHORT).show(); return; }
-        try {
-            float w = Float.parseFloat(wStr);
-            if (w < 20 || w > 300) { Toast.makeText(getContext(), getString(R.string.error_invalid_weight), Toast.LENGTH_SHORT).show(); return; }
-        } catch (NumberFormatException e) { Toast.makeText(getContext(), getString(R.string.error_invalid_weight), Toast.LENGTH_SHORT).show(); return; }
+        if (f.firstName.isEmpty() || f.lastName.isEmpty()) { toast(R.string.error_empty_name); return; }
+        if (f.gender.isEmpty()) { toast(R.string.error_select_gender); return; }
+        if (f.goal.isEmpty()) { toast(R.string.error_select_goal); return; }
 
-        float finalHeight = Float.parseFloat(hStr);
-        float finalWeight = Float.parseFloat(wStr);
+        Float h = parse(etHeight);
+        if (h == null || h < 50 || h > 300) { toast(R.string.error_invalid_height); return; }
+        Float w = parse(etWeight);
+        if (w == null || w < 20 || w > 300) { toast(R.string.error_invalid_weight); return; }
+        f.heightCm = h;
+        f.weightKg = w;
+
+        String by = etBirthYear.getText().toString().trim();
+        if (!by.isEmpty()) {
+            int year;
+            try { year = Integer.parseInt(by); } catch (NumberFormatException e) { year = -1; }
+            int age = Year.now().getValue() - year;
+            if (age < 13 || age > 100) { toast(R.string.error_invalid_birth_year); return; }
+            f.birthYear = year;
+        }
+        String tw = etTargetWeight.getText().toString().trim();
+        if (!tw.isEmpty()) {
+            Float t = parse(etTargetWeight);
+            if (t == null || t < 20 || t > 400) { toast(R.string.error_invalid_target_weight); return; }
+            f.targetWeight = t;
+        }
+
         btnSave.setEnabled(false);
+        vm.save(f);
+    }
 
-        PrefManager pref = new PrefManager(getContext());
-        int userId = pref.getId();
-
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("first_name", fName); updates.put("last_name", lName);
-        updates.put("gender", selectedGender); updates.put("goal", selectedGoal);
-        updates.put("height_cm", finalHeight); updates.put("weight_kg", finalWeight);
-
-        SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-
-        api.updateUser("eq." + userId, updates)
-                .enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (!isAdded()) return;
-                        btnSave.setEnabled(true);
-                        if (response.isSuccessful()) {
-                            pref.setFirstName(fName); pref.setLastName(lName);
-                            pref.setGender(selectedGender); pref.setGoal(selectedGoal);
-                            pref.setHeight(finalHeight); pref.setWeight(finalWeight);
-                            Toast.makeText(getContext(), "Profil bilgileri kaydedildi!", Toast.LENGTH_SHORT).show();
-                            androidx.navigation.fragment.NavHostFragment.findNavController(EditProfileFragment.this).navigateUp();
-                        } else {
-                            Toast.makeText(getContext(), "Kayıt başarısız!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        if (!isAdded()) return;
-                        btnSave.setEnabled(true);
-                        Toast.makeText(getContext(), "Bağlantı hatası!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    private static Float parse(EditText et) {
+        try {
+            return Float.parseFloat(et.getText().toString().trim().replace(',', '.'));
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="@color/bg_screen"
     tools:context=".MealListActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -30,7 +30,7 @@
                 android:text="@string/meal_list_title"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="4dp" />
 
             <TextView
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/meal_list_subtitle_format"
                 android:textSize="14sp"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 android:layout_marginBottom="24dp"
                 tools:text="Bugün 3 öğün eklendi" />
 
@@ -65,16 +65,16 @@
                         android:text="0"
                         android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="#4CAF50" />
+                        android:textColor="@color/brand_green" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_kcal"
                         android:textSize="11sp"
-                        android:textColor="#9E9E9E" />
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
-                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#F0F0F0" />
+                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="@color/divider" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -89,16 +89,16 @@
                         android:text="0g"
                         android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E" />
+                        android:textColor="@color/text_primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_protein"
                         android:textSize="11sp"
-                        android:textColor="#9E9E9E" />
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
-                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#F0F0F0" />
+                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="@color/divider" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -113,16 +113,16 @@
                         android:text="0g"
                         android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E" />
+                        android:textColor="@color/text_primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_carbs"
                         android:textSize="11sp"
-                        android:textColor="#9E9E9E" />
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
 
-                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#F0F0F0" />
+                <View android:layout_width="1dp" android:layout_height="match_parent" android:background="@color/divider" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -137,13 +137,13 @@
                         android:text="0g"
                         android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E" />
+                        android:textColor="@color/text_primary" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/label_fat"
                         android:textSize="11sp"
-                        android:textColor="#9E9E9E" />
+                        android:textColor="@color/text_secondary" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -153,7 +153,7 @@
                 android:text="@string/meal_list_header_today"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="8dp" />
 
             <LinearLayout
@@ -177,13 +177,13 @@
                     android:text="@string/meal_list_empty_title"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#1A1A2E" />
+                    android:textColor="@color/text_primary" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/meal_list_empty_subtitle"
                     android:textSize="13sp"
-                    android:textColor="#9E9E9E" />
+                    android:textColor="@color/text_secondary" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -203,8 +203,8 @@
         android:layout_marginBottom="100dp"
         android:src="@android:drawable/ic_input_add"
         android:contentDescription="@string/meal_row_default_name"
-        app:backgroundTint="#4CAF50"
-        app:tint="#FFFFFF"
+        app:backgroundTint="@color/brand_green"
+        app:tint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 

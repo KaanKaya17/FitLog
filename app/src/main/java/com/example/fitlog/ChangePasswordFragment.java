@@ -8,18 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
-public class ChangePasswordFragment extends Fragment {
+import com.example.fitlog.data.AppExecutors;
+import com.example.fitlog.ui.BaseFragment;
+import com.example.fitlog.ui.ErrorMessages;
 
-    private EditText editTextCurrentPassword;
-    private EditText editTextNewPassword;
-    private EditText editTextConfirmPassword;
+public class ChangePasswordFragment extends BaseFragment {
+
+    private EditText editTextCurrentPassword, editTextNewPassword, editTextConfirmPassword;
     private Button btnUpdatePassword;
 
     @Nullable
@@ -31,71 +30,44 @@ public class ChangePasswordFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         editTextCurrentPassword = view.findViewById(R.id.editTextCurrentPassword);
         editTextNewPassword = view.findViewById(R.id.editTextNewPassword);
         editTextConfirmPassword = view.findViewById(R.id.editTextConfirmPassword);
         btnUpdatePassword = view.findViewById(R.id.btnUpdatePassword);
-
         btnUpdatePassword.setOnClickListener(v -> updatePassword());
     }
 
     private void updatePassword() {
-        if (getContext() == null) return;
         String currentPass = editTextCurrentPassword.getText().toString();
         String newPass     = editTextNewPassword.getText().toString();
         String confirmPass = editTextConfirmPassword.getText().toString();
 
-        if (currentPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
-            toast("Lütfen tüm alanları doldurun.");
-            return;
-        }
-        if (!newPass.equals(confirmPass)) {
-            toast("Yeni şifreler eşleşmiyor.");
-            return;
-        }
-        if (!Validator.isValidPassword(newPass)) {
-            toast(getString(R.string.error_password_rules));
-            return;
-        }
-        if (newPass.equals(currentPass)) {
-            toast("Yeni şifre mevcut şifreyle aynı olamaz.");
-            return;
-        }
-        if (new PrefManager(getContext()).getId() == -1) {
-            toast("Kullanıcı bilgisi bulunamadı.");
-            return;
-        }
+        if (currentPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) { toast(R.string.error_fill_all_fields); return; }
+        if (!newPass.equals(confirmPass)) { toast(R.string.error_password_mismatch); return; }
+        if (!Validator.isValidPassword(newPass)) { toast(R.string.error_password_rules); return; }
+        if (newPass.equals(currentPass)) { toast(R.string.error_password_same); return; }
+        if (new PrefManager(requireContext()).getId() == -1) { toast(R.string.error_not_logged_in); return; }
 
         btnUpdatePassword.setEnabled(false);
         Context appCtx = requireContext().getApplicationContext();
-        new Thread(() -> {
-            String message;
-            boolean success = false;
+        AppExecutors.io().execute(() -> {
             try {
                 // Mevcut şifre sunucuda doğrulanır, yeni şifre Supabase Auth'ta hash'lenir.
                 AuthManager.changePassword(appCtx, currentPass, newPass);
-                message = "Şifreniz başarıyla güncellendi.";
-                success = true;
-            } catch (AuthManager.AuthException e) {
-                message = e.getMessage();
+                AppExecutors.main(() -> {
+                    if (!isAdded()) return;
+                    btnUpdatePassword.setEnabled(true);
+                    toast(R.string.password_changed);
+                    navigateUp();
+                });
             } catch (Exception e) {
-                Log.e("ChangePassword", "Error", e);
-                message = "Bir hata oluştu.";
+                if (!(e instanceof AuthManager.AuthException)) Log.w("ChangePassword", "Error", e);
+                AppExecutors.main(() -> {
+                    if (!isAdded()) return;
+                    btnUpdatePassword.setEnabled(true);
+                    ErrorMessages.toast(requireContext(), e);
+                });
             }
-
-            final String fMessage = message;
-            final boolean fSuccess = success;
-            if (getActivity() != null) getActivity().runOnUiThread(() -> {
-                if (!isAdded()) return;
-                btnUpdatePassword.setEnabled(true);
-                toast(fMessage);
-                if (fSuccess) NavHostFragment.findNavController(this).navigateUp();
-            });
-        }).start();
-    }
-
-    private void toast(String msg) {
-        if (getContext() != null) Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        });
     }
 }

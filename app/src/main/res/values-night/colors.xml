@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand_navy">#23233A</color>
+    <color name="brand_navy_variant">#34345A</color>
+
+    <color name="bg_screen">#111118</color>
+    <color name="surface">#1C1C27</color>
+    <color name="surface_input">#262634</color>
+    <color name="outline">#3A3A4C</color>
+    <color name="divider">#2A2A38</color>
+    <color name="track">#33334A</color>
+    <color name="text_primary">#ECECF4</color>
+    <color name="text_secondary">#9A9AAE</color>
+    <color name="text_tertiary">#8A94A6</color>
+
+    <color name="tint_blue_bg">#1E2A3A</color>
+    <color name="tint_green_bg">#1E3324</color>
+    <color name="tint_pink_bg">#3A1E2A</color>
+    <color name="tint_orange_bg">#3A2C1A</color>
+</resources>

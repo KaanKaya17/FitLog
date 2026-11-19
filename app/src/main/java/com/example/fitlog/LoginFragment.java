@@ -1,26 +1,29 @@
 package com.example.fitlog;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.browser.customtabs.CustomTabsIntent;
 
+import com.example.fitlog.data.AppExecutors;
+import com.example.fitlog.ui.BaseFragment;
+import com.example.fitlog.ui.ErrorMessages;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends BaseFragment {
 
-    private FirebaseAnalytics firebaseAnalytics;
+    private FirebaseAnalytics analytics;
     private EditText editTextEmail;
     private EditText editTextPassword;
+    private View btnLogin;
 
     @Nullable
     @Override
@@ -31,90 +34,75 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getContext() == null) return;
-
-        firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+        analytics = FirebaseAnalytics.getInstance(requireContext());
         editTextEmail    = view.findViewById(R.id.editTextEmail);
         editTextPassword = view.findViewById(R.id.editTextPassword);
+        btnLogin         = view.findViewById(R.id.btnLogin);
 
-        // btnLogin has android:id in XML
-        view.findViewById(R.id.btnLogin).setOnClickListener(v -> btnLogin());
+        btnLogin.setOnClickListener(v -> attemptLogin());
+        view.findViewById(R.id.btnGoogle).setOnClickListener(v -> startGoogle());
 
-        // "Register" link uses android:onClick="btnUserRegister" - handled by MainActivity
-        // But we also set click on tvGoToRegister (the actual ID in XML)
-        View tvForgotPassword = view.findViewById(R.id.tvForgotPassword);
-        if (tvForgotPassword != null) tvForgotPassword.setOnClickListener(v -> sendPasswordReset());
-
-        View tvGoToRegister = view.findViewById(R.id.tvGoToRegister);
-        if (tvGoToRegister != null) {
-            tvGoToRegister.setOnClickListener(v ->
-                    Navigation.findNavController(v).navigate(R.id.registerFragment));
-        }
+        View tvForgot = view.findViewById(R.id.tvForgotPassword);
+        if (tvForgot != null) tvForgot.setOnClickListener(v -> sendPasswordReset());
+        View tvRegister = view.findViewById(R.id.tvGoToRegister);
+        if (tvRegister != null) tvRegister.setOnClickListener(v -> navigate(R.id.registerFragment));
     }
 
-    private void btnLogin() {
+    private void attemptLogin() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString();
+        if (!Validator.isValidEmail(email)) { toast(R.string.error_invalid_email); return; }
+        if (password.isEmpty()) { toast(R.string.error_password_required); return; }
 
-        if (!Validator.isValidEmail(email)) {
-            Toast.makeText(getContext(), "Mail is incorrect!", Toast.LENGTH_SHORT).show();
-            return;
+        btnLogin.setEnabled(false);
+        Context appCtx = requireContext().getApplicationContext();
+        AppExecutors.io().execute(() -> {
+            try {
+                User user = AuthManager.signIn(appCtx, email, password);
+                AppExecutors.main(() -> onLoggedIn(user, "email"));
+            } catch (Exception e) {
+                if (!(e instanceof AuthManager.AuthException)) Log.w("LOGIN", "Login failed", e);
+                AppExecutors.main(() -> {
+                    if (!isAdded()) return;
+                    btnLogin.setEnabled(true);
+                    ErrorMessages.toast(requireContext(), e);
+                });
+            }
+        });
+    }
+
+    private void onLoggedIn(User user, String method) {
+        if (!isAdded()) return;
+        Bundle b = new Bundle();
+        b.putString(FirebaseAnalytics.Param.METHOD, method);
+        analytics.logEvent(FirebaseAnalytics.Event.LOGIN, b);
+        String name = user.getFirst_name() != null ? user.getFirst_name() : "";
+        toast(getString(R.string.login_welcome, name));
+        Navigation.toHomeAndClear(requireActivity());
+    }
+
+    /** Google girişini Custom Tab'de başlatır; dönüş MainActivity'ye deep link ile gelir. */
+    private void startGoogle() {
+        if (!NetworkUtils.isNetworkAvailable(requireContext())) { toast(R.string.error_network); return; }
+        String url = AuthManager.googleAuthorizeUrl(requireContext());
+        try {
+            new CustomTabsIntent.Builder().setShowTitle(true).build().launchUrl(requireContext(), Uri.parse(url));
+        } catch (Exception e) {
+            toast(R.string.error_generic);
         }
-        if (password.isEmpty()) {
-            Toast.makeText(getContext(), "Password is required!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        loginUser(email, password);
     }
 
     private void sendPasswordReset() {
         String email = editTextEmail.getText().toString().trim();
-        if (!Validator.isValidEmail(email)) {
-            Toast.makeText(getContext(), "Önce geçerli bir e-posta adresi girin.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        new Thread(() -> {
+        if (!Validator.isValidEmail(email)) { toast(R.string.error_enter_email_first); return; }
+        AppExecutors.io().execute(() -> {
             try {
                 AuthManager.sendPasswordReset(email);
             } catch (Exception e) {
                 Log.w("LOGIN", "Password reset request failed", e);
             }
             // Hesap var/yok bilgisini sızdırmamak için her durumda aynı mesaj.
-            showOnUi("Bu adres kayıtlıysa şifre sıfırlama bağlantısı gönderildi.");
-        }).start();
-    }
-
-    private void loginUser(String userMail, String userPassword) {
-        android.content.Context appCtx = requireContext().getApplicationContext();
-        new Thread(() -> {
-            try {
-                // Şifre doğrulaması Supabase Auth sunucusunda yapılır.
-                User foundUser = AuthManager.signIn(appCtx, userMail, userPassword);
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        if (!isAdded()) return;
-                        Bundle loginBundle = new Bundle();
-                        loginBundle.putString(FirebaseAnalytics.Param.METHOD, "email");
-                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, loginBundle);
-
-                        Toast.makeText(getContext(), "Hoş geldin " + foundUser.getFirst_name(), Toast.LENGTH_SHORT).show();
-                        Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
-                    });
-                }
-            } catch (AuthManager.AuthException e) {
-                showOnUi(e.getMessage());
-            } catch (Exception e) {
-                Log.e("LOGIN", "Login failed", e);
-                showOnUi("Bağlantı hatası. Lütfen tekrar deneyin.");
-            }
-        }).start();
-    }
-
-    private void showOnUi(String msg) {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(() -> {
-                if (isAdded() && getContext() != null) Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-            });
-        }
+            AppExecutors.main(() -> toast(R.string.password_reset_sent));
+        });
     }
 }

@@ -36,6 +36,17 @@ public class PrefManager {
     private static final String KEY_WEIGHT     = "user_weight";
     private static final String KEY_GOAL       = "user_goal";
     private static final String KEY_FCM_TOKEN  = "fcm_token";
+    private static final String KEY_BIRTH_YEAR = "user_birth_year";
+    private static final String KEY_ACTIVITY   = "user_activity_level";
+    private static final String KEY_TARGET_WEIGHT = "user_target_weight";
+    private static final String KEY_PROTEIN_GOAL = "protein_goal";
+    private static final String KEY_CARBS_GOAL   = "carbs_goal";
+    private static final String KEY_FAT_GOAL     = "fat_goal";
+    private static final String KEY_REMINDER_INTERVAL_H = "reminder_interval_hours";
+    private static final String KEY_QUIET_START = "reminder_quiet_start";
+    private static final String KEY_QUIET_END   = "reminder_quiet_end";
+    private static final String KEY_THEME_MODE  = "theme_mode";
+    private static final String KEY_PKCE_VERIFIER = "oauth_pkce_verifier";
 
     private static final String KEY_ACCESS_TOKEN  = "auth_access_token";
     private static final String KEY_REFRESH_TOKEN = "auth_refresh_token";
@@ -131,7 +142,50 @@ public class PrefManager {
         editor.putFloat(KEY_HEIGHT, user.getHeight_cm() != null ? user.getHeight_cm() : 0f);
         editor.putFloat(KEY_WEIGHT, user.getWeight_kg() != null ? user.getWeight_kg() : 0f);
         editor.putString(KEY_GOAL, user.getGoal() != null ? user.getGoal() : "");
+        editor.putInt(KEY_BIRTH_YEAR, user.getBirth_year() != null ? user.getBirth_year() : 0);
+        editor.putString(KEY_ACTIVITY, user.getActivity_level() != null ? user.getActivity_level() : "");
+        editor.putFloat(KEY_TARGET_WEIGHT, user.getTarget_weight_kg() != null ? user.getTarget_weight_kg() : 0f);
+        editor.putInt(KEY_PROTEIN_GOAL, user.getDaily_protein_goal_g() != null ? user.getDaily_protein_goal_g() : 0);
+        editor.putInt(KEY_CARBS_GOAL, user.getDaily_carbs_goal_g() != null ? user.getDaily_carbs_goal_g() : 0);
+        editor.putInt(KEY_FAT_GOAL, user.getDaily_fat_goal_g() != null ? user.getDaily_fat_goal_g() : 0);
         editor.apply();
+    }
+
+    public int getBirthYear() { return sharedPreferences.getInt(KEY_BIRTH_YEAR, 0); }
+    public void setBirthYear(int y) { editor.putInt(KEY_BIRTH_YEAR, y).apply(); }
+
+    public String getActivityLevel() { return sharedPreferences.getString(KEY_ACTIVITY, ""); }
+    public void setActivityLevel(String a) { editor.putString(KEY_ACTIVITY, a).apply(); }
+
+    public float getTargetWeight() { return sharedPreferences.getFloat(KEY_TARGET_WEIGHT, 0f); }
+    public void setTargetWeight(float w) { editor.putFloat(KEY_TARGET_WEIGHT, w).apply(); }
+
+    public int getProteinGoal() { return sharedPreferences.getInt(KEY_PROTEIN_GOAL, 0); }
+    public int getCarbsGoal() { return sharedPreferences.getInt(KEY_CARBS_GOAL, 0); }
+    public int getFatGoal() { return sharedPreferences.getInt(KEY_FAT_GOAL, 0); }
+    public void setMacroGoals(int protein, int carbs, int fat) {
+        editor.putInt(KEY_PROTEIN_GOAL, protein).putInt(KEY_CARBS_GOAL, carbs).putInt(KEY_FAT_GOAL, fat).apply();
+    }
+
+    // ── Hatırlatıcı / tema (çıkışta korunur) ──────────────────────────
+    public int getReminderIntervalHours() { return sharedPreferences.getInt(KEY_REMINDER_INTERVAL_H, 2); }
+    public void setReminderIntervalHours(int h) { editor.putInt(KEY_REMINDER_INTERVAL_H, h).apply(); }
+    public int getQuietStartHour() { return sharedPreferences.getInt(KEY_QUIET_START, 23); }
+    public int getQuietEndHour() { return sharedPreferences.getInt(KEY_QUIET_END, 8); }
+    public void setQuietHours(int start, int end) {
+        editor.putInt(KEY_QUIET_START, start).putInt(KEY_QUIET_END, end).apply();
+    }
+
+    /** "system", "light" veya "dark". */
+    public String getThemeMode() { return sharedPreferences.getString(KEY_THEME_MODE, "system"); }
+    public void setThemeMode(String mode) { editor.putString(KEY_THEME_MODE, mode).commit(); }
+
+    // ── OAuth PKCE (tarayıcıya gidip dönerken geçici) ──────────────────
+    public void setPkceVerifier(String v) { editor.putString(KEY_PKCE_VERIFIER, v).commit(); }
+    public String takePkceVerifier() {
+        String v = sharedPreferences.getString(KEY_PKCE_VERIFIER, null);
+        editor.remove(KEY_PKCE_VERIFIER).commit();
+        return v;
     }
 
     public int getId()            { return sharedPreferences.getInt(KEY_ID, -1); }
@@ -159,6 +213,10 @@ public class PrefManager {
     public void clearUser() {
         String savedLang = getLanguage();
         boolean savedReminder = isWaterReminderEnabled();
+        int savedInterval = getReminderIntervalHours();
+        int savedQuietStart = getQuietStartHour();
+        int savedQuietEnd = getQuietEndHour();
+        String savedTheme = getThemeMode();
 
         memAccessToken = null;
         memRefreshToken = null;
@@ -167,6 +225,10 @@ public class PrefManager {
         editor.clear();
         editor.putString(KEY_LANGUAGE, savedLang);
         editor.putBoolean(KEY_WATER_REMINDER, savedReminder);
+        editor.putInt(KEY_REMINDER_INTERVAL_H, savedInterval);
+        editor.putInt(KEY_QUIET_START, savedQuietStart);
+        editor.putInt(KEY_QUIET_END, savedQuietEnd);
+        editor.putString(KEY_THEME_MODE, savedTheme);
         editor.putBoolean(KEY_MIGRATION_DONE, true);
         editor.commit(); // senkron: hemen ardından gelen okuma eski oturumu görmesin
     }

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="@color/bg_screen"
     tools:context=".UserRegister">
 
     <androidx.core.widget.NestedScrollView
@@ -30,7 +30,7 @@
                 android:text="@string/register_title"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="4dp" />
 
             <TextView
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/register_subtitle"
                 android:textSize="14sp"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 android:layout_marginBottom="32dp" />
 
             <TextView
@@ -47,7 +47,7 @@
                 android:text="@string/register_label_username"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="6dp" />
 
             <EditText
@@ -60,7 +60,7 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:background="@drawable/edittext_bg"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:inputType="text"
                 android:importantForAutofill="no" />
 
@@ -70,7 +70,7 @@
                 android:text="@string/login_label_email"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="6dp" />
 
             <EditText
@@ -83,7 +83,7 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:background="@drawable/edittext_bg"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:inputType="textEmailAddress"
                 android:autofillHints="emailAddress" />
 
@@ -93,7 +93,7 @@
                 android:text="@string/login_label_password"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="6dp" />
 
             <EditText
@@ -106,7 +106,7 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:background="@drawable/edittext_bg"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:inputType="textPassword"
                 android:autofillHints="password" />
 
@@ -130,7 +130,7 @@
                         android:text="@string/register_label_firstname"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="6dp" />
 
                     <EditText
@@ -142,7 +142,7 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:background="@drawable/edittext_bg"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:inputType="textPersonName"
                         android:autofillHints="personGivenName" />
                 </LinearLayout>
@@ -160,7 +160,7 @@
                         android:text="@string/register_label_lastname"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:layout_marginBottom="6dp" />
 
                     <EditText
@@ -172,7 +172,7 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:background="@drawable/edittext_bg"
-                        android:textColor="#1A1A2E"
+                        android:textColor="@color/text_primary"
                         android:inputType="textPersonName"
                         android:autofillHints="personFamilyName" />
                 </LinearLayout>
@@ -186,8 +186,8 @@
                 android:text="@string/register_action_register"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:backgroundTint="#4CAF50" />
+                android:textColor="@color/white"
+                android:backgroundTint="@color/brand_green" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -202,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/register_footer_has_account"
                     android:textSize="14sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginEnd="4dp" />
 
                 <TextView android:id="@+id/tvGoToLogin"
@@ -211,7 +211,7 @@
                     android:text="@string/login_action_login"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#4CAF50"
+                    android:textColor="@color/brand_green"
                     android:clickable="true"
                     android:focusable="true" />
             </LinearLayout>

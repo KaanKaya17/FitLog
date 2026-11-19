@@ -27,7 +27,7 @@ public class UserStatusChecker {
 
         // Eski sürümden kalan (Supabase Auth oturumu olmayan) giriş: yeniden giriş iste.
         if (!AuthManager.hasSession(appCtx)) {
-            forceLogout(activity, "Güvenlik güncellemesi nedeniyle lütfen tekrar giriş yapın.");
+            forceLogout(activity, R.string.auth_relogin_required);
             return;
         }
 
@@ -38,7 +38,7 @@ public class UserStatusChecker {
 
                 if (!AuthManager.hasSession(appCtx)) {
                     // Token yenilenemedi ve oturum silindi.
-                    forceLogout(activity, "Oturumunuzun süresi doldu, lütfen tekrar giriş yapın.");
+                    forceLogout(activity, R.string.error_session_expired);
                     return;
                 }
 
@@ -46,7 +46,10 @@ public class UserStatusChecker {
                     User user = response.body().get(0);
                     if (user.isBlocked()) {
                         AuthManager.signOut(appCtx);
-                        forceLogout(activity, "Hesabınız engellenmiştir. Lütfen destek ekibiyle iletişime geçin.");
+                        forceLogout(activity, R.string.auth_error_blocked);
+                    } else {
+                        // Başka cihazda yapılan profil/hedef değişikliklerini senkronize et.
+                        pref.saveUser(user);
                     }
                 } else if (!response.isSuccessful()) {
                     Log.w(TAG, "Kullanıcı durumu alınamadı. HTTP " + response.code());
@@ -57,7 +60,7 @@ public class UserStatusChecker {
         }).start();
     }
 
-    private static void forceLogout(Activity activity, String message) {
+    private static void forceLogout(Activity activity, int message) {
         activity.runOnUiThread(() -> {
             if (activity.isFinishing() || activity.isDestroyed()) return;
             AuthManager.clearLocalSession(activity.getApplicationContext());

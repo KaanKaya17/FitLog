@@ -31,7 +31,7 @@
                 android:text="@string/food_label_default_name"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:maxLines="1"
                 android:ellipsize="end"
                 tools:text="Izgara Somon" />
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/food_label_serving"
                 android:textSize="12sp"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 android:layout_marginTop="2dp"
                 tools:text="200 gram" />
         </LinearLayout>
@@ -65,7 +65,7 @@
                 android:text="0"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="#4CAF50"
+                android:textColor="@color/brand_green"
                 tools:text="450" />
 
             <TextView
@@ -73,14 +73,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/unit_kcal"
                 android:textSize="10sp"
-                android:textColor="#4CAF50" />
+                android:textColor="@color/brand_green" />
         </LinearLayout>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#F0F0F0"
+        android:background="@color/divider"
         android:layout_marginBottom="12dp" />
 
     <LinearLayout
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:text="0g P"
                 android:textSize="12sp"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 tools:text="35g P" />
         </LinearLayout>
 
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:text="0g K"
                 android:textSize="12sp"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 tools:text="12g K" />
         </LinearLayout>
 
@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:text="0g Y"
                 android:textSize="12sp"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 tools:text="20g Y" />
         </LinearLayout>
 
@@ -163,7 +163,7 @@
             android:layout_height="wrap_content"
             android:text="›"
             android:textSize="20sp"
-            android:textColor="#CCCCCC"
+            android:textColor="@color/outline"
             android:importantForAccessibility="no" />
     </LinearLayout>
 </LinearLayout>

@@ -1,13 +1,8 @@
 package com.example.fitlog;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,42 +12,44 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.fitlog.domain.NutritionCalculator;
+import com.example.fitlog.ui.BaseFragment;
+import com.example.fitlog.ui.ProfileViewModel;
+import com.example.fitlog.ui.TargetsDialog;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends BaseFragment {
 
     private static final int MIN_CALORIE = 500;
     private static final int MIN_WATER   = 500;
+    static final int[] INTERVALS = {1, 2, 3, 4};
+    static final String[] THEMES = {"system", "light", "dark"};
 
     private SeekBar seekBarCalorie, seekBarWater;
-    private TextView tvCalorieGoalValue, tvWaterGoalValue;
-    private TextView tvCurrentCalorieGoal, tvCurrentWaterGoal;
-    private PrefManager pref;
+    private TextView tvCalorieGoalValue, tvWaterGoalValue, tvCurrentCalorieGoal, tvCurrentWaterGoal;
     private Switch switchWaterReminder;
-    private FirebaseAnalytics firebaseAnalytics;
+    private View layoutReminderOptions;
+    private PrefManager pref;
+    private FirebaseAnalytics analytics;
+    private ProfileViewModel vm;
 
-    private final ActivityResultLauncher<String> requestPermissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
-                if (isGranted) {
-                    pref.setWaterReminderEnabled(true);
-                    switchWaterReminder.setChecked(true);
-                    scheduleWaterReminder();
-                } else {
-                    pref.setWaterReminderEnabled(false);
-                    switchWaterReminder.setChecked(false);
-                }
+    private final ActivityResultLauncher<String> notificationPermission =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+                pref.setWaterReminderEnabled(granted);
+                switchWaterReminder.setChecked(granted);
+                ReminderScheduler.apply(requireContext());
+                updateReminderOptions();
             });
 
     @Nullable
@@ -64,58 +61,11 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getContext() == null) return;
+        analytics = FirebaseAnalytics.getInstance(requireContext());
+        pref = new PrefManager(requireContext());
+        vm = new ViewModelProvider(this).get(ProfileViewModel.class);
+        bindCommon(vm);
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
-        pref = new PrefManager(getContext());
-
-        Spinner spinnerLanguage = view.findViewById(R.id.spinnerLanguage);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                getContext(), R.array.languages, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerLanguage.setAdapter(adapter);
-
-        String currentLang = pref.getLanguage();
-        spinnerLanguage.setSelection(currentLang.equals("tr") ? 1 : 0);
-
-        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            boolean isFirstLoad = true;
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-                if (isFirstLoad) { isFirstLoad = false; return; }
-                String selectedLang = (position == 0) ? "en" : "tr";
-                if (!selectedLang.equals(pref.getLanguage())) {
-                    pref.setLanguage(selectedLang);
-                    Bundle langBundle = new Bundle();
-                    langBundle.putString("new_language", selectedLang);
-                    firebaseAnalytics.logEvent("language_changed", langBundle);
-                    restartApp();
-                }
-            }
-            @Override public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        initViews(view);
-        loadCurrentGoals();
-        setupSeekBars();
-        setupReminders();
-
-        view.findViewById(R.id.btnSaveSettings).setOnClickListener(v -> saveSettings());
-        View btnAboutProject = view.findViewById(R.id.layoutAbout);
-        if (btnAboutProject != null) {
-            btnAboutProject.setOnClickListener(v -> androidx.navigation.Navigation.findNavController(v).navigate(R.id.aboutProjectFragment));
-        }
-    }
-
-    private void restartApp() {
-        if (getActivity() == null) return;
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        getActivity().finish();
-    }
-
-    private void initViews(View view) {
         seekBarCalorie       = view.findViewById(R.id.seekBarCalorie);
         seekBarWater         = view.findViewById(R.id.seekBarWater);
         tvCalorieGoalValue   = view.findViewById(R.id.tvCalorieGoalValue);
@@ -123,7 +73,72 @@ public class SettingsFragment extends Fragment {
         tvCurrentCalorieGoal = view.findViewById(R.id.tvCurrentCalorieGoal);
         tvCurrentWaterGoal   = view.findViewById(R.id.tvCurrentWaterGoal);
         switchWaterReminder  = view.findViewById(R.id.switchWaterReminder);
+        layoutReminderOptions = view.findViewById(R.id.layoutReminderOptions);
+
+        setupLanguage(view.findViewById(R.id.spinnerLanguage));
+        setupTheme(view.findViewById(R.id.spinnerTheme));
+        loadCurrentGoals();
+        setupSeekBars();
+        setupReminders(view);
+
+        view.findViewById(R.id.btnSaveSettings).setOnClickListener(v -> saveGoals());
+        view.findViewById(R.id.btnCalcFromProfile).setOnClickListener(v -> {
+            NutritionCalculator.Targets t = vm.suggestTargets();
+            if (t == null) { toast(R.string.error_profile_incomplete); return; }
+            TargetsDialog.show(requireContext(), t, () -> vm.applyTargets(t), null);
+        });
+        vm.targetsApplied().observe(getViewLifecycleOwner(), e -> { if (e.consume() != null) loadCurrentGoals(); });
+
+        View about = view.findViewById(R.id.layoutAbout);
+        if (about != null) about.setOnClickListener(v -> navigate(R.id.aboutProjectFragment));
     }
+
+    // ── Dil / tema ─────────────────────────────────────────────────────
+
+    private void setupLanguage(Spinner spinner) {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                requireContext(), R.array.languages, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setSelection("tr".equals(pref.getLanguage()) ? 1 : 0, false);
+        spinner.setOnItemSelectedListener(new SimpleItemSelected(position -> {
+            String lang = position == 0 ? "en" : "tr";
+            if (lang.equals(pref.getLanguage())) return;
+            pref.setLanguage(lang);
+            Bundle b = new Bundle();
+            b.putString("new_language", lang);
+            analytics.logEvent("language_changed", b);
+            restartApp();
+        }));
+    }
+
+    private void setupTheme(Spinner spinner) {
+        String[] labels = {getString(R.string.theme_system), getString(R.string.theme_light), getString(R.string.theme_dark)};
+        spinner.setAdapter(simpleAdapter(labels));
+        int current = 0;
+        for (int i = 0; i < THEMES.length; i++) if (THEMES[i].equals(pref.getThemeMode())) current = i;
+        spinner.setSelection(current, false);
+        spinner.setOnItemSelectedListener(new SimpleItemSelected(position -> {
+            if (THEMES[position].equals(pref.getThemeMode())) return;
+            pref.setThemeMode(THEMES[position]);
+            AppCompatDelegate.setDefaultNightMode(nightModeOf(THEMES[position]));
+        }));
+    }
+
+    public static int nightModeOf(String mode) {
+        if ("light".equals(mode)) return AppCompatDelegate.MODE_NIGHT_NO;
+        if ("dark".equals(mode)) return AppCompatDelegate.MODE_NIGHT_YES;
+        return AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+    }
+
+    private void restartApp() {
+        Intent intent = new Intent(requireActivity(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        requireActivity().finish();
+    }
+
+    // ── Hedefler ───────────────────────────────────────────────────────
 
     private void loadCurrentGoals() {
         int calorieGoal = pref.getCalorieGoal();
@@ -137,121 +152,100 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setupSeekBars() {
-        seekBarCalorie.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int value = Math.round((progress + MIN_CALORIE) / 50f) * 50;
-                tvCalorieGoalValue.setText(String.valueOf(value));
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        seekBarWater.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int value = Math.round((progress + MIN_WATER) / 100f) * 100;
-                tvWaterGoalValue.setText(String.valueOf(value));
-            }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
+        seekBarCalorie.setOnSeekBarChangeListener(new SimpleSeek(progress ->
+                tvCalorieGoalValue.setText(String.valueOf(Math.round((progress + MIN_CALORIE) / 50f) * 50))));
+        seekBarWater.setOnSeekBarChangeListener(new SimpleSeek(progress ->
+                tvWaterGoalValue.setText(String.valueOf(Math.round((progress + MIN_WATER) / 100f) * 100))));
     }
 
-    private void setupReminders() {
-        if (getContext() == null) return;
-        switchWaterReminder.setChecked(pref.isWaterReminderEnabled());
-        NotificationHelper.createNotificationChannel(getContext());
-
-        switchWaterReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                        pref.setWaterReminderEnabled(true);
-                        scheduleWaterReminder();
-                    } else {
-                        switchWaterReminder.setChecked(false);
-                        requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
-                    }
-                } else {
-                    pref.setWaterReminderEnabled(true);
-                    scheduleWaterReminder();
-                }
-                Bundle b = new Bundle(); b.putBoolean("water_reminder_enabled", true);
-                firebaseAnalytics.logEvent("settings_reminder_changed", b);
-            } else {
-                pref.setWaterReminderEnabled(false);
-                cancelWaterReminder();
-                Bundle b = new Bundle(); b.putBoolean("water_reminder_enabled", false);
-                firebaseAnalytics.logEvent("settings_reminder_changed", b);
-            }
-        });
-    }
-
-    private void scheduleWaterReminder() {
-        if (getContext() == null) return;
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), WaterReminderReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        if (alarmManager != null) {
-            long interval = 2 * 60 * 60 * 1000;
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + interval, interval, pendingIntent);
-        }
-    }
-
-    private void cancelWaterReminder() {
-        if (getContext() == null) return;
-        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), WaterReminderReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        if (alarmManager != null) alarmManager.cancel(pendingIntent);
-    }
-
-    private void saveSettings() {
+    private void saveGoals() {
         int calorieGoal = Integer.parseInt(tvCalorieGoalValue.getText().toString());
         int waterGoal   = Integer.parseInt(tvWaterGoalValue.getText().toString());
-        pref.setCalorieGoal(calorieGoal);
-        pref.setWaterGoal(waterGoal);
+        if (pref.getId() == -1) { toast(R.string.error_not_logged_in); return; }
+        vm.saveGoals(calorieGoal, waterGoal);
         tvCurrentCalorieGoal.setText(String.valueOf(calorieGoal));
         tvCurrentWaterGoal.setText(String.valueOf(waterGoal));
 
-        Bundle goalsBundle = new Bundle();
-        goalsBundle.putInt("new_calorie_goal", calorieGoal);
-        goalsBundle.putInt("new_water_goal", waterGoal);
-        firebaseAnalytics.logEvent("goals_updated", goalsBundle);
-
-        saveToSupabase(calorieGoal, waterGoal);
+        Bundle b = new Bundle();
+        b.putInt("new_calorie_goal", calorieGoal);
+        b.putInt("new_water_goal", waterGoal);
+        analytics.logEvent("goals_updated", b);
     }
 
-    private void saveToSupabase(int calorieGoal, int waterGoal) {
-        new Thread(() -> {
-            try {
-                SupabaseApi api   = RetrofitClient.getClient().create(SupabaseApi.class);
-                String userFilter = "eq." + pref.getId();
+    // ── Hatırlatıcı ────────────────────────────────────────────────────
 
-                Map<String, Object> body = new HashMap<>();
-                body.put("daily_calorie_goal", calorieGoal);
-                body.put("daily_water_goal_ml", waterGoal);
+    private void setupReminders(View view) {
+        NotificationHelper.createNotificationChannel(requireContext());
+        switchWaterReminder.setChecked(pref.isWaterReminderEnabled());
+        updateReminderOptions();
 
-                retrofit2.Response<Void> response = api.updateUser(userFilter, body).execute();
-
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        if (!isAdded()) return;
-                        if (response.isSuccessful()) {
-                            Toast.makeText(getContext(), "✅ Hedefler kaydedildi!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getContext(), "Kayıt sırasında hata oluştu.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            } catch (Exception e) {
-                Log.e("SETTINGS", "Bağlantı hatası: " + e.getMessage());
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        if (!isAdded()) return;
-                        Toast.makeText(getContext(), "Bağlantı hatası.", Toast.LENGTH_SHORT).show();
-                    });
-                }
+        switchWaterReminder.setOnCheckedChangeListener((b, checked) -> {
+            if (checked && ContextCompat.checkSelfPermission(requireContext(),
+                    android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                switchWaterReminder.setChecked(false);
+                notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS);
+                return;
             }
-        }).start();
+            pref.setWaterReminderEnabled(checked);
+            ReminderScheduler.apply(requireContext());
+            updateReminderOptions();
+            Bundle e = new Bundle();
+            e.putBoolean("water_reminder_enabled", checked);
+            analytics.logEvent("settings_reminder_changed", e);
+        });
+
+        Spinner interval = view.findViewById(R.id.spinnerReminderInterval);
+        String[] intervalLabels = new String[INTERVALS.length];
+        int sel = 1;
+        for (int i = 0; i < INTERVALS.length; i++) {
+            intervalLabels[i] = getString(R.string.reminder_every_hours, INTERVALS[i]);
+            if (INTERVALS[i] == pref.getReminderIntervalHours()) sel = i;
+        }
+        interval.setAdapter(simpleAdapter(intervalLabels));
+        interval.setSelection(sel, false);
+        interval.setOnItemSelectedListener(new SimpleItemSelected(pos -> {
+            pref.setReminderIntervalHours(INTERVALS[pos]);
+            ReminderScheduler.apply(requireContext());
+        }));
+
+        String[] hours = new String[24];
+        for (int h = 0; h < 24; h++) hours[h] = String.format(Locale.ROOT, "%02d:00", h);
+        Spinner start = view.findViewById(R.id.spinnerQuietStart);
+        Spinner end = view.findViewById(R.id.spinnerQuietEnd);
+        start.setAdapter(simpleAdapter(hours));
+        end.setAdapter(simpleAdapter(hours));
+        start.setSelection(pref.getQuietStartHour(), false);
+        end.setSelection(pref.getQuietEndHour(), false);
+        AdapterView.OnItemSelectedListener quiet = new SimpleItemSelected(pos ->
+                pref.setQuietHours(start.getSelectedItemPosition(), end.getSelectedItemPosition()));
+        start.setOnItemSelectedListener(quiet);
+        end.setOnItemSelectedListener(quiet);
+    }
+
+    private void updateReminderOptions() {
+        layoutReminderOptions.setAlpha(pref.isWaterReminderEnabled() ? 1f : 0.4f);
+    }
+
+    private ArrayAdapter<String> simpleAdapter(String[] items) {
+        ArrayAdapter<String> a = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, items);
+        a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return a;
+    }
+
+    // ── Küçük dinleyici yardımcıları ───────────────────────────────────
+
+    private static final class SimpleItemSelected implements AdapterView.OnItemSelectedListener {
+        private final java.util.function.IntConsumer onSelect;
+        SimpleItemSelected(java.util.function.IntConsumer onSelect) { this.onSelect = onSelect; }
+        @Override public void onItemSelected(AdapterView<?> p, View v, int position, long id) { onSelect.accept(position); }
+        @Override public void onNothingSelected(AdapterView<?> p) {}
+    }
+
+    private static final class SimpleSeek implements SeekBar.OnSeekBarChangeListener {
+        private final java.util.function.IntConsumer onChange;
+        SimpleSeek(java.util.function.IntConsumer onChange) { this.onChange = onChange; }
+        @Override public void onProgressChanged(SeekBar s, int progress, boolean fromUser) { onChange.accept(progress); }
+        @Override public void onStartTrackingTouch(SeekBar s) {}
+        @Override public void onStopTrackingTouch(SeekBar s) {}
     }
 }

@@ -11,6 +11,7 @@ public class MealInsertDto {
     private float fiber;
     private String confidence;
     private String eaten_at;
+    private String meal_type;
 
     public MealInsertDto(int userId, NutritionData data) {
         this.user_id       = userId;
@@ -29,6 +30,11 @@ public class MealInsertDto {
         this.eaten_at = eatenAt;
     }
 
+    public MealInsertDto(int userId, NutritionData data, String eatenAt, String mealType) {
+        this(userId, data, eatenAt);
+        this.meal_type = mealType;
+    }
+
     public int getUser_id() { return user_id; }
     public String getFood_name() { return food_name; }
     public String getServing_size() { return serving_size; }
@@ -39,4 +45,5 @@ public class MealInsertDto {
     public float getFiber() { return fiber; }
     public String getConfidence() { return confidence; }
     public String getEaten_at() { return eaten_at; }
+    public String getMeal_type() { return meal_type; }
 }

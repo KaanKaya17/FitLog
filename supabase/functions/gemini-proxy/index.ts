@@ -17,6 +17,8 @@ const GEMINI_MODEL = "gemini-2.5-flash";
 const GEMINI_URL =
   `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const MAX_BODY_BYTES = 4 * 1024 * 1024; // ~4 MB (fotoğraf base64 dahil)
+const MAX_CONTENTS = 24;                 // sohbet geçmişi dahil en fazla tur
+const DAILY_LIMIT = Number(Deno.env.get("AI_DAILY_LIMIT") ?? "60");
 
 function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
@@ -46,6 +48,15 @@ Deno.serve(async (req) => {
   const { data: appUserId, error: rpcError } = await supabase.rpc("current_user_id");
   if (rpcError || appUserId === null) return json(403, { error: { message: "Forbidden" } });
 
+  // Günlük kullanım kotası (maliyet ve kötüye kullanım sınırı)
+  const { data: allowed, error: quotaError } = await supabase.rpc("consume_ai_quota", {
+    daily_limit: DAILY_LIMIT,
+  });
+  if (quotaError) return json(500, { error: { message: "Quota check failed" } });
+  if (allowed !== true) {
+    return json(429, { error: { message: "Daily AI limit reached", code: "quota_exceeded" } });
+  }
+
   // 2) Gövdeyi doğrula
   const raw = await req.text();
   if (raw.length > MAX_BODY_BYTES) return json(413, { error: { message: "Request too large" } });
@@ -56,13 +67,23 @@ Deno.serve(async (req) => {
   } catch {
     return json(400, { error: { message: "Invalid JSON" } });
   }
-  if (!Array.isArray(body.contents) || body.contents.length === 0 || body.contents.length > 4) {
+  if (!Array.isArray(body.contents) || body.contents.length === 0 || body.contents.length > MAX_CONTENTS) {
     return json(400, { error: { message: "Invalid contents" } });
   }
 
   const forwarded: Record<string, unknown> = { contents: body.contents };
+  if (body.systemInstruction && typeof body.systemInstruction === "object") {
+    forwarded.systemInstruction = body.systemInstruction;
+  }
   if (body.generationConfig && typeof body.generationConfig === "object") {
-    forwarded.generationConfig = body.generationConfig;
+    // Yalnızca güvenli alanlar; çıktı uzunluğu sunucuda sınırlanır.
+    const g = body.generationConfig as Record<string, unknown>;
+    const cfg: Record<string, unknown> = { maxOutputTokens: 8192 };
+    if (typeof g.responseMimeType === "string") cfg.responseMimeType = g.responseMimeType;
+    if (typeof g.temperature === "number") cfg.temperature = Math.min(Math.max(g.temperature, 0), 1.5);
+    forwarded.generationConfig = cfg;
+  } else {
+    forwarded.generationConfig = { maxOutputTokens: 8192 };
   }
 
   // 3) Gemini'ye ilet (anahtar URL yerine header'da)

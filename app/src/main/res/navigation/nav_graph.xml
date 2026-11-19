@@ -127,4 +127,18 @@
         <action android:id="@+id/action_register_to_login" app:destination="@id/loginFragment" />
     </fragment>
 
+    <!-- Weight tracking -->
+    <fragment
+        android:id="@+id/weightFragment"
+        android:name="com.example.fitlog.WeightFragment"
+        android:label="Weight"
+        tools:layout="@layout/fragment_weight" />
+
+    <!-- AI Coach chat -->
+    <fragment
+        android:id="@+id/aiChatFragment"
+        android:name="com.example.fitlog.AiChatFragment"
+        android:label="AI Chat"
+        tools:layout="@layout/fragment_ai_chat" />
+
 </navigation>

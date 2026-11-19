@@ -1,21 +1,26 @@
 package com.example.fitlog;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProvider;
 
-public class ProfileFragment extends Fragment {
+import com.example.fitlog.ui.AccountViewModel;
+import com.example.fitlog.ui.BaseFragment;
+
+import java.util.Locale;
+
+public class ProfileFragment extends BaseFragment {
 
     private TextView tvFullName, tvUsername, tvEmail, tvFirstName, tvLastName;
     private TextView tvHeight, tvWeight, tvGender;
+    private AccountViewModel vm;
 
     @Nullable
     @Override
@@ -26,6 +31,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        vm = new ViewModelProvider(this).get(AccountViewModel.class);
+        bindCommon(vm);
 
         tvFullName  = view.findViewById(R.id.tvFullName);
         tvUsername  = view.findViewById(R.id.tvUsername);
@@ -36,22 +43,23 @@ public class ProfileFragment extends Fragment {
         tvWeight    = view.findViewById(R.id.tvWeight);
         tvGender    = view.findViewById(R.id.tvGender);
 
-        view.findViewById(R.id.btnEditProfile).setOnClickListener(v -> 
-            androidx.navigation.Navigation.findNavController(v).navigate(R.id.editProfileFragment));
-            
-        view.findViewById(R.id.btnChangePassword).setOnClickListener(v -> 
-            androidx.navigation.Navigation.findNavController(v).navigate(R.id.changePasswordFragment));
-            
-        view.findViewById(R.id.btnSettings).setOnClickListener(v -> 
-            androidx.navigation.Navigation.findNavController(v).navigate(R.id.settingsFragment));
-            
+        view.findViewById(R.id.btnEditProfile).setOnClickListener(v -> navigate(R.id.editProfileFragment));
+        view.findViewById(R.id.btnChangePassword).setOnClickListener(v -> navigate(R.id.changePasswordFragment));
+        view.findViewById(R.id.btnSettings).setOnClickListener(v -> navigate(R.id.settingsFragment));
+        view.findViewById(R.id.btnWeight).setOnClickListener(v -> navigate(R.id.weightFragment));
+
         view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
-            android.content.Context appCtx = requireContext().getApplicationContext();
-            // Sunucudaki oturumu (refresh token) arka planda iptal et, yereli hemen sil.
-            String token = new PrefManager(appCtx).getAccessToken();
-            AuthManager.clearLocalSession(appCtx);
-            AuthManager.revokeInBackground(token);
-            Toast.makeText(getContext(), "Çıkış Yapıldı", Toast.LENGTH_SHORT).show();
+            vm.logout();
+            toast(R.string.msg_logged_out);
+            Navigation.toLoginAndClear(requireActivity());
+        });
+
+        View btnDelete = view.findViewById(R.id.btnDeleteAccount);
+        btnDelete.setOnClickListener(v -> confirmDelete());
+        vm.busy().observe(getViewLifecycleOwner(), b -> btnDelete.setEnabled(!Boolean.TRUE.equals(b)));
+        vm.deleted().observe(getViewLifecycleOwner(), e -> {
+            if (e.consume() == null) return;
+            toast(R.string.delete_account_done);
             Navigation.toLoginAndClear(requireActivity());
         });
 
@@ -61,8 +69,17 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (getActivity() != null) UserStatusChecker.check(requireActivity());
+        UserStatusChecker.check(requireActivity());
         loadProfileFromPrefs();
+    }
+
+    private void confirmDelete() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.delete_account_title)
+                .setMessage(R.string.delete_account_message)
+                .setPositiveButton(R.string.delete_account_confirm, (d, w) -> vm.deleteAccount())
+                .setNegativeButton(R.string.action_cancel, null)
+                .show();
     }
 
     private void loadProfileFromPrefs() {
@@ -72,7 +89,7 @@ public class ProfileFragment extends Fragment {
         String firstName = pref.getFirstName();
         String lastName  = pref.getLastName();
 
-        tvFullName.setText(firstName + " " + lastName);
+        tvFullName.setText((firstName + " " + lastName).trim());
         tvUsername.setText("@" + pref.getUsername());
         tvEmail.setText(pref.getEmail());
         tvFirstName.setText(firstName.isEmpty() ? "—" : firstName);
@@ -80,19 +97,13 @@ public class ProfileFragment extends Fragment {
 
         float height = pref.getHeight();
         float weight = pref.getWeight();
+        tvHeight.setText(height > 0 ? String.format(Locale.getDefault(), "%.0f cm", height) : "— cm");
+        tvWeight.setText(weight > 0 ? String.format(Locale.getDefault(), "%.1f kg", weight) : "— kg");
+
         String gender = pref.getGender();
-
-        tvHeight.setText((height > 0) ? (height + " cm") : "— cm");
-        tvWeight.setText((weight > 0) ? (weight + " kg") : "— kg");
-
-        if (gender == null || gender.isEmpty()) {
-            tvGender.setText("—");
-        } else if (gender.equals("Male")) {
-            tvGender.setText(getString(R.string.gender_male));
-        } else if (gender.equals("Female")) {
-            tvGender.setText(getString(R.string.gender_female));
-        } else {
-            tvGender.setText(gender);
-        }
+        if (gender == null || gender.isEmpty()) tvGender.setText("—");
+        else if (gender.equals("Male")) tvGender.setText(R.string.gender_male);
+        else if (gender.equals("Female")) tvGender.setText(R.string.gender_female);
+        else tvGender.setText(gender);
     }
 }

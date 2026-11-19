@@ -1,25 +1,26 @@
 package com.example.fitlog;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
-
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
+import com.example.fitlog.data.AppExecutors;
+import com.example.fitlog.ui.BaseFragment;
+import com.example.fitlog.ui.ErrorMessages;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends BaseFragment {
 
-    private FirebaseAnalytics firebaseAnalytics;
-    private EditText editTextEmail, editTextPassword, editTextFirstName, editTextLastName, editTextUserUserName;
+    private FirebaseAnalytics analytics;
+    private EditText editTextEmail, editTextPassword, editTextFirstName, editTextLastName, editTextUserName;
+    private View btnAddUser;
 
     @Nullable
     @Override
@@ -30,81 +31,55 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getContext() == null) return;
+        analytics = FirebaseAnalytics.getInstance(requireContext());
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
+        editTextEmail     = view.findViewById(R.id.editTextEmail);
+        editTextPassword  = view.findViewById(R.id.editTextPassword);
+        editTextFirstName = view.findViewById(R.id.editTextFirstName);
+        editTextLastName  = view.findViewById(R.id.editTextLastName);
+        editTextUserName  = view.findViewById(R.id.editTextName);
+        btnAddUser        = view.findViewById(R.id.btnAddUser);
 
-        editTextEmail        = view.findViewById(R.id.editTextEmail);
-        editTextPassword     = view.findViewById(R.id.editTextPassword);
-        editTextFirstName    = view.findViewById(R.id.editTextFirstName);
-        editTextLastName     = view.findViewById(R.id.editTextLastName);
-        editTextUserUserName = view.findViewById(R.id.editTextName);
-
-        // btnAddUser has android:id in XML
-        view.findViewById(R.id.btnAddUser).setOnClickListener(v -> btnAddUser());
-
-        // "Login" link
+        btnAddUser.setOnClickListener(v -> attemptRegister());
         View tvGoToLogin = view.findViewById(R.id.tvGoToLogin);
-        if (tvGoToLogin != null) {
-            tvGoToLogin.setOnClickListener(v -> androidx.navigation.Navigation.findNavController(v).navigate(R.id.loginFragment));
-        }
+        if (tvGoToLogin != null) tvGoToLogin.setOnClickListener(v -> navigate(R.id.loginFragment));
     }
 
-    private void btnAddUser() {
-        if (getContext() == null) return;
+    private void attemptRegister() {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString();
         String firstName = editTextFirstName.getText().toString().trim();
         String lastName = editTextLastName.getText().toString().trim();
-        String userName = editTextUserUserName.getText().toString().trim();
+        String userName = editTextUserName.getText().toString().trim();
 
-        if (!Validator.isValidEmail(email)) { showError("Geçerli bir mail giriniz"); return; }
-        if (!Validator.isValidPassword(password)) { showError(getString(R.string.error_password_rules)); return; }
-        if (!Validator.isValidFirstName(firstName)) { showError("İsim geçersiz"); return; }
-        if (!Validator.isValidLastName(lastName)) { showError("Soyisim geçersiz"); return; }
-        if (!Validator.isValidUserName(userName)) { showError("Kullanıcı adı geçersiz (3-30 karakter: harf, rakam, _ veya .)"); return; }
+        if (!Validator.isValidEmail(email)) { toast(R.string.error_invalid_email); return; }
+        if (!Validator.isValidPassword(password)) { toast(R.string.error_password_rules); return; }
+        if (!Validator.isValidFirstName(firstName)) { toast(R.string.error_invalid_first_name); return; }
+        if (!Validator.isValidLastName(lastName)) { toast(R.string.error_invalid_last_name); return; }
+        if (!Validator.isValidUserName(userName)) { toast(R.string.error_invalid_username); return; }
 
-        addUser(userName, email, password, firstName, lastName);
-    }
-
-    private void showError(String msg) {
-        if (getContext() != null) Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-    }
-
-    private void addUser(String userName, String userMail, String userPassword, String userFirstName, String userLastName) {
-        android.content.Context appCtx = requireContext().getApplicationContext();
-        new Thread(() -> {
+        btnAddUser.setEnabled(false);
+        Context appCtx = requireContext().getApplicationContext();
+        AppExecutors.io().execute(() -> {
             try {
-                // Şifre Supabase Auth'ta hash'lenerek saklanır; public.users satırını
-                // sunucudaki trigger oluşturur.
-                AuthManager.signUp(appCtx, userMail, userPassword, userName, userFirstName, userLastName);
-
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        if (!isAdded()) return;
-                        Bundle registerBundle = new Bundle();
-                        registerBundle.putString(FirebaseAnalytics.Param.METHOD, "email");
-                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, registerBundle);
-                        Toast.makeText(getContext(),
-                                "Kayıt başarılı! E-posta onayı istendiyse gelen kutunuzu kontrol edin.",
-                                Toast.LENGTH_LONG).show();
-                        Navigation.findNavController(requireView()).navigate(R.id.loginFragment);
-                    });
-                }
-            } catch (AuthManager.AuthException e) {
-                showOnUi(e.getMessage());
+                // Şifre Supabase Auth'ta hash'lenerek saklanır; public.users satırını trigger oluşturur.
+                AuthManager.signUp(appCtx, email, password, userName, firstName, lastName);
+                AppExecutors.main(() -> {
+                    if (!isAdded()) return;
+                    Bundle b = new Bundle();
+                    b.putString(FirebaseAnalytics.Param.METHOD, "email");
+                    analytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, b);
+                    toast(R.string.register_success);
+                    navigate(R.id.loginFragment);
+                });
             } catch (Exception e) {
-                Log.e("REGISTER", "Register failed", e);
-                showOnUi("Bağlantı hatası. Lütfen tekrar deneyin.");
+                if (!(e instanceof AuthManager.AuthException)) Log.w("REGISTER", "Register failed", e);
+                AppExecutors.main(() -> {
+                    if (!isAdded()) return;
+                    btnAddUser.setEnabled(true);
+                    ErrorMessages.toast(requireContext(), e);
+                });
             }
-        }).start();
-    }
-
-    private void showOnUi(String msg) {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(() -> {
-                if (isAdded() && getContext() != null) Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
-            });
-        }
+        });
     }
 }

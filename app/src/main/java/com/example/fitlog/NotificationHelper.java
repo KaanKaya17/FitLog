@@ -10,16 +10,15 @@ import androidx.core.app.NotificationCompat;
 
 public class NotificationHelper {
     private static final String CHANNEL_ID = "water_reminder_channel";
-    private static final String CHANNEL_NAME = "Su Hatırlatıcısı";
 
     public static void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    CHANNEL_NAME,
+                    context.getString(R.string.notif_channel_water),
                     NotificationManager.IMPORTANCE_HIGH
             );
-            channel.setDescription("Su içme hatırlatıcı bildirimleri");
+            channel.setDescription(context.getString(R.string.notif_channel_water_desc));
             NotificationManager manager = context.getSystemService(NotificationManager.class);
             if (manager != null) {
                 manager.createNotificationChannel(channel);

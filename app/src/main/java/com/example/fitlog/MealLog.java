@@ -50,7 +50,10 @@ public class MealLog {
     public void setLog_id(int log_id) { this.log_id = log_id; }
 
     private String eaten_at;
+    private String meal_type;
 
     public String getEaten_at() { return eaten_at; }
+    public String getMeal_type() { return meal_type; }
+    public void setMeal_type(String meal_type) { this.meal_type = meal_type; }
     public void setEaten_at(String eaten_at) { this.eaten_at = eaten_at; }
 }

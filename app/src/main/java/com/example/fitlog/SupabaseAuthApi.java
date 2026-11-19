@@ -22,6 +22,9 @@ public interface SupabaseAuthApi {
     @POST("auth/v1/token?grant_type=refresh_token")
     Call<AuthResponse> refresh(@Body RefreshGrant body);
 
+    @POST("auth/v1/token?grant_type=pkce")
+    Call<AuthResponse> exchangeCode(@Body PkceGrant body);
+
     @POST("auth/v1/recover")
     Call<Void> recover(@Body Map<String, Object> body);
 
@@ -37,6 +40,12 @@ public interface SupabaseAuthApi {
         final String email;
         final String password;
         PasswordGrant(String email, String password) { this.email = email; this.password = password; }
+    }
+
+    class PkceGrant {
+        @SerializedName("auth_code") final String authCode;
+        @SerializedName("code_verifier") final String codeVerifier;
+        PkceGrant(String authCode, String codeVerifier) { this.authCode = authCode; this.codeVerifier = codeVerifier; }
     }
 
     class RefreshGrant {

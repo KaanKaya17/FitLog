@@ -18,6 +18,12 @@ public class User {
     private Float height_cm;
     private Float weight_kg;
     private String goal;
+    private Integer birth_year;
+    private String activity_level;
+    private Float target_weight_kg;
+    private Integer daily_protein_goal_g;
+    private Integer daily_carbs_goal_g;
+    private Integer daily_fat_goal_g;
 
     // 1. Boş Constructor (GSON'ın nesneyi oluşturabilmesi için gereklidir)
     public User() {}
@@ -59,5 +65,11 @@ public class User {
     public void setWeight_kg(Float weight_kg) { this.weight_kg = weight_kg; }
 
     public String getGoal() { return goal; }
+    public Integer getBirth_year() { return birth_year; }
+    public String getActivity_level() { return activity_level; }
+    public Float getTarget_weight_kg() { return target_weight_kg; }
+    public Integer getDaily_protein_goal_g() { return daily_protein_goal_g; }
+    public Integer getDaily_carbs_goal_g() { return daily_carbs_goal_g; }
+    public Integer getDaily_fat_goal_g() { return daily_fat_goal_g; }
     public void setGoal(String goal) { this.goal = goal; }
 }

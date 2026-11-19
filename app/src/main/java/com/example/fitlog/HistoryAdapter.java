@@ -51,7 +51,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             TextView emptyText = new TextView(context);
             emptyText.setText(context.getString(R.string.history_no_meals_today));
             emptyText.setTextSize(13f);
-            emptyText.setTextColor(0xFF9E9E9E);
+            emptyText.setTextColor(androidx.core.content.ContextCompat.getColor(context, R.color.text_secondary));
             holder.layoutMeals.addView(emptyText);
         } else {
             for (MealLog meal : day.meals) {

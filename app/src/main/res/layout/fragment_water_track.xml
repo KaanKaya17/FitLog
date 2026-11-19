@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="@color/bg_screen"
     tools:context=".WaterTrack">
 
     <androidx.core.widget.NestedScrollView
@@ -30,7 +30,7 @@
                 android:text="@string/water_title"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="#1A1A2E"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="4dp" />
 
             <TextView
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/water_subtitle"
                 android:textSize="14sp"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 android:layout_marginBottom="32dp" />
 
             <LinearLayout
@@ -65,7 +65,7 @@
                     android:text="0"
                     android:textSize="56sp"
                     android:textStyle="bold"
-                    android:textColor="#1A1A2E" />
+                    android:textColor="@color/text_primary" />
 
                 <TextView
                     android:id="@+id/tvGoalAmount"
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:text="/ 2000 ml"
                     android:textSize="16sp"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/text_secondary"
                     android:layout_marginBottom="24dp" />
 
                 <ProgressBar
@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/water_status_percent"
                     android:textSize="13sp"
-                    android:textColor="#4CAF50"
+                    android:textColor="@color/brand_green"
                     android:textStyle="bold"
                     tools:text="%0 tamamlandı" />
             </LinearLayout>
@@ -103,7 +103,7 @@
                 android:text="@string/water_header_quick_add"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 android:layout_marginBottom="12dp" />
 
             <LinearLayout
@@ -120,8 +120,8 @@
                     android:text="@string/water_btn_200"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#4CAF50"
-                    android:backgroundTint="#E8F5E9"
+                    android:textColor="@color/brand_green"
+                    android:backgroundTint="@color/tint_green_bg"
                     android:layout_marginEnd="8dp" />
 
                 <Button
@@ -132,8 +132,8 @@
                     android:text="@string/water_btn_300"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#4CAF50"
-                    android:backgroundTint="#E8F5E9"
+                    android:textColor="@color/brand_green"
+                    android:backgroundTint="@color/tint_green_bg"
                     android:layout_marginEnd="8dp" />
 
                 <Button
@@ -144,8 +144,8 @@
                     android:text="@string/water_btn_500"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#4CAF50"
-                    android:backgroundTint="#E8F5E9" />
+                    android:textColor="@color/brand_green"
+                    android:backgroundTint="@color/tint_green_bg" />
             </LinearLayout>
 
             <TextView
@@ -154,7 +154,7 @@
                 android:text="@string/water_header_manual"
                 android:textSize="13sp"
                 android:textStyle="bold"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/text_secondary"
                 android:layout_marginBottom="12dp" />
 
             <LinearLayout
@@ -173,7 +173,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:background="@drawable/edittext_bg"
-                    android:textColor="#1A1A2E"
+                    android:textColor="@color/text_primary"
                     android:inputType="number"
                     android:layout_marginEnd="12dp"
                     android:importantForAutofill="no" />
@@ -185,8 +185,8 @@
                     android:text="@string/water_action_add"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:backgroundTint="#4CAF50"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/brand_green"
                     android:paddingStart="24dp"
                     android:paddingEnd="24dp" />
             </LinearLayout>
@@ -198,8 +198,8 @@
                 android:text="@string/water_action_reset"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="#9E9E9E"
-                android:backgroundTint="#F0F0F0"
+                android:textColor="@color/text_secondary"
+                android:backgroundTint="@color/divider"
                 android:layout_marginBottom="24dp" />
 
         </LinearLayout>
