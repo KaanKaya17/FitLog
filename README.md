@@ -22,13 +22,20 @@ FitLog, yapay zeka destekli bir Android beslenme, su ve kilo takip uygulamasıd�
 - Hızlı ekleme, **geri al**, günü sıfırlama
 - Ayarlanabilir hatırlatma sıklığı ve **sessiz saatler**; cihaz yeniden başlayınca hatırlatıcı yeniden kurulur
 - Bildirim panelinde **"+250 ml su" hızlı ayar kutucuğu** (uygulamayı açmadan ekleme)
+- **Ana ekran widget'ı**: bugünün kalori ve su ilerlemesi, tek dokunuşla +250 ml
+
+**Hatırlatıcılar**
+- **Öğün hatırlatıcısı**: kahvaltı, öğle ve akşam yemeği girilmemişse 10:00 / 14:00 / 20:00'de bildirim (sessiz saatlere uyar)
 
 **AI Koç**
 - Profilin ve son 7 günün verisiyle kişiselleştirilmiş günlük plan
 - Koçla **sohbet** (geçmiş yalnızca cihazda, bellekte tutulur)
+- Plandan **alışveriş listesi** (kategoriye göre gruplu, paylaşılabilir)
 
 **Hesap ve uygulama**
-- E-posta/şifre ve **Google ile giriş** (Supabase Auth, OAuth + PKCE), şifre sıfırlama
+- E-posta/şifre ve **Google ile giriş** (Supabase Auth, OAuth + PKCE)
+- **Şifre sıfırlama** ve **e-posta onayı**: e-postadaki bağlantı uygulamayı açar (PKCE, `fitlog://auth-callback`)
+- **Gizlilik**: analitik ve hata raporları yalnızca kullanıcı onayıyla açılır (Ayarlar → Gizlilik); [gizlilik politikası](PRIVACY.md)
 - Uygulama içinden **hesap silme** (tüm veriler sunucudan silinir)
 - **Açık / koyu / sistem** teması; Türkçe, İngilizce, Yunanca
 - **Çevrimdışı çalışma**: su, öğün ve kilo bağlantı yokken kuyruğa alınır ve sonra otomatik gönderilir; ekranlar son kaydedilen verilerle açılır
@@ -86,10 +93,10 @@ supabase secrets set AI_DAILY_LIMIT=60   # isteğe bağlı, kullanıcı başına
 supabase functions deploy gemini-proxy
 ```
 
-### 3. Google ile giriş (isteğe bağlı)
-1. Google Cloud Console'da bir OAuth istemcisi (Web) oluşturun.
-2. Supabase → Authentication → Providers → **Google**'ı açıp istemci kimliğini girin.
-3. Supabase → Authentication → URL Configuration → **Redirect URLs** listesine `fitlog://auth-callback` ekleyin.
+### 3. Auth yönlendirmesi ve Google ile giriş
+1. Supabase → Authentication → URL Configuration → **Redirect URLs** listesine `fitlog://auth-callback` ekleyin. Şifre sıfırlama, e-posta onayı ve Google girişi bu adresle uygulamaya döner.
+2. (İsteğe bağlı) Google Cloud Console'da bir OAuth istemcisi (Web) oluşturun.
+3. (İsteğe bağlı) Supabase → Authentication → Providers → **Google**'ı açıp istemci kimliğini girin.
 
 ### 4. Uygulama
 Proje kökündeki **`local.properties`** dosyasına (git'e eklenmez) yalnızca herkese açık değerleri yazın:
@@ -103,10 +110,27 @@ Firebase Console'dan indirdiğiniz `google-services.json` dosyasını `app/` kla
 
 > ⚠️ Buraya **asla** `service_role` anahtarı veya Gemini anahtarı koymayın; `BuildConfig` içindeki her değer APK'dan okunabilir.
 
+### 5. Release imzası (Play Store)
+Keystore'u repoya koymayın (`*.jks` git'e eklenmez). Yolunu ve şifrelerini `local.properties`'e ya da CI'da aynı adlı ortam değişkenlerine yazın:
+
+```properties
+RELEASE_STORE_FILE=keystore/fitlog-release.jks
+RELEASE_STORE_PASSWORD=...
+RELEASE_KEY_ALIAS=fitlog
+RELEASE_KEY_PASSWORD=...
+```
+
+Tanımlı değilse release derlemesi imzasız üretilir. `./gradlew bundleRelease` ile Play Store için AAB oluşturulur.
+
 ### Testler
 ```bash
 ./gradlew testDebugUnitTest lintDebug
 ```
+Arayüz testleri (bağlı cihaz veya emülatör gerekir; cihazdaki yerel oturumu sıfırlar):
+```bash
+./gradlew connectedDebugAndroidTest
+```
+
 Birim testleri tarih aralıklarını, kalori/makro hesabını, seri ve geçmiş toplamalarını, Open Food Facts ayrıştırmasını, Gemini yanıt ayrıştırmasını, PKCE'yi ve `MockWebServer` ile repository'nin gönderdiği gerçek HTTP isteklerini (çevrimdışı kuyruk dahil) doğrular.
 
 ## 📱 Ekran Görüntüleri

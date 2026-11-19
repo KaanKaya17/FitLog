@@ -95,14 +95,15 @@ public class LoginFragment extends BaseFragment {
     private void sendPasswordReset() {
         String email = editTextEmail.getText().toString().trim();
         if (!Validator.isValidEmail(email)) { toast(R.string.error_enter_email_first); return; }
+        Context appCtx = requireContext().getApplicationContext();
         AppExecutors.io().execute(() -> {
             try {
-                AuthManager.sendPasswordReset(email);
+                AuthManager.sendPasswordReset(appCtx, email);
             } catch (Exception e) {
                 Log.w("LOGIN", "Password reset request failed", e);
             }
             // Hesap var/yok bilgisini sızdırmamak için her durumda aynı mesaj.
-            AppExecutors.main(() -> toast(R.string.password_reset_sent));
+            AppExecutors.main(() -> { if (isAdded()) toast(R.string.password_reset_sent); });
         });
     }
 }

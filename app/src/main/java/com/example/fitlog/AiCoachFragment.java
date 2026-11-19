@@ -55,6 +55,22 @@ public class AiCoachFragment extends BaseFragment {
 
         btnRegenerate.setOnClickListener(v -> start(true));
         view.findViewById(R.id.btnAskCoach).setOnClickListener(v -> navigate(R.id.aiChatFragment));
+        View btnShopping = view.findViewById(R.id.btnShoppingList);
+        btnShopping.setOnClickListener(v -> {
+            if (!NetworkUtils.isNetworkAvailable(requireContext())) { toast(R.string.error_network); return; }
+            vm.generateShoppingList(getString(R.string.ai_shopping_prompt));
+            analytics.logEvent("ai_shopping_list", null);
+        });
+        vm.shoppingList().observe(getViewLifecycleOwner(), res -> {
+            if (res == null) return;
+            btnShopping.setEnabled(!res.isLoading());
+            ((android.widget.Button) btnShopping).setText(res.isLoading()
+                    ? R.string.ai_shopping_loading : R.string.ai_shopping_list);
+            if (res.isLoading()) return;
+            vm.clearShoppingList();
+            if (res.isError()) { ErrorMessages.toast(requireContext(), res.error); return; }
+            if (res.data != null) showShoppingList(res.data);
+        });
         includeNoInternet.findViewById(R.id.btnRetryInternet).setOnClickListener(v -> start(false));
         View btnBack = view.findViewById(R.id.btnBack);
         if (btnBack != null) btnBack.setOnClickListener(v -> navigateUp());
@@ -70,6 +86,26 @@ public class AiCoachFragment extends BaseFragment {
         });
 
         if (vm.plan().getValue() == null) start(false);
+    }
+
+    private void showShoppingList(String list) {
+        String text = list.replace("**", "").trim();
+        android.widget.TextView tv = new android.widget.TextView(requireContext());
+        int pad = (int) (20 * getResources().getDisplayMetrics().density);
+        tv.setPadding(pad, pad / 2, pad, 0);
+        tv.setTextIsSelectable(true);
+        tv.setText(text);
+        android.widget.ScrollView scroll = new android.widget.ScrollView(requireContext());
+        scroll.addView(tv);
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.ai_shopping_list)
+                .setView(scroll)
+                .setPositiveButton(R.string.ai_shopping_share, (d, w) -> startActivity(
+                        android.content.Intent.createChooser(new android.content.Intent(android.content.Intent.ACTION_SEND)
+                                .setType("text/plain")
+                                .putExtra(android.content.Intent.EXTRA_TEXT, text), getString(R.string.ai_shopping_list))))
+                .setNegativeButton(R.string.ai_shopping_close, null)
+                .show();
     }
 
     private void start(boolean regenerate) {

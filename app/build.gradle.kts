@@ -44,10 +44,34 @@ android {
 
     testOptions {
         unitTests.isReturnDefaultValues = true
+        animationsDisabled = true
+    }
+
+    // Release imzası: keystore ve şifreler repoya girmez. local.properties ya da
+    // ortam değişkenlerinden (CI secret) okunur; tanımlı değilse release imzasız kalır.
+    fun signingValue(key: String): String? =
+        (System.getenv(key) ?: localProperties.getProperty(key))?.trim('"')?.takeIf { it.isNotEmpty() }
+    val releaseStoreFile = signingValue("RELEASE_STORE_FILE")
+    val hasReleaseSigning = releaseStoreFile != null && rootProject.file(releaseStoreFile).exists()
+
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = rootProject.file(releaseStoreFile!!)
+                storePassword = signingValue("RELEASE_STORE_PASSWORD")
+                keyAlias = signingValue("RELEASE_KEY_ALIAS")
+                keyPassword = signingValue("RELEASE_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig = signingConfigs.getByName("release")
+            } else {
+                logger.warn("UYARI: RELEASE_STORE_FILE tanımlı değil; release APK/AAB imzasız üretilecek.")
+            }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

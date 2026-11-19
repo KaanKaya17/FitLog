@@ -59,13 +59,65 @@ public final class AuthManager {
 
     public static final String OAUTH_REDIRECT = "fitlog://auth-callback";
 
+    /** fitlog://auth-callback dönüşünün hangi akıştan geldiği (PKCE verifier ile saklanır). */
+    public static final String FLOW_OAUTH = "oauth";
+    public static final String FLOW_RECOVERY = "recovery";
+    public static final String FLOW_SIGNUP = "signup";
+
+    /**
+     * Şifre sıfırlama bağlantısından gelen geçici oturum. Yeni şifre belirlenene
+     * kadar diske yazılmaz; uygulama kapanırsa kullanıcı yeni bağlantı ister.
+     */
+    private static volatile SupabaseAuthApi.AuthResponse pendingRecovery;
+
+    /** Dönüş işlendiğinde ne olduğunu anlatır. */
+    public static final class CallbackResult {
+        /** Giriş tamamlandıysa kullanıcı; şifre sıfırlamada null. */
+        public final User user;
+        public final boolean recovery;
+        CallbackResult(User user, boolean recovery) { this.user = user; this.recovery = recovery; }
+    }
+
+    /** Bekleyen dönüşün türü; bilinmiyorsa Google girişi kabul edilir. */
+    public static String pendingFlow(Context ctx) {
+        String f = new PrefManager(ctx).getPkceFlow();
+        return f != null ? f : FLOW_OAUTH;
+    }
+
+    /**
+     * fitlog://auth-callback?code=... dönüşünü işler: Google girişi, e-posta onayı
+     * ya da şifre sıfırlama.
+     */
+    public static CallbackResult handleAuthCallback(Context ctx, String code) throws IOException, AuthException {
+        if (FLOW_RECOVERY.equals(pendingFlow(ctx))) {
+            pendingRecovery = exchange(ctx, code);
+            return new CallbackResult(null, true);
+        }
+        return new CallbackResult(completeSignIn(ctx, exchange(ctx, code)), false);
+    }
+
+    public static boolean hasPendingRecovery() { return pendingRecovery != null; }
+
+    /** Şifre sıfırlama bağlantısıyla gelen oturumla yeni şifreyi ayarlar ve giriş yapar. */
+    public static User completePasswordRecovery(Context ctx, String newPassword) throws IOException, AuthException {
+        SupabaseAuthApi.AuthResponse session = pendingRecovery;
+        if (session == null) throw new AuthException("recovery_missing", R.string.auth_error_link_expired);
+        Map<String, Object> body = new HashMap<>();
+        body.put("password", newPassword);
+        Response<SupabaseAuthApi.AuthUser> r =
+                api().updateUser("Bearer " + session.accessToken, body).execute();
+        if (!r.isSuccessful()) throw toAuthException(r);
+        pendingRecovery = null;
+        return completeSignIn(ctx, session);
+    }
+
     /**
      * Tarayıcıda açılacak Google giriş adresini üretir. code_verifier cihazda
      * saklanır; token'lar URL'de taşınmaz, yalnızca tek kullanımlık kod döner.
      */
     public static String googleAuthorizeUrl(Context ctx) {
         String verifier = com.example.fitlog.domain.Pkce.newVerifier();
-        new PrefManager(ctx).setPkceVerifier(verifier);
+        new PrefManager(ctx).setPkceVerifier(verifier, FLOW_OAUTH);
         return okhttp3.HttpUrl.get(BuildConfig.SUPABASE_URL + "/auth/v1/authorize").newBuilder()
                 .addQueryParameter("provider", "google")
                 .addQueryParameter("redirect_to", OAUTH_REDIRECT)
@@ -74,8 +126,8 @@ public final class AuthManager {
                 .build().toString();
     }
 
-    /** OAuth dönüşündeki kodu oturuma çevirir. */
-    public static User exchangeOAuthCode(Context ctx, String code) throws IOException, AuthException {
+    /** Dönüşteki tek kullanımlık kodu, cihazdaki verifier ile oturuma çevirir. */
+    private static SupabaseAuthApi.AuthResponse exchange(Context ctx, String code) throws IOException, AuthException {
         String verifier = new PrefManager(ctx).takePkceVerifier();
         if (verifier == null || code == null || code.isEmpty()) {
             throw new AuthException("pkce_missing", R.string.auth_error_oauth_expired);
@@ -83,7 +135,7 @@ public final class AuthManager {
         Response<SupabaseAuthApi.AuthResponse> r =
                 api().exchangeCode(new SupabaseAuthApi.PkceGrant(code, verifier)).execute();
         if (!r.isSuccessful() || r.body() == null || r.body().accessToken == null) throw toAuthException(r);
-        return completeSignIn(ctx, r.body());
+        return r.body();
     }
 
     private static User completeSignIn(Context ctx, SupabaseAuthApi.AuthResponse session)
@@ -116,19 +168,37 @@ public final class AuthManager {
         meta.put("first_name", firstName);
         meta.put("last_name", lastName);
 
-        Response<SupabaseAuthApi.AuthResponse> r =
-                api().signUp(new SupabaseAuthApi.SignUpRequest(email, password, meta)).execute();
-        if (!r.isSuccessful() || r.body() == null) throw toAuthException(r);
+        // E-posta onayı açıksa onay bağlantısı uygulamaya döner ve oturumu açar.
+        String verifier = com.example.fitlog.domain.Pkce.newVerifier();
+        PrefManager pref = new PrefManager(ctx);
+        pref.setPkceVerifier(verifier, FLOW_SIGNUP);
+
+        Response<SupabaseAuthApi.AuthResponse> r = api().signUp(OAUTH_REDIRECT,
+                new SupabaseAuthApi.SignUpRequest(email, password, meta,
+                        com.example.fitlog.domain.Pkce.challenge(verifier))).execute();
+        if (!r.isSuccessful() || r.body() == null) {
+            pref.takePkceVerifier();
+            throw toAuthException(r);
+        }
 
         // Kayıt sonrası kullanıcıyı login ekranına yönlendiriyoruz; açık oturumu tutmuyoruz.
-        return r.body().accessToken != null;
+        boolean sessionOpened = r.body().accessToken != null;
+        if (sessionOpened) pref.takePkceVerifier(); // onay gerekmiyor, bağlantı gelmeyecek
+        return sessionOpened;
     }
 
-    /** Şifre sıfırlama e-postası gönderir. */
-    public static void sendPasswordReset(String email) throws IOException, AuthException {
+    /**
+     * Şifre sıfırlama e-postası gönderir. E-postadaki bağlantı
+     * fitlog://auth-callback?code=... ile uygulamaya döner ve yeni şifre ekranı açılır.
+     */
+    public static void sendPasswordReset(Context ctx, String email) throws IOException, AuthException {
+        String verifier = com.example.fitlog.domain.Pkce.newVerifier();
+        new PrefManager(ctx).setPkceVerifier(verifier, FLOW_RECOVERY);
         Map<String, Object> body = new HashMap<>();
         body.put("email", email);
-        Response<Void> r = api().recover(body).execute();
+        body.put("code_challenge", com.example.fitlog.domain.Pkce.challenge(verifier));
+        body.put("code_challenge_method", "s256");
+        Response<Void> r = api().recover(OAUTH_REDIRECT, body).execute();
         if (!r.isSuccessful()) throw toAuthException(r);
     }
 
@@ -278,6 +348,10 @@ public final class AuthManager {
             case "over_request_rate_limit":
             case "over_email_send_rate_limit":
                 return new AuthException(code, R.string.auth_error_rate_limited);
+            case "otp_expired":
+                return new AuthException(code, R.string.auth_error_link_expired);
+            case "same_password":
+                return new AuthException(code, R.string.error_password_same);
             case "flow_state_not_found":
             case "flow_state_expired":
             case "bad_code_verifier":

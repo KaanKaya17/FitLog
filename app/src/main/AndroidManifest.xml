@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitLog">
 
+        <!-- Analitik ve hata raporları kullanıcı onayı verene kadar kapalı (ConsentManager). -->
+        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
+
         <!-- Single Activity: All UI is now handled via Fragments -->
         <activity
             android:name=".MainActivity"
@@ -38,6 +42,19 @@
         </activity>
 
         <receiver android:name=".WaterReminderReceiver" android:exported="false" />
+        <receiver android:name=".MealReminderReceiver" android:exported="false" />
+
+        <receiver
+            android:name=".TodayWidget"
+            android:exported="false"
+            android:label="@string/widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_today_info" />
+        </receiver>
 
         <service
             android:name=".WaterTileService"

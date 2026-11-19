@@ -30,10 +30,27 @@ public class AiCoachViewModel extends BaseViewModel {
     }
 
     private final MutableLiveData<Resource<String>> plan = new MutableLiveData<>();
+    private final MutableLiveData<Resource<String>> shoppingList = new MutableLiveData<>();
 
     public AiCoachViewModel(@NonNull Application app) { super(app); }
 
     public LiveData<Resource<String>> plan() { return plan; }
+    public LiveData<Resource<String>> shoppingList() { return shoppingList; }
+
+    /**
+     * Mevcut plandan alışveriş listesi üretir.
+     * @param promptTemplate R.string.ai_shopping_prompt (%1$s = plan metni)
+     */
+    public void generateShoppingList(String promptTemplate) {
+        Resource<String> current = plan.getValue();
+        String planText = current != null ? current.data : null;
+        if (planText == null || planText.trim().isEmpty()) return;
+        load(shoppingList, () -> GeminiNutritionService.extractText(
+                repo.generate(request(String.format(promptTemplate, planText)))));
+    }
+
+    /** Liste gösterildikten sonra ekran dönünce tekrar açılmasın. */
+    public void clearShoppingList() { shoppingList.setValue(null); }
 
     /** Bugünün kayıtlı planını getirir; yoksa yenisini üretir. */
     public void loadOrGenerate(Prompt p) {

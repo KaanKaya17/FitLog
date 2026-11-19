@@ -21,6 +21,7 @@ import com.example.fitlog.ui.ErrorMessages;
 public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
+    private androidx.appcompat.app.AlertDialog consentDialog;
 
     @Override
     protected void attachBaseContext(android.content.Context newBase) {
@@ -46,39 +47,90 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (consentDialog == null || !consentDialog.isShowing()) {
+            consentDialog = ConsentManager.askIfNeeded(this);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Uygulamada yapılan değişiklikler ana ekran widget'ına yansısın.
+        TodayWidget.refresh(this);
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
         handleOAuthRedirect(intent);
     }
 
-    /** fitlog://auth-callback?code=... (Google girişi dönüşü). */
+    /**
+     * fitlog://auth-callback?code=... dönüşü: Google girişi, e-posta onayı ya da
+     * şifre sıfırlama bağlantısı. Hangisi olduğu cihazda saklanan akış türünden anlaşılır.
+     */
     private void handleOAuthRedirect(Intent intent) {
         Uri data = intent != null ? intent.getData() : null;
         if (data == null || !"fitlog".equals(data.getScheme()) || !"auth-callback".equals(data.getHost())) return;
         intent.setData(null); // ekran döndürmede tekrar işlenmesin
 
-        String error = data.getQueryParameter("error");
+        android.content.Context appCtx = getApplicationContext();
+        String flow = AuthManager.pendingFlow(appCtx);
         String code = data.getQueryParameter("code");
-        if (error != null || code == null) {
-            if (!"access_denied".equals(error)) Toast.makeText(this, R.string.auth_error_oauth_failed, Toast.LENGTH_LONG).show();
+        // Hata parametreleri sorguda ya da # sonrasında gelebilir (ör. süresi geçmiş bağlantı).
+        Uri fragment = data.getFragment() != null ? Uri.parse("x://h?" + data.getFragment()) : null;
+        String error = firstNonNull(data.getQueryParameter("error"),
+                fragment != null ? fragment.getQueryParameter("error") : null);
+        String errorCode = firstNonNull(data.getQueryParameter("error_code"),
+                fragment != null ? fragment.getQueryParameter("error_code") : null);
+
+        if (error != null || errorCode != null || code == null) {
+            if ("otp_expired".equals(errorCode)) {
+                Toast.makeText(this, R.string.auth_error_link_expired, Toast.LENGTH_LONG).show();
+            } else if (!AuthManager.FLOW_OAUTH.equals(flow) || !"access_denied".equals(error)) {
+                Toast.makeText(this, AuthManager.FLOW_OAUTH.equals(flow)
+                        ? R.string.auth_error_oauth_failed : R.string.auth_error_link_failed,
+                        Toast.LENGTH_LONG).show();
+            }
             return;
         }
-        android.content.Context appCtx = getApplicationContext();
         AppExecutors.io().execute(() -> {
             try {
-                User user = AuthManager.exchangeOAuthCode(appCtx, code);
+                AuthManager.CallbackResult result = AuthManager.handleAuthCallback(appCtx, code);
                 AppExecutors.main(() -> {
                     if (isFinishing()) return;
+                    if (result.recovery) {
+                        openPasswordReset();
+                        return;
+                    }
+                    User user = result.user;
                     String name = user.getFirst_name() != null ? user.getFirst_name() : "";
-                    Toast.makeText(this, getString(R.string.login_welcome, name), Toast.LENGTH_SHORT).show();
+                    if (AuthManager.FLOW_SIGNUP.equals(flow)) {
+                        Toast.makeText(this, R.string.email_confirmed, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, getString(R.string.login_welcome, name), Toast.LENGTH_SHORT).show();
+                    }
                     Navigation.toHomeAndClear(this);
                 });
             } catch (Exception e) {
-                Log.w("OAuth", "Code exchange failed", e);
+                Log.w("AuthCallback", "Code exchange failed", e);
                 AppExecutors.main(() -> ErrorMessages.toast(this, e));
             }
         });
+    }
+
+    private void openPasswordReset() {
+        if (navController == null) return;
+        Bundle args = new Bundle();
+        args.putBoolean(ChangePasswordFragment.ARG_RECOVERY, true);
+        navController.navigate(R.id.changePasswordFragment, args);
+    }
+
+    private static String firstNonNull(String a, String b) {
+        return a != null ? a : b;
     }
 
     public NavController getNavController() {

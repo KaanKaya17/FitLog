@@ -18,6 +18,9 @@ local.properties
 *.log
 
 # Gizli anahtarlar
+*.jks
+*.keystore
+keystore.properties
 local.properties
 supabase/.env
 supabase/functions/.env
