@@ -540,4 +540,9 @@
     <string name="widget_ml_format">%1$d / %2$d ml water</string>
     <string name="widget_placeholder">–</string>
     <string name="widget_sign_in">Sign in to FitLog to see today\'s progress</string>
+    <string name="ai_shopping_list">Shopping list</string>
+    <string name="ai_shopping_loading">Preparing list…</string>
+    <string name="ai_shopping_share">Share</string>
+    <string name="ai_shopping_close">Close</string>
+    <string name="ai_shopping_prompt">Turn the meal plan below into a short shopping list in English. Group items under these headings: Produce, Protein, Dairy, Grains &amp; Bakery, Other. One item per line starting with \"• \", with an approximate quantity. Merge duplicates. Output only the list, no introduction or notes.\n\nMeal plan:\n%1$s</string>
 </resources>

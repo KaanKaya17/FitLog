@@ -105,6 +105,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnShoppingList"
+            style="@style/FitLog.SecondaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/ai_shopping_list" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
@@ -128,6 +141,7 @@
             android:backgroundTint="@null"
             android:background="@drawable/ai_regenerate_btn_bg"
             style="@style/Widget.MaterialComponents.Button" />
+        </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 

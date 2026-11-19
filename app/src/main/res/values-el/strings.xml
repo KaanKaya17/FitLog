@@ -536,4 +536,9 @@
     <string name="widget_ml_format">%1$d / %2$d ml νερό</string>
     <string name="widget_placeholder">–</string>
     <string name="widget_sign_in">Συνδεθείτε στο FitLog για να δείτε την πρόοδο της ημέρας</string>
+    <string name="ai_shopping_list">Λίστα αγορών</string>
+    <string name="ai_shopping_loading">Ετοιμάζεται η λίστα…</string>
+    <string name="ai_shopping_share">Κοινοποίηση</string>
+    <string name="ai_shopping_close">Κλείσιμο</string>
+    <string name="ai_shopping_prompt">Μετάτρεψε το παρακάτω πρόγραμμα γευμάτων σε σύντομη λίστα αγορών στα ελληνικά. Ομαδοποίησε τα είδη στις κατηγορίες: Φρούτα και Λαχανικά, Πρωτεΐνη, Γαλακτοκομικά, Δημητριακά και Αρτοποιία, Άλλα. Ένα είδος ανά γραμμή που ξεκινά με \"• \", με κατά προσέγγιση ποσότητα. Συγχώνευσε τα διπλότυπα. Γράψε μόνο τη λίστα, χωρίς εισαγωγή ή σημειώσεις.\n\nΠρόγραμμα γευμάτων:\n%1$s</string>
 </resources>
