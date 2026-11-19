@@ -9,12 +9,13 @@ import retrofit2.http.Body;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
 
 /** Supabase Auth (GoTrue) uç noktaları. */
 public interface SupabaseAuthApi {
 
     @POST("auth/v1/signup")
-    Call<AuthResponse> signUp(@Body SignUpRequest body);
+    Call<AuthResponse> signUp(@Query("redirect_to") String redirectTo, @Body SignUpRequest body);
 
     @POST("auth/v1/token?grant_type=password")
     Call<AuthResponse> signInWithPassword(@Body PasswordGrant body);
@@ -26,7 +27,7 @@ public interface SupabaseAuthApi {
     Call<AuthResponse> exchangeCode(@Body PkceGrant body);
 
     @POST("auth/v1/recover")
-    Call<Void> recover(@Body Map<String, Object> body);
+    Call<Void> recover(@Query("redirect_to") String redirectTo, @Body Map<String, Object> body);
 
     @PUT("auth/v1/user")
     Call<AuthUser> updateUser(@Header("Authorization") String bearer, @Body Map<String, Object> body);
@@ -57,8 +58,13 @@ public interface SupabaseAuthApi {
         final String email;
         final String password;
         final Map<String, String> data;
-        SignUpRequest(String email, String password, Map<String, String> data) {
+        // PKCE: onay e-postasındaki bağlantı uygulamaya tek kullanımlık kodla döner.
+        @SerializedName("code_challenge") final String codeChallenge;
+        @SerializedName("code_challenge_method") final String codeChallengeMethod;
+        SignUpRequest(String email, String password, Map<String, String> data, String codeChallenge) {
             this.email = email; this.password = password; this.data = data;
+            this.codeChallenge = codeChallenge;
+            this.codeChallengeMethod = codeChallenge != null ? "s256" : null;
         }
     }
 

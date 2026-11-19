@@ -90,8 +90,21 @@ public class SettingsFragment extends BaseFragment {
         vm.targetsApplied().observe(getViewLifecycleOwner(), e -> { if (e.consume() != null) loadCurrentGoals(); });
         setupExport(view);
 
+        setupPrivacy(view);
+
         View about = view.findViewById(R.id.layoutAbout);
         if (about != null) about.setOnClickListener(v -> navigate(R.id.aboutProjectFragment));
+    }
+
+    // ── Gizlilik ───────────────────────────────────────────────────────
+
+    private void setupPrivacy(View view) {
+        Switch sw = view.findViewById(R.id.switchAnalytics);
+        sw.setChecked(ConsentManager.isGranted(requireContext()));
+        sw.setOnCheckedChangeListener((b, checked) -> ConsentManager.setGranted(requireContext(), checked));
+        view.findViewById(R.id.layoutAnalyticsConsent).setOnClickListener(v -> sw.toggle());
+        view.findViewById(R.id.layoutPrivacyPolicy)
+                .setOnClickListener(v -> ConsentManager.openPrivacyPolicy(requireContext()));
     }
 
     // ── Veri dışa aktarma ──────────────────────────────────────────────

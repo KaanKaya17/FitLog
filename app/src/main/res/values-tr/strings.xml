@@ -510,4 +510,18 @@
     <string name="notif_channel_weekly">Haftalık özet</string>
     <string name="notif_channel_weekly_desc">Her pazar haftanın kısa özeti</string>
     <string name="tile_add_water">+250 ml su</string>
+    <string name="auth_error_link_expired">Bu bağlantının süresi dolmuş ya da daha önce kullanılmış. Lütfen yeni bir bağlantı isteyin.</string>
+    <string name="auth_error_link_failed">Bağlantı açılamadı. Lütfen tekrar deneyin.</string>
+    <string name="email_confirmed">E-posta adresiniz onaylandı. Hoş geldiniz!</string>
+    <string name="reset_pwd_title">Yeni Şifre Belirle</string>
+    <string name="reset_pwd_subtitle">Hesabınız için yeni bir şifre seçin.</string>
+    <string name="consent_title">Gizliliğiniz</string>
+    <string name="consent_message">Uygulamayı geliştirebilmemiz için FitLog anonim kullanım istatistikleri ve hata raporları (Google Firebase) gönderebilir. Bu isteğe bağlıdır ve Ayarlar\'dan istediğiniz zaman değiştirebilirsiniz.\n\nYapay zekâ özelliklerine gönderdiğiniz yemek fotoğrafları ve metinler Google Gemini tarafından işlenir. Ayrıntılar gizlilik politikasındadır.</string>
+    <string name="consent_accept">İzin ver</string>
+    <string name="consent_decline">İzin verme</string>
+    <string name="privacy_policy">Gizlilik politikası</string>
+    <string name="settings_header_privacy">Gizlilik</string>
+    <string name="settings_label_analytics">Kullanım istatistikleri ve hata raporları</string>
+    <string name="settings_sub_analytics">Uygulamayı geliştirmeye yardımcı anonim veriler</string>
+    <string name="settings_sub_privacy_policy">Hangi verileri neden topladığımız</string>
 </resources>

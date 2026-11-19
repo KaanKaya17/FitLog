@@ -73,6 +73,8 @@ public class GeminiAndAuthTest {
         assertEquals(R.string.auth_error_invalid_credentials, AuthManager.mapError("invalid_grant", 400).messageRes);
         assertEquals(R.string.auth_error_email_exists, AuthManager.mapError("user_already_exists", 422).messageRes);
         assertEquals(R.string.auth_error_oauth_expired, AuthManager.mapError("flow_state_expired", 400).messageRes);
+        assertEquals(R.string.auth_error_link_expired, AuthManager.mapError("otp_expired", 403).messageRes);
+        assertEquals(R.string.error_password_same, AuthManager.mapError("same_password", 422).messageRes);
         assertEquals(R.string.error_server, AuthManager.mapError("", 503).messageRes);
         assertEquals("http_418", AuthManager.mapError("", 418).code);
     }

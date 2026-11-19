@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitLog">
 
+        <!-- Analitik ve hata raporları kullanıcı onayı verene kadar kapalı (ConsentManager). -->
+        <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
+
         <!-- Single Activity: All UI is now handled via Fragments -->
         <activity
             android:name=".MainActivity"

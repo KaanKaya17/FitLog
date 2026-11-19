@@ -510,4 +510,19 @@
     <string name="notif_channel_weekly">Weekly summary</string>
     <string name="notif_channel_weekly_desc">A short summary of your week every Sunday</string>
     <string name="tile_add_water">+250 ml water</string>
+    <string name="auth_error_link_expired">This link has expired or was already used. Please request a new one.</string>
+    <string name="auth_error_link_failed">The link could not be opened. Please try again.</string>
+    <string name="email_confirmed">Your email is confirmed. Welcome!</string>
+    <string name="reset_pwd_title">Set a New Password</string>
+    <string name="reset_pwd_subtitle">Choose a new password for your account.</string>
+    <string name="consent_title">Your privacy</string>
+    <string name="consent_message">FitLog can send anonymous usage statistics and crash reports (Google Firebase) to help us improve the app. This is optional and you can change it any time in Settings.\n\nMeal photos and text you send to the AI features are processed by Google Gemini. Details are in the privacy policy.</string>
+    <string name="consent_accept">Allow</string>
+    <string name="consent_decline">Don\'t allow</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="settings_header_privacy">Privacy</string>
+    <string name="settings_label_analytics">Usage statistics &amp; crash reports</string>
+    <string name="settings_sub_analytics">Anonymous data that helps improve the app</string>
+    <string name="settings_sub_privacy_policy">What data we collect and why</string>
+    <string name="privacy_policy_url" translatable="false">https://github.com/KaanKaya17/FitLog/blob/master/PRIVACY.md</string>
 </resources>

@@ -47,6 +47,7 @@ public class PrefManager {
     private static final String KEY_QUIET_END   = "reminder_quiet_end";
     private static final String KEY_THEME_MODE  = "theme_mode";
     private static final String KEY_PKCE_VERIFIER = "oauth_pkce_verifier";
+    private static final String KEY_PKCE_FLOW     = "oauth_pkce_flow";
 
     private static final String KEY_ACCESS_TOKEN  = "auth_access_token";
     private static final String KEY_REFRESH_TOKEN = "auth_refresh_token";
@@ -181,10 +182,16 @@ public class PrefManager {
     public void setThemeMode(String mode) { editor.putString(KEY_THEME_MODE, mode).commit(); }
 
     // ── OAuth PKCE (tarayıcıya gidip dönerken geçici) ──────────────────
-    public void setPkceVerifier(String v) { editor.putString(KEY_PKCE_VERIFIER, v).commit(); }
+    public void setPkceVerifier(String v) { setPkceVerifier(v, null); }
+    /** @param flow geri dönüşte hangi akışın sürdüğü (AuthManager.FLOW_*). */
+    public void setPkceVerifier(String v, String flow) {
+        editor.putString(KEY_PKCE_VERIFIER, v).putString(KEY_PKCE_FLOW, flow).commit();
+    }
+    /** Bekleyen akışın türü (silmeden okur). */
+    public String getPkceFlow() { return sharedPreferences.getString(KEY_PKCE_FLOW, null); }
     public String takePkceVerifier() {
         String v = sharedPreferences.getString(KEY_PKCE_VERIFIER, null);
-        editor.remove(KEY_PKCE_VERIFIER).commit();
+        editor.remove(KEY_PKCE_VERIFIER).remove(KEY_PKCE_FLOW).commit();
         return v;
     }
 

@@ -507,4 +507,18 @@
     <string name="notif_channel_weekly">Εβδομαδιαία σύνοψη</string>
     <string name="notif_channel_weekly_desc">Σύντομη σύνοψη κάθε Κυριακή</string>
     <string name="tile_add_water">+250 ml νερό</string>
+    <string name="auth_error_link_expired">Ο σύνδεσμος έχει λήξει ή έχει ήδη χρησιμοποιηθεί. Ζητήστε νέο σύνδεσμο.</string>
+    <string name="auth_error_link_failed">Δεν ήταν δυνατό να ανοίξει ο σύνδεσμος. Δοκιμάστε ξανά.</string>
+    <string name="email_confirmed">Το email σας επιβεβαιώθηκε. Καλώς ήρθατε!</string>
+    <string name="reset_pwd_title">Ορισμός Νέου Κωδικού</string>
+    <string name="reset_pwd_subtitle">Επιλέξτε νέο κωδικό για τον λογαριασμό σας.</string>
+    <string name="consent_title">Το απόρρητό σας</string>
+    <string name="consent_message">Το FitLog μπορεί να στέλνει ανώνυμα στατιστικά χρήσης και αναφορές σφαλμάτων (Google Firebase) για να βελτιώνουμε την εφαρμογή. Είναι προαιρετικό και μπορείτε να το αλλάξετε οποιαδήποτε στιγμή στις Ρυθμίσεις.\n\nΟι φωτογραφίες γευμάτων και τα κείμενα που στέλνετε στις λειτουργίες AI επεξεργάζονται από το Google Gemini. Λεπτομέρειες στην πολιτική απορρήτου.</string>
+    <string name="consent_accept">Αποδοχή</string>
+    <string name="consent_decline">Απόρριψη</string>
+    <string name="privacy_policy">Πολιτική απορρήτου</string>
+    <string name="settings_header_privacy">Απόρρητο</string>
+    <string name="settings_label_analytics">Στατιστικά χρήσης και αναφορές σφαλμάτων</string>
+    <string name="settings_sub_analytics">Ανώνυμα δεδομένα που βοηθούν στη βελτίωση της εφαρμογής</string>
+    <string name="settings_sub_privacy_policy">Ποια δεδομένα συλλέγουμε και γιατί</string>
 </resources>
