@@ -25,19 +25,43 @@ FitLog, modern ve kapsamlı bir Android akıllı sağlık ve beslenme takip uygu
 
 ### Gereksinimler
 1. Android Studio
-2. Uygulama veritabanı için Supabase Proje URL'i ve API Key'i
-3. Yapay Zeka için Google Gemini API Key
-4. Firebase konfigürasyon dosyası (`google-services.json`) 
+2. Bir Supabase projesi (URL + **anon / publishable** key)
+3. Google Gemini API Key (yalnızca sunucuda kullanılır)
+4. Firebase konfigürasyon dosyası (`google-services.json`)
+5. [Supabase CLI](https://supabase.com/docs/guides/cli)
 
-### Yapılandırma
-Aşağıdaki gibi proje ana dizininde bulunan özel **`local.properties`** dosyanıza kendi anahtarlarınızı yerleştirmelisiniz:
+### 1. Veritabanı (Supabase)
+Kimlik doğrulama **Supabase Auth** ile yapılır; şifreler uygulamada veya `public.users` tablosunda tutulmaz.
+Her tabloda Row Level Security açıktır: her kullanıcı yalnızca kendi verisini görebilir.
+
+```bash
+supabase link --project-ref <PROJE_REF>
+supabase db push
+```
+
+`supabase/migrations/` altındaki dosyalar sırasıyla:
+- `..._auth_and_rls.sql`: `users.auth_id` kolonu, kayıt trigger'ı ve RLS politikaları.
+- `..._migrate_existing_users.sql`: Eski kullanıcıları Supabase Auth'a taşır (şifreleri bcrypt ile hash'ler) ve düz metin `password_hash` kolonunu siler. **Çalıştırmadan önce yedek alın.**
+
+### 2. Gemini proxy (Edge Function)
+Gemini API anahtarı APK'ya **gömülmez**. Uygulama, kullanıcının oturum token'ı ile `gemini-proxy` fonksiyonunu çağırır; anahtar Supabase secret olarak sunucuda durur.
+
+```bash
+supabase secrets set GEMINI_API_KEY=<YENI_GEMINI_KEY>
+supabase functions deploy gemini-proxy
+```
+
+### 3. Uygulama
+Proje kökündeki **`local.properties`** dosyasına (git'e eklenmez) yalnızca herkese açık değerleri yazın:
 
 ```properties
-SUPABASE_URL="SİZİN_SUPABASE_URL_ADRESINIZ"
-SUPABASE_API_KEY="SİZİN_SUPABASE_ANON_KEY_ŞİFRENİZ"
-GEMINI_API_KEY="SİZİN_GEMINI_KEY_ŞİFRENİZ"
+SUPABASE_URL=https://<PROJE_REF>.supabase.co
+SUPABASE_API_KEY=<SUPABASE_ANON_KEY>
 ```
-Ayrıca `app/src/main/assets/config.properties` içerisine AI servislerinin API keyler'i tanımlanarak çalışma mantığı aktifleştirilmelidir.
+
+Firebase Console'dan indirdiğiniz `google-services.json` dosyasını `app/` klasörüne koyun (bu dosya da git'e eklenmez).
+
+> ⚠️ Buraya **asla** `service_role` anahtarı veya Gemini anahtarı koymayın; `BuildConfig` içindeki her değer APK'dan okunabilir.
 
 ## 📱 Ekran Görüntüleri ve Arayüz
 *(Arayüz resimlerinizi veya projenizin demolarını daha sonra bu alana ekleyebilirsiniz.)*

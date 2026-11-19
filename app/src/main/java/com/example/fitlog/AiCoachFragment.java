@@ -72,7 +72,8 @@ public class AiCoachFragment extends Fragment {
         btnRetryInternet.setOnClickListener(v -> checkExistingPlan());
 
         View btnBack = view.findViewById(R.id.btnBack);
-        if (btnBack != null) btnBack.setOnClickListener(v -> requireActivity().onBackPressed());
+        if (btnBack != null) btnBack.setOnClickListener(v ->
+                androidx.navigation.fragment.NavHostFragment.findNavController(this).navigateUp());
 
         checkExistingPlan();
     }
@@ -105,11 +106,9 @@ public class AiCoachFragment extends Fragment {
         if (!NetworkUtils.isNetworkAvailable(getContext())) { showNoInternet(); return; }
         showLoading(true);
 
-        SupabaseApi authApi = RetrofitClient.getClient().create(SupabaseApi.class);
-        String apiKey = BuildConfig.SUPABASE_API_KEY;
-        String authHeader = "Bearer " + apiKey;
+        SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
 
-        authApi.getTodayAiMealPlan(apiKey, authHeader, "application/json", "eq." + prefManager.getId(), "eq." + todayDate)
+        api.getAiMealPlans("eq." + prefManager.getId(), "eq." + todayDate)
                 .enqueue(new Callback<List<AiMealPlan>>() {
                     @Override
                     public void onResponse(Call<List<AiMealPlan>> call, Response<List<AiMealPlan>> response) {
@@ -141,7 +140,7 @@ public class AiCoachFragment extends Fragment {
 
         if (gender == null || gender.isEmpty() || weight == 0 || height == 0 || goal == null || goal.isEmpty()) {
             Toast.makeText(getContext(), getString(R.string.ai_error_empty_profile), Toast.LENGTH_LONG).show();
-            requireActivity().onBackPressed();
+            androidx.navigation.fragment.NavHostFragment.findNavController(this).navigateUp();
             return;
         }
 
@@ -158,17 +157,16 @@ public class AiCoachFragment extends Fragment {
         contents.add(part);
         requestBody.add("contents", contents);
 
-        GeminiApi geminiApi = GeminiApiClient.getClient().create(GeminiApi.class);
+        // Gemini isteği, API anahtarını sunucuda tutan Edge Function üzerinden gider.
+        SupabaseApi geminiApi = RetrofitClient.getClient().create(SupabaseApi.class);
 
-        geminiApi.generateContent(BuildConfig.GEMINI_API_KEY, requestBody).enqueue(new Callback<JsonObject>() {
+        geminiApi.generateContent(requestBody).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (!isAdded()) return;
                 if (response.isSuccessful() && response.body() != null) {
                     try {
-                        String text = response.body().getAsJsonArray("candidates").get(0).getAsJsonObject()
-                                .getAsJsonObject("content").getAsJsonArray("parts").get(0)
-                                .getAsJsonObject().get("text").getAsString();
+                        String text = GeminiNutritionService.extractText(response.body());
                         renderPlanToCards(text);
                         savePlanToDatabase(text);
 
@@ -176,11 +174,12 @@ public class AiCoachFragment extends Fragment {
                         aiBundle.putString("goal", goal);
                         firebaseAnalytics.logEvent("ai_coach_used", aiBundle);
                     } catch (Exception e) {
-                        Log.e("GEMINI_ERROR", e.toString());
+                        Log.w("AI_COACH", "Gemini yanıtı çözümlenemedi", e);
                         Toast.makeText(getContext(), getString(R.string.ai_error_response), Toast.LENGTH_SHORT).show();
                         showLoading(false);
                     }
                 } else {
+                    Log.w("AI_COACH", "Gemini proxy hatası: " + GeminiNutritionService.errorMessage(response));
                     Toast.makeText(getContext(), getString(R.string.ai_error_api), Toast.LENGTH_LONG).show();
                     showLoading(false);
                 }
@@ -197,9 +196,8 @@ public class AiCoachFragment extends Fragment {
     private void savePlanToDatabase(String planContent) {
         SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
         AiMealPlan newPlan = new AiMealPlan(prefManager.getId(), planContent);
-        String apiKey = BuildConfig.SUPABASE_API_KEY;
 
-        api.insertAiMealPlan(apiKey, "Bearer " + apiKey, "application/json", "return=minimal", newPlan)
+        api.insertAiMealPlan(newPlan)
                 .enqueue(new Callback<Void>() {
                     @Override public void onResponse(Call<Void> call, Response<Void> r) { if (isAdded()) showLoading(false); }
                     @Override public void onFailure(Call<Void> call, Throwable t) { if (isAdded()) showLoading(false); }

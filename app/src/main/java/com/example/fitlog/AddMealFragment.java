@@ -133,7 +133,7 @@ public class AddMealFragment extends Fragment {
         tvFat         = view.findViewById(R.id.tvFat);
         tvFiber       = view.findViewById(R.id.tvFiber);
 
-        service = new GeminiNutritionService(getContext());
+        service = new GeminiNutritionService();
 
         btnCamera.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -267,14 +267,12 @@ public class AddMealFragment extends Fragment {
 
     private void saveMealToSupabase(NutritionData data) {
         btnSave.setEnabled(false);
+        android.content.Context appCtx = requireContext().getApplicationContext();
 
         new Thread(() -> {
             try {
                 SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
-
-                PrefManager pref = new PrefManager(requireContext());
+                PrefManager pref = new PrefManager(appCtx);
                 MealInsertDto mealLog;
                 if (selectedDate != null) {
                     mealLog = new MealInsertDto(pref.getId(), data, selectedDate + "T12:00:00Z");
@@ -282,7 +280,7 @@ public class AddMealFragment extends Fragment {
                     mealLog = new MealInsertDto(pref.getId(), data);
                 }
 
-                retrofit2.Response<Void> response = api.insertMealLog(apiKey, authHeader, "application/json", "return=minimal", mealLog).execute();
+                retrofit2.Response<Void> response = api.insertMealLog(mealLog).execute();
 
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {

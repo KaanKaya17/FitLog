@@ -112,11 +112,8 @@ public class MealListFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                SupabaseApi api   = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey     = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
-
-                retrofit2.Response<List<MealLog>> response = api.getTodayMealLogs(apiKey, authHeader, "application/json", userIdFilter, dateFilter).execute();
+                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
+                retrofit2.Response<List<MealLog>> response = api.getMealLogs(userIdFilter, dateFilter).execute();
 
                 if (response.isSuccessful() && response.body() != null) {
                     List<MealLog> meals = response.body();
@@ -156,11 +153,8 @@ public class MealListFragment extends Fragment {
     private void deleteMeal(MealLog meal, int position) {
         new Thread(() -> {
             try {
-                SupabaseApi api   = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey     = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
-
-                retrofit2.Response<Void> response = api.deleteMealLog(apiKey, authHeader, "eq." + meal.getLog_id()).execute();
+                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
+                retrofit2.Response<Void> response = api.deleteMealLog("eq." + meal.getLog_id()).execute();
 
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {

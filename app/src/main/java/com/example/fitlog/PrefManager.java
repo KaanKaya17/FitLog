@@ -7,9 +7,15 @@ import android.util.Log;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-
+/**
+ * Kullanıcı bilgileri ve oturum token'ları için şifreli depolama.
+ *
+ * - SharedPreferences örneği uygulama boyunca tek sefer oluşturulur (MasterKey
+ *   üretimi pahalıdır).
+ * - Şifreli depo bozulursa önce silinip yeniden oluşturulur.
+ * - Yine de oluşturulamazsa şifresiz depoya düşülür; ancak bu durumda oturum
+ *   token'ları DİSKE YAZILMAZ, yalnızca bellekte tutulur.
+ */
 public class PrefManager {
     private static final String TAG = "PrefManager";
     private static final String PREF_NAME = "AppPrefs";
@@ -31,76 +37,88 @@ public class PrefManager {
     private static final String KEY_GOAL       = "user_goal";
     private static final String KEY_FCM_TOKEN  = "fcm_token";
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private static final String KEY_ACCESS_TOKEN  = "auth_access_token";
+    private static final String KEY_REFRESH_TOKEN = "auth_refresh_token";
+    private static final String KEY_TOKEN_EXPIRES = "auth_expires_at";
+    private static final String KEY_AUTH_ID       = "auth_user_id";
+
+    private static SharedPreferences sharedInstance;
+    private static boolean isEncrypted;
+
+    // Şifreli depo kullanılamazsa token'lar yalnızca burada tutulur.
+    private static volatile String memAccessToken;
+    private static volatile String memRefreshToken;
+    private static volatile long memExpiresAt;
+
+    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences.Editor editor;
 
     public PrefManager(Context context) {
+        sharedPreferences = obtain(context.getApplicationContext());
+        editor = sharedPreferences.edit();
+    }
+
+    private static synchronized SharedPreferences obtain(Context context) {
+        if (sharedInstance != null) return sharedInstance;
+
+        SharedPreferences prefs = createEncrypted(context);
+        if (prefs == null) {
+            // Keystore anahtarı değişmiş/bozulmuş olabilir: depoyu silip tekrar dene.
+            Log.w(TAG, "Şifreli depo açılamadı, sıfırlanıp yeniden deneniyor.");
+            context.deleteSharedPreferences(ENCRYPTED_PREF_NAME);
+            prefs = createEncrypted(context);
+        }
+
+        if (prefs != null) {
+            isEncrypted = true;
+            migrateFromOldPrefs(context, prefs);
+        } else {
+            Log.e(TAG, "Şifreli depo kullanılamıyor; oturum token'ları diske yazılmayacak.");
+            isEncrypted = false;
+            prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        }
+        sharedInstance = prefs;
+        return prefs;
+    }
+
+    private static SharedPreferences createEncrypted(Context context) {
         try {
             MasterKey masterKey = new MasterKey.Builder(context)
                     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
                     .build();
-
-            sharedPreferences = EncryptedSharedPreferences.create(
+            return EncryptedSharedPreferences.create(
                     context,
                     ENCRYPTED_PREF_NAME,
                     masterKey,
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
-            editor = sharedPreferences.edit();
-
-            // Eski şifrelenmemiş verilerden göç ettir
-            migrateFromOldPrefs(context);
-
-        } catch (GeneralSecurityException | IOException e) {
-            Log.e(TAG, "EncryptedSharedPreferences oluşturulamadı, normal prefs'e fallback.", e);
-            // Fallback: Şifreli prefs oluşturulamazsa normal prefs kullan
-            sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-            editor = sharedPreferences.edit();
+        } catch (Exception e) {
+            Log.e(TAG, "EncryptedSharedPreferences oluşturulamadı", e);
+            return null;
         }
     }
 
-    /**
-     * Eski şifrelenmemiş SharedPreferences'tan verileri şifreli olana taşır.
-     * Taşıma işlemi sadece bir kez yapılır.
-     */
-    private void migrateFromOldPrefs(Context context) {
-        if (sharedPreferences.getBoolean(KEY_MIGRATION_DONE, false)) {
-            return; // Zaten göç ettirilmiş
-        }
+    /** Eski şifrelenmemiş SharedPreferences'taki ayarları taşır (bir kez). */
+    private static void migrateFromOldPrefs(Context context, SharedPreferences target) {
+        if (target.getBoolean(KEY_MIGRATION_DONE, false)) return;
 
         SharedPreferences oldPrefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor e = target.edit();
+        // Kullanıcı kimliği taşınmaz: yeni Supabase Auth oturumu gerektiği için
+        // eski kullanıcılar bir kez yeniden giriş yapar.
+        e.putInt(KEY_CALORIE_GOAL, oldPrefs.getInt(KEY_CALORIE_GOAL, 2000));
+        e.putInt(KEY_WATER_GOAL, oldPrefs.getInt(KEY_WATER_GOAL, 2000));
+        e.putString(KEY_LANGUAGE, oldPrefs.getString(KEY_LANGUAGE, "en"));
+        e.putBoolean(KEY_WATER_REMINDER, oldPrefs.getBoolean(KEY_WATER_REMINDER, false));
+        e.putBoolean(KEY_MIGRATION_DONE, true);
+        e.apply();
 
-        // Eski prefs'te veri var mı kontrol et
-        if (oldPrefs.contains(KEY_ID)) {
-            Log.d(TAG, "Eski SharedPreferences'tan şifreli prefs'e göç ettiriliyor...");
-
-            editor.putInt(KEY_ID, oldPrefs.getInt(KEY_ID, -1));
-            editor.putString(KEY_USERNAME, oldPrefs.getString(KEY_USERNAME, ""));
-            editor.putString(KEY_EMAIL, oldPrefs.getString(KEY_EMAIL, ""));
-            editor.putString(KEY_FIRST_NAME, oldPrefs.getString(KEY_FIRST_NAME, ""));
-            editor.putString(KEY_LAST_NAME, oldPrefs.getString(KEY_LAST_NAME, ""));
-            editor.putInt(KEY_CALORIE_GOAL, oldPrefs.getInt(KEY_CALORIE_GOAL, 2000));
-            editor.putInt(KEY_WATER_GOAL, oldPrefs.getInt(KEY_WATER_GOAL, 2000));
-            editor.putString(KEY_LANGUAGE, oldPrefs.getString(KEY_LANGUAGE, "en"));
-            editor.putBoolean(KEY_WATER_REMINDER, oldPrefs.getBoolean(KEY_WATER_REMINDER, false));
-            editor.putString(KEY_GENDER, oldPrefs.getString(KEY_GENDER, ""));
-            editor.putFloat(KEY_HEIGHT, oldPrefs.getFloat(KEY_HEIGHT, 0f));
-            editor.putFloat(KEY_WEIGHT, oldPrefs.getFloat(KEY_WEIGHT, 0f));
-            editor.putString(KEY_GOAL, oldPrefs.getString(KEY_GOAL, ""));
-            editor.putString(KEY_FCM_TOKEN, oldPrefs.getString(KEY_FCM_TOKEN, null));
-
-            // Eski prefs'i temizle (hassas verileri kaldır)
-            oldPrefs.edit().clear().apply();
-            Log.d(TAG, "Eski SharedPreferences temizlendi.");
-        }
-
-        // Göç tamamlandı olarak işaretle
-        editor.putBoolean(KEY_MIGRATION_DONE, true);
-        editor.apply();
+        oldPrefs.edit().clear().apply();
     }
 
-    // Tek seferde tüm kullanıcıyı kaydet
+    // ── Kullanıcı ──────────────────────────────────────────────────────
+
     public void saveUser(User user) {
         editor.putInt(KEY_ID, user.getId());
         editor.putString(KEY_USERNAME, user.getUsername());
@@ -116,7 +134,6 @@ public class PrefManager {
         editor.apply();
     }
 
-    // Getterlar
     public int getId()            { return sharedPreferences.getInt(KEY_ID, -1); }
     public String getUsername()   { return sharedPreferences.getString(KEY_USERNAME, ""); }
     public String getEmail()      { return sharedPreferences.getString(KEY_EMAIL, ""); }
@@ -138,31 +155,64 @@ public class PrefManager {
     public void setGoal(String goal) { editor.putString(KEY_GOAL, goal).apply(); }
     public String getGoal() { return sharedPreferences.getString(KEY_GOAL, ""); }
 
-    // Logout'ta hepsini temizle
+    /** Çıkışta kullanıcı ve oturum bilgilerini siler; dil ve hatırlatıcı ayarı korunur. */
     public void clearUser() {
-        // Dil ve hatırlatıcı ayarlarını koru
         String savedLang = getLanguage();
         boolean savedReminder = isWaterReminderEnabled();
+
+        memAccessToken = null;
+        memRefreshToken = null;
+        memExpiresAt = 0;
 
         editor.clear();
         editor.putString(KEY_LANGUAGE, savedLang);
         editor.putBoolean(KEY_WATER_REMINDER, savedReminder);
         editor.putBoolean(KEY_MIGRATION_DONE, true);
-        editor.apply();
+        editor.commit(); // senkron: hemen ardından gelen okuma eski oturumu görmesin
     }
 
-    public void setCalorieGoal(int goal) { editor.putInt(KEY_CALORIE_GOAL, goal); editor.apply(); }
+    public void setCalorieGoal(int goal) { editor.putInt(KEY_CALORIE_GOAL, goal).apply(); }
     public int getCalorieGoal()          { return sharedPreferences.getInt(KEY_CALORIE_GOAL, 2000); }
 
-    public void setWaterGoal(int goal)   { editor.putInt(KEY_WATER_GOAL, goal); editor.apply(); }
+    public void setWaterGoal(int goal)   { editor.putInt(KEY_WATER_GOAL, goal).apply(); }
     public int getWaterGoal()            { return sharedPreferences.getInt(KEY_WATER_GOAL, 2000); }
 
-    public void setLanguage(String lang) { editor.putString(KEY_LANGUAGE, lang); editor.apply(); }
-    public String getLanguage()          { return sharedPreferences.getString(KEY_LANGUAGE, "en"); } // Varsayılan: İngilizce
+    public void setLanguage(String lang) { editor.putString(KEY_LANGUAGE, lang).apply(); }
+    public String getLanguage()          { return sharedPreferences.getString(KEY_LANGUAGE, "en"); }
 
-    public void setWaterReminderEnabled(boolean enabled) { editor.putBoolean(KEY_WATER_REMINDER, enabled); editor.apply(); }
+    public void setWaterReminderEnabled(boolean enabled) { editor.putBoolean(KEY_WATER_REMINDER, enabled).apply(); }
     public boolean isWaterReminderEnabled() { return sharedPreferences.getBoolean(KEY_WATER_REMINDER, false); }
 
     public void setFcmToken(String token) { editor.putString(KEY_FCM_TOKEN, token).apply(); }
     public String getFcmToken() { return sharedPreferences.getString(KEY_FCM_TOKEN, null); }
+
+    // ── Oturum (Supabase Auth) ─────────────────────────────────────────
+
+    public void saveSession(String accessToken, String refreshToken, long expiresAt, String authId) {
+        if (isEncrypted) {
+            editor.putString(KEY_ACCESS_TOKEN, accessToken);
+            editor.putString(KEY_REFRESH_TOKEN, refreshToken);
+            editor.putLong(KEY_TOKEN_EXPIRES, expiresAt);
+        } else {
+            memAccessToken = accessToken;
+            memRefreshToken = refreshToken;
+            memExpiresAt = expiresAt;
+        }
+        if (authId != null) editor.putString(KEY_AUTH_ID, authId);
+        editor.commit();
+    }
+
+    public String getAccessToken() {
+        return isEncrypted ? sharedPreferences.getString(KEY_ACCESS_TOKEN, null) : memAccessToken;
+    }
+
+    public String getRefreshToken() {
+        return isEncrypted ? sharedPreferences.getString(KEY_REFRESH_TOKEN, null) : memRefreshToken;
+    }
+
+    public long getTokenExpiresAt() {
+        return isEncrypted ? sharedPreferences.getLong(KEY_TOKEN_EXPIRES, 0) : memExpiresAt;
+    }
+
+    public String getAuthId() { return sharedPreferences.getString(KEY_AUTH_ID, null); }
 }

@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment {
         if (getContext() == null) return;
         PrefManager pref = new PrefManager(getContext());
         String firstName = pref.getFirstName();
-        tvUsername.setText(firstName == null || firstName.isEmpty() ? String.valueOf(R.string.home_default_user) : firstName);
+        tvUsername.setText(firstName == null || firstName.isEmpty() ? getString(R.string.home_default_user) : firstName);
 
         int hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
         if (hour < 12)      tvGreeting.setText(R.string.home_greeting);
@@ -113,17 +113,10 @@ public class HomeFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                SupabaseApi api   = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey     = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
+                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
 
-                retrofit2.Response<List<WaterLog>> waterResp = api.getTodayWaterLogs(
-                        apiKey, authHeader, "application/json", userIdFilter, dateFilter
-                ).execute();
-
-                retrofit2.Response<List<MealLog>> mealResp = api.getTodayMealLogs(
-                        apiKey, authHeader, "application/json", userIdFilter, dateFilter
-                ).execute();
+                retrofit2.Response<List<WaterLog>> waterResp = api.getWaterLogs(userIdFilter, dateFilter).execute();
+                retrofit2.Response<List<MealLog>> mealResp = api.getMealLogs(userIdFilter, dateFilter).execute();
 
                 int totalWater     = 0;
                 int totalCalories  = 0;
@@ -220,7 +213,7 @@ public class HomeFragment extends Fragment {
         com.google.firebase.messaging.FirebaseMessaging.getInstance().getToken()
             .addOnCompleteListener(task -> {
                 if (!task.isSuccessful()) {
-                    Log.w("FCM", "Fetching FCM registration token failed", task.getException());
+                    Log.w("FCM", "Fetching FCM registration token failed");
                     return;
                 }
                 String token = task.getResult();
@@ -236,20 +229,9 @@ public class HomeFragment extends Fragment {
         new Thread(() -> {
             try {
                 SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
-
                 Map<String, Object> update = new HashMap<>();
                 update.put("fcm_token", token);
-
-                api.updateUserProfile(
-                        apiKey,
-                        authHeader,
-                        "application/json",
-                        "return=minimal",
-                        "eq." + userId,
-                        update
-                ).execute();
+                api.updateUser("eq." + userId, update).execute();
             } catch (Exception e) {
                 Log.e("FCM", "Token güncelleme hatası: " + e.getMessage());
             }
@@ -265,17 +247,13 @@ public class HomeFragment extends Fragment {
         new Thread(() -> {
             try {
                 SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-                retrofit2.Response<List<AdminNotification>> response = api.getNotifications(
-                        "eq." + userId,
-                        "eq.false",
-                        BuildConfig.SUPABASE_API_KEY,
-                        "Bearer " + BuildConfig.SUPABASE_API_KEY
-                ).execute();
+                retrofit2.Response<List<AdminNotification>> response =
+                        api.getNotifications("eq." + userId, "eq.false").execute();
 
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
                     AdminNotification note = response.body().get(0);
                     if (getActivity() != null) {
-                        getActivity().runOnUiThread(() -> showNotificationDialog(note));
+                        getActivity().runOnUiThread(() -> { if (isAdded()) showNotificationDialog(note); });
                     }
                 }
             } catch (Exception e) {
@@ -303,14 +281,10 @@ public class HomeFragment extends Fragment {
                 Map<String, Object> update = new HashMap<>();
                 update.put("is_read", true);
 
-                api.markNotificationAsRead(
-                        "eq." + noteId,
-                        BuildConfig.SUPABASE_API_KEY,
-                        "Bearer " + BuildConfig.SUPABASE_API_KEY,
-                        "application/json",
-                        update
-                ).execute();
-            } catch (Exception e) {}
+                api.markNotificationAsRead("eq." + noteId, update).execute();
+            } catch (Exception e) {
+                Log.w("NOTIF", "Bildirim okundu olarak işaretlenemedi", e);
+            }
         }).start();
     }
 }

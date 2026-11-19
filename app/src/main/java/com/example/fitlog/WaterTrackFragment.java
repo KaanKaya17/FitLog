@@ -135,17 +135,16 @@ public class WaterTrackFragment extends Fragment {
 
     private void loadTodayWater() {
         if (getContext() == null) return;
+        android.content.Context appCtx = requireContext().getApplicationContext();
         new Thread(() -> {
             try {
                 SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey     = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
-                PrefManager pref  = new PrefManager(requireContext());
+                PrefManager pref  = new PrefManager(appCtx);
                 String userIdFilter = "eq." + pref.getId();
                 String today = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(new java.util.Date());
                 String dateFilter = "gte." + today + "T00:00:00Z";
 
-                retrofit2.Response<List<WaterLog>> response = api.getTodayWaterLogs(apiKey, authHeader, "application/json", userIdFilter, dateFilter).execute();
+                retrofit2.Response<List<WaterLog>> response = api.getWaterLogs(userIdFilter, dateFilter).execute();
 
                 if (response.isSuccessful() && response.body() != null) {
                     int total = 0;
@@ -169,15 +168,14 @@ public class WaterTrackFragment extends Fragment {
 
     private void saveWaterLog(int amountMl) {
         if (getContext() == null) return;
+        android.content.Context appCtx = requireContext().getApplicationContext();
         new Thread(() -> {
             try {
                 SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey     = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
-                PrefManager pref = new PrefManager(requireContext());
+                PrefManager pref = new PrefManager(appCtx);
                 WaterLog log = new WaterLog(pref.getId(), amountMl);
 
-                retrofit2.Response<Void> response = api.insertWaterLog(apiKey, authHeader, "application/json", "return=minimal", log).execute();
+                retrofit2.Response<Void> response = api.insertWaterLog(log).execute();
 
                 if (!response.isSuccessful()) {
                     if (getActivity() != null) {

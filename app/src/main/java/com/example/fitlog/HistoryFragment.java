@@ -64,17 +64,10 @@ public class HistoryFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                SupabaseApi api   = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey     = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
+                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
 
-                retrofit2.Response<List<WaterLog>> waterResp = api.getTodayWaterLogs(
-                        apiKey, authHeader, "application/json", userIdFilter, weekFilter
-                ).execute();
-
-                retrofit2.Response<List<MealLog>> mealResp = api.getTodayMealLogs(
-                        apiKey, authHeader, "application/json", userIdFilter, weekFilter
-                ).execute();
+                retrofit2.Response<List<WaterLog>> waterResp = api.getWaterLogs(userIdFilter, weekFilter).execute();
+                retrofit2.Response<List<MealLog>> mealResp = api.getMealLogs(userIdFilter, weekFilter).execute();
 
                 List<DayHistory> days = buildDayList();
 

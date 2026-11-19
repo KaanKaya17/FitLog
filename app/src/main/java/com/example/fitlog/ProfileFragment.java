@@ -46,11 +46,13 @@ public class ProfileFragment extends Fragment {
             androidx.navigation.Navigation.findNavController(v).navigate(R.id.settingsFragment));
             
         view.findViewById(R.id.btnLogout).setOnClickListener(v -> {
-            PrefManager manager = new PrefManager(requireContext());
-            manager.clearUser();
+            android.content.Context appCtx = requireContext().getApplicationContext();
+            // Sunucudaki oturumu (refresh token) arka planda iptal et, yereli hemen sil.
+            String token = new PrefManager(appCtx).getAccessToken();
+            AuthManager.clearLocalSession(appCtx);
+            AuthManager.revokeInBackground(token);
             Toast.makeText(getContext(), "Çıkış Yapıldı", Toast.LENGTH_SHORT).show();
-            // UserStatusChecker will handle navigation on Resume, but to be sure:
-            androidx.navigation.Navigation.findNavController(v).navigate(R.id.loginFragment);
+            Navigation.toLoginAndClear(requireActivity());
         });
 
         loadProfileFromPrefs();

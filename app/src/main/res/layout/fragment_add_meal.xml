@@ -72,6 +72,7 @@
 
                     <EditText
                         android:id="@+id/etFood"
+                        android:maxLength="200"
                         android:layout_width="0dp"
                         android:layout_height="52dp"
                         android:layout_weight="1"

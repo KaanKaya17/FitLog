@@ -13,3 +13,17 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Build/çıktı logları
+*.log
+
+# Gizli anahtarlar
+local.properties
+supabase/.env
+supabase/functions/.env
+
+# Firebase yapılandırması (proje kimlikleri / API key içerir)
+google-services.json
+
+# Yerel IDE cihaz seçimi
+.idea/deploymentTargetSelector.xml

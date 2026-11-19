@@ -10,7 +10,7 @@
     <string name="water_subtitle">Μείνε ενυδατωμένος σήμερα</string>
     <string name="water_daily_goal">Ημερήσιος στόχος</string>
     <string name="water_goal_label"> / 2500 ml</string>
-    <string name="water_remaining">0% ολοκληρώθηκε · 2500 ml απομένουν</string>
+    <string name="water_remaining" formatted="false">0% ολοκληρώθηκε · 2500 ml απομένουν</string>
     <string name="water_glasses">Ποτήρια (250 ml το καθένα)</string>
     <string name="water_add">Γρήγορη προσθήκη</string>
     <string name="water_reset">Επαναφορά</string>
@@ -84,7 +84,7 @@
     <string name="home_water_label">💧 Ημερήσιο Νερό</string>
     <string name="home_water_format">0 / 2000 ml</string>
     <string name="home_water_progress_format">%1$d / %2$d ml</string>
-    <string name="home_water_percent_format">%0 ολοκληρώθηκε</string>
+    <string name="home_water_percent_format" formatted="false">0% ολοκληρώθηκε</string>
     <string name="home_water_percent_value">%%%1$d ολοκληρώθηκε</string>
     <string name="home_action_detail">Λεπτομέρειες →</string>
 
@@ -330,4 +330,9 @@
     <string name="water_error_daily_limit">Έχετε φτάσει το ημερήσιο μέγιστο όριο (10000 ml).</string>
     <string name="error_connection_with_msg">Σφάλμα σύνδεσης: %1$s</string>
     <string name="error_data_load_with_msg">Αποτυχία φόρτωσης δεδομένων: %1$s</string>
+    <string name="error_password_rules">Ο κωδικός πρέπει να έχει 8–72 χαρακτήρες και να περιέχει κεφαλαίο, πεζό γράμμα και αριθμό.</string>
+    <string name="desc_back">Πίσω</string>
+    <string name="no_internet_title">Δεν υπάρχει σύνδεση στο Internet</string>
+    <string name="no_internet_subtitle">Ελέγξτε τη σύνδεσή σας για να χρησιμοποιήσετε τις λειτουργίες AI.</string>
+    <string name="action_retry">Επανάληψη</string>
 </resources>

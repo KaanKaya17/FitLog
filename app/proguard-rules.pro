@@ -22,7 +22,7 @@
 
 # Gson & Retrofit Data Models
 -keep class com.example.fitlog.User { *; }
--keep class com.example.fitlog.UserInsertDto { *; }
+-keep class com.example.fitlog.SupabaseAuthApi$* { *; }
 -keep class com.example.fitlog.WaterLog { *; }
 -keep class com.example.fitlog.MealLog { *; }
 -keep class com.example.fitlog.MealInsertDto { *; }
@@ -36,3 +36,10 @@
 -keepattributes *Annotation*
 -keep class sun.misc.Unsafe { *; }
 -keep class com.google.gson.stream.** { *; }
+
+# Release build'lerde debug/verbose/info loglarını tamamen kaldır
+-assumenosideeffects class android.util.Log {
+    public static int v(...);
+    public static int d(...);
+    public static int i(...);
+}

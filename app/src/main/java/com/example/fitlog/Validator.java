@@ -43,7 +43,7 @@ public class Validator {
             return false;
         }
 
-        if(password.length() < 8){
+        if(password.length() < 8 || password.length() > 72){ // bcrypt 72 bayt sınırı
             return false;
         }
 
@@ -54,9 +54,13 @@ public class Validator {
         return hasUpper && hasLower && hasDigit;
     }
 
-    /*
-    public static boolean isValidUserName(){
+    /** 3-30 karakter; harf, rakam, alt çizgi ve nokta. */
+    public static boolean isValidUserName(String userName){
 
+        if(userName == null){
+            return false;
+        }
+
+        return userName.matches("[a-zA-Z0-9_.]{3,30}");
     }
-    */
 }

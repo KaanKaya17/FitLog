@@ -60,7 +60,7 @@ public class MealDetailFragment extends Fragment {
             tvConfidence.setTextColor(requireContext().getColor(android.R.color.holo_red_dark));
         }
 
-        view.findViewById(R.id.btnBack).setOnClickListener(v -> requireActivity().onBackPressed());
+        view.findViewById(R.id.btnBack).setOnClickListener(v -> androidx.navigation.fragment.NavHostFragment.findNavController(this).navigateUp());
         view.findViewById(R.id.btnDelete).setOnClickListener(v -> deleteMeal());
     }
 
@@ -69,18 +69,15 @@ public class MealDetailFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                SupabaseApi api   = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey     = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
-
-                retrofit2.Response<Void> response = api.deleteMealLog(apiKey, authHeader, "eq." + logId).execute();
+                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
+                retrofit2.Response<Void> response = api.deleteMealLog("eq." + logId).execute();
 
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
                         if (!isAdded()) return;
                         if (response.isSuccessful()) {
                             Toast.makeText(getContext(), "Öğün silindi.", Toast.LENGTH_SHORT).show();
-                            requireActivity().onBackPressed();
+                            androidx.navigation.fragment.NavHostFragment.findNavController(MealDetailFragment.this).navigateUp();
                         } else {
                             Toast.makeText(getContext(), "Silme işlemi başarısız.", Toast.LENGTH_SHORT).show();
                         }

@@ -26,21 +26,16 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField(
-            "String",
-            "SUPABASE_API_KEY",
-            "\"${localProperties["SUPABASE_API_KEY"]}\""
-        )
-        buildConfigField(
-            "String",
-            "SUPABASE_URL",
-            "\"${localProperties["SUPABASE_URL"]}\""
-        )
-        buildConfigField(
-            "String",
-            "GEMINI_API_KEY",
-            "\"${localProperties["GEMINI_API_KEY"]}\""
-        )
+        // Yalnızca herkese açık (public) değerler APK'ya girer.
+        // SUPABASE_API_KEY = Supabase "anon"/"publishable" anahtarı (service_role ASLA!).
+        // Gemini anahtarı uygulamada değil, Supabase Edge Function secret'ında tutulur.
+        val supabaseUrl = localProperties.getProperty("SUPABASE_URL", "").trim('"')
+        val supabaseKey = localProperties.getProperty("SUPABASE_API_KEY", "").trim('"')
+        if (supabaseUrl.isEmpty() || supabaseKey.isEmpty()) {
+            logger.warn("UYARI: local.properties içinde SUPABASE_URL / SUPABASE_API_KEY tanımlı değil.")
+        }
+        buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
+        buildConfigField("String", "SUPABASE_API_KEY", "\"$supabaseKey\"")
     }
 
     buildFeatures {

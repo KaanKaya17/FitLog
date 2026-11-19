@@ -10,7 +10,7 @@
     <string name="water_subtitle">Bugün yeterince su iç</string>
     <string name="water_daily_goal">Günlük hedef</string>
     <string name="water_goal_label"> / 2500 ml</string>
-    <string name="water_remaining">%0 tamamlandı · 2500 ml kaldı</string>
+    <string name="water_remaining" formatted="false">%0 tamamlandı · 2500 ml kaldı</string>
     <string name="water_glasses">Bardaklar (her biri 250 ml)</string>
     <string name="water_add">Hızlı ekle</string>
     <string name="water_reset">Sıfırla</string>
@@ -84,7 +84,7 @@
     <string name="home_water_label">💧  Günlük Su</string>
     <string name="home_water_format">0 / 2000 ml</string>
     <string name="home_water_progress_format">%1$d / %2$d ml</string>
-    <string name="home_water_percent_format">%%0 tamamlandı</string>
+    <string name="home_water_percent_format" formatted="false">%0 tamamlandı</string>
     <string name="home_water_percent_value">%%%1$d tamamlandı</string>
     <string name="home_action_detail">Detay →</string>
 
@@ -337,4 +337,5 @@
     <string name="no_internet_title">İnternet Bağlantısı Yok</string>
     <string name="no_internet_subtitle">Yapay zeka özelliklerini kullanmak için lütfen internet bağlantınızı kontrol edin.</string>
     <string name="action_retry">Tekrar Dene</string>
+    <string name="error_password_rules">Şifre 8–72 karakter olmalı; en az bir büyük harf, bir küçük harf ve bir rakam içermelidir.</string>
 </resources>

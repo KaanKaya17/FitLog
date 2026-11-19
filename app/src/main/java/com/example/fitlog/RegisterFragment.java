@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import java.util.List;
 
 public class RegisterFragment extends Fragment {
 
@@ -54,16 +53,16 @@ public class RegisterFragment extends Fragment {
     private void btnAddUser() {
         if (getContext() == null) return;
         String email = editTextEmail.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
+        String password = editTextPassword.getText().toString();
         String firstName = editTextFirstName.getText().toString().trim();
         String lastName = editTextLastName.getText().toString().trim();
         String userName = editTextUserUserName.getText().toString().trim();
 
         if (!Validator.isValidEmail(email)) { showError("Geçerli bir mail giriniz"); return; }
-        if (!Validator.isValidPassword(password)) { showError("Şifre geçersiz"); return; }
+        if (!Validator.isValidPassword(password)) { showError(getString(R.string.error_password_rules)); return; }
         if (!Validator.isValidFirstName(firstName)) { showError("İsim geçersiz"); return; }
         if (!Validator.isValidLastName(lastName)) { showError("Soyisim geçersiz"); return; }
-        if (!Validator.isValidFirstName(userName)) { showError("Kullanici Adi Gecersiz"); return; }
+        if (!Validator.isValidUserName(userName)) { showError("Kullanıcı adı geçersiz (3-30 karakter: harf, rakam, _ veya .)"); return; }
 
         addUser(userName, email, password, firstName, lastName);
     }
@@ -73,39 +72,30 @@ public class RegisterFragment extends Fragment {
     }
 
     private void addUser(String userName, String userMail, String userPassword, String userFirstName, String userLastName) {
+        android.content.Context appCtx = requireContext().getApplicationContext();
         new Thread(() -> {
             try {
-                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
+                // Şifre Supabase Auth'ta hash'lenerek saklanır; public.users satırını
+                // sunucudaki trigger oluşturur.
+                AuthManager.signUp(appCtx, userMail, userPassword, userName, userFirstName, userLastName);
 
-                retrofit2.Response<List<User>> checkResponse = api.getUserByEmail(apiKey, authHeader, "eq." + userMail, "application/json").execute();
-
-                if (checkResponse.isSuccessful() && checkResponse.body() != null && !checkResponse.body().isEmpty()) {
-                    showOnUi("Bu mail adresi zaten kayıtlı.");
-                    return;
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        if (!isAdded()) return;
+                        Bundle registerBundle = new Bundle();
+                        registerBundle.putString(FirebaseAnalytics.Param.METHOD, "email");
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, registerBundle);
+                        Toast.makeText(getContext(),
+                                "Kayıt başarılı! E-posta onayı istendiyse gelen kutunuzu kontrol edin.",
+                                Toast.LENGTH_LONG).show();
+                        Navigation.findNavController(requireView()).navigate(R.id.loginFragment);
+                    });
                 }
-
-                UserInsertDto newUser = new UserInsertDto(userName, userMail, userPassword, userFirstName, userLastName);
-                retrofit2.Response<Void> response = api.insertUser(apiKey, authHeader, "application/json", "return=minimal", newUser).execute();
-
-                if (response.isSuccessful()) {
-                    if (getActivity() != null) {
-                        getActivity().runOnUiThread(() -> {
-                            if (!isAdded()) return;
-                            Bundle registerBundle = new Bundle();
-                            registerBundle.putString(FirebaseAnalytics.Param.METHOD, "email");
-                            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, registerBundle);
-                            Toast.makeText(getContext(), "Kayıt başarılı!", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(requireView()).navigate(R.id.loginFragment);
-                        });
-                    }
-                } else {
-                    showOnUi("Kayıt sırasında hata oluştu.");
-                }
+            } catch (AuthManager.AuthException e) {
+                showOnUi(e.getMessage());
             } catch (Exception e) {
-                Log.e("REGISTER", "Error: " + e.getMessage());
-                showOnUi("Bağlantı hatası: " + e.getMessage());
+                Log.e("REGISTER", "Register failed", e);
+                showOnUi("Bağlantı hatası. Lütfen tekrar deneyin.");
             }
         }).start();
     }

@@ -75,7 +75,7 @@ public class EditProfileFragment extends Fragment {
 
         // Back button
         View btnBack = view.findViewById(R.id.btnBack);
-        if (btnBack != null) btnBack.setOnClickListener(v -> requireActivity().onBackPressed());
+        if (btnBack != null) btnBack.setOnClickListener(v -> androidx.navigation.fragment.NavHostFragment.findNavController(this).navigateUp());
     }
 
     private void selectGender(String gender) {
@@ -139,9 +139,8 @@ public class EditProfileFragment extends Fragment {
         updates.put("height_cm", finalHeight); updates.put("weight_kg", finalWeight);
 
         SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-        String apiKey = BuildConfig.SUPABASE_API_KEY;
 
-        api.updateUserProfile(apiKey, "Bearer " + apiKey, "application/json", "return=minimal", "eq." + userId, updates)
+        api.updateUser("eq." + userId, updates)
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
@@ -152,7 +151,7 @@ public class EditProfileFragment extends Fragment {
                             pref.setGender(selectedGender); pref.setGoal(selectedGoal);
                             pref.setHeight(finalHeight); pref.setWeight(finalWeight);
                             Toast.makeText(getContext(), "Profil bilgileri kaydedildi!", Toast.LENGTH_SHORT).show();
-                            requireActivity().onBackPressed();
+                            androidx.navigation.fragment.NavHostFragment.findNavController(EditProfileFragment.this).navigateUp();
                         } else {
                             Toast.makeText(getContext(), "Kayıt başarısız!", Toast.LENGTH_SHORT).show();
                         }

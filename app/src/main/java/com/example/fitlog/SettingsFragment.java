@@ -225,15 +225,13 @@ public class SettingsFragment extends Fragment {
         new Thread(() -> {
             try {
                 SupabaseApi api   = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey     = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
                 String userFilter = "eq." + pref.getId();
 
-                Map<String, Integer> body = new HashMap<>();
+                Map<String, Object> body = new HashMap<>();
                 body.put("daily_calorie_goal", calorieGoal);
                 body.put("daily_water_goal_ml", waterGoal);
 
-                retrofit2.Response<Void> response = api.updateUserGoals(apiKey, authHeader, "application/json", "return=minimal", userFilter, body).execute();
+                retrofit2.Response<Void> response = api.updateUser(userFilter, body).execute();
 
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {

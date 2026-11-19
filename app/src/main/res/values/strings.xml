@@ -10,7 +10,7 @@
     <string name="water_subtitle">Stay hydrated today</string>
     <string name="water_daily_goal">Daily goal</string>
     <string name="water_goal_label"> / 2500 ml</string>
-    <string name="water_remaining">0% completed · 2500 ml remaining</string>
+    <string name="water_remaining" formatted="false">0% completed · 2500 ml remaining</string>
     <string name="water_glasses">Glasses (250 ml each)</string>
     <string name="water_add">Quick add</string>
     <string name="water_reset">Reset</string>
@@ -84,7 +84,7 @@
     <string name="home_water_label">💧 Daily Water</string>
     <string name="home_water_format">0 / 2000 ml</string>
     <string name="home_water_progress_format">%1$d / %2$d ml</string>
-    <string name="home_water_percent_format">%0 completed</string>
+    <string name="home_water_percent_format" formatted="false">0% completed</string>
     <string name="home_water_percent_value">%%%1$d completed</string>
     <string name="home_action_detail">Details →</string>
 
@@ -337,4 +337,5 @@
     <string name="no_internet_title">No Internet Connection</string>
     <string name="no_internet_subtitle">Please check your connection to use AI features.</string>
     <string name="action_retry">Retry</string>
+    <string name="error_password_rules">Password must be 8–72 characters and contain an uppercase letter, a lowercase letter and a digit.</string>
 </resources>

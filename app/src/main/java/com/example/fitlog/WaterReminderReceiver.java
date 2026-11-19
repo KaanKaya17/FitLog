@@ -32,21 +32,20 @@ public class WaterReminderReceiver extends BroadcastReceiver {
         }
 
         int waterGoal = pref.getWaterGoal();
+        Context appCtx = context.getApplicationContext();
+        // Arka plan işi bitene kadar receiver'ı canlı tut.
+        PendingResult pendingResult = goAsync();
 
         // 2. Supabase'den bugünün su loglarını al ve toplamı hesapla
         new Thread(() -> {
             try {
                 SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
 
                 String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                 String userIdFilter = "eq." + userId;
                 String dateFilter = "gte." + today + "T00:00:00Z";
 
-                retrofit2.Response<List<WaterLog>> response = api.getTodayWaterLogs(
-                        apiKey, authHeader, "application/json", userIdFilter, dateFilter
-                ).execute();
+                retrofit2.Response<List<WaterLog>> response = api.getWaterLogs(userIdFilter, dateFilter).execute();
 
                 int totalWater = 0;
                 if (response.isSuccessful() && response.body() != null) {
@@ -62,18 +61,20 @@ public class WaterReminderReceiver extends BroadcastReceiver {
                 } else if (totalWater >= waterGoal * 0.8f) {
                     // %80 ve üzeri suyunu içmiş (Örn: 2000'in 1600'ünü içmiş). Cesaretlendirici bildirim at!
                     Log.d("WaterReminder", "Almost there! Sending 'almost' notification.");
-                    NotificationHelper.showAlmostThereNotification(context);
+                    NotificationHelper.showAlmostThereNotification(appCtx);
                 } else {
                     // Normal uyarı
                     Log.d("WaterReminder", "Sending regular notification.");
-                    NotificationHelper.showWaterNotification(context);
+                    NotificationHelper.showWaterNotification(appCtx);
                 }
 
             } catch (Exception e) {
                 Log.e("WaterReminder", "Failed to fetch water data: " + e.getMessage());
                 // İstisnai durumlarda (internetsizlik v.b) standart hatırlatma atsın mı?
                 // Hadi interneti yoksa yine hatırlatma atalım madem :)
-                NotificationHelper.showWaterNotification(context);
+                NotificationHelper.showWaterNotification(appCtx);
+            } finally {
+                pendingResult.finish();
             }
         }).start();
     }

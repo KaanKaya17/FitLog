@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import java.util.List;
 
 public class LoginFragment extends Fragment {
 
@@ -43,6 +42,9 @@ public class LoginFragment extends Fragment {
 
         // "Register" link uses android:onClick="btnUserRegister" - handled by MainActivity
         // But we also set click on tvGoToRegister (the actual ID in XML)
+        View tvForgotPassword = view.findViewById(R.id.tvForgotPassword);
+        if (tvForgotPassword != null) tvForgotPassword.setOnClickListener(v -> sendPasswordReset());
+
         View tvGoToRegister = view.findViewById(R.id.tvGoToRegister);
         if (tvGoToRegister != null) {
             tvGoToRegister.setOnClickListener(v ->
@@ -52,59 +54,58 @@ public class LoginFragment extends Fragment {
 
     private void btnLogin() {
         String email = editTextEmail.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
+        String password = editTextPassword.getText().toString();
 
         if (!Validator.isValidEmail(email)) {
             Toast.makeText(getContext(), "Mail is incorrect!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (!Validator.isValidPassword(password)) {
-            Toast.makeText(getContext(), "Password format is incorrect!", Toast.LENGTH_SHORT).show();
+        if (password.isEmpty()) {
+            Toast.makeText(getContext(), "Password is required!", Toast.LENGTH_SHORT).show();
             return;
         }
         loginUser(email, password);
     }
 
-    private void loginUser(String userMail, String userPassword) {
+    private void sendPasswordReset() {
+        String email = editTextEmail.getText().toString().trim();
+        if (!Validator.isValidEmail(email)) {
+            Toast.makeText(getContext(), "Önce geçerli bir e-posta adresi girin.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         new Thread(() -> {
             try {
-                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
-
-                retrofit2.Response<List<User>> response = api.getUserByEmail(apiKey, authHeader, "eq." + userMail, "application/json").execute();
-
-                if (response.isSuccessful() && response.body() != null) {
-                    List<User> users = response.body();
-                    if (users.isEmpty()) {
-                        showOnUi("Bu mail adresi kayıtlı değil.");
-                        return;
-                    }
-                    User foundUser = users.get(0);
-                    if (foundUser.getPassword_hash().equals(userPassword)) {
-                        if (getActivity() != null) {
-                            getActivity().runOnUiThread(() -> {
-                                if (!isAdded()) return;
-                                Bundle loginBundle = new Bundle();
-                                loginBundle.putString(FirebaseAnalytics.Param.METHOD, "email");
-                                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, loginBundle);
-
-                                Toast.makeText(getContext(), "Hoş geldin " + foundUser.getFirst_name(), Toast.LENGTH_SHORT).show();
-                                PrefManager manager = new PrefManager(getContext());
-                                manager.saveUser(foundUser);
-                                // Navigate to home
-                                Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
-                            });
-                        }
-                    } else {
-                        showOnUi("Şifre hatalı.");
-                    }
-                } else {
-                    showOnUi("Bir hata oluştu.");
-                }
+                AuthManager.sendPasswordReset(email);
             } catch (Exception e) {
-                Log.e("LOGIN", "Error: " + e.getMessage());
-                showOnUi("Bağlantı hatası: " + e.getMessage());
+                Log.w("LOGIN", "Password reset request failed", e);
+            }
+            // Hesap var/yok bilgisini sızdırmamak için her durumda aynı mesaj.
+            showOnUi("Bu adres kayıtlıysa şifre sıfırlama bağlantısı gönderildi.");
+        }).start();
+    }
+
+    private void loginUser(String userMail, String userPassword) {
+        android.content.Context appCtx = requireContext().getApplicationContext();
+        new Thread(() -> {
+            try {
+                // Şifre doğrulaması Supabase Auth sunucusunda yapılır.
+                User foundUser = AuthManager.signIn(appCtx, userMail, userPassword);
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        if (!isAdded()) return;
+                        Bundle loginBundle = new Bundle();
+                        loginBundle.putString(FirebaseAnalytics.Param.METHOD, "email");
+                        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, loginBundle);
+
+                        Toast.makeText(getContext(), "Hoş geldin " + foundUser.getFirst_name(), Toast.LENGTH_SHORT).show();
+                        Navigation.findNavController(requireView()).navigate(R.id.homeFragment);
+                    });
+                }
+            } catch (AuthManager.AuthException e) {
+                showOnUi(e.getMessage());
+            } catch (Exception e) {
+                Log.e("LOGIN", "Login failed", e);
+                showOnUi("Bağlantı hatası. Lütfen tekrar deneyin.");
             }
         }).start();
     }

@@ -1,5 +1,6 @@
 package com.example.fitlog;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,10 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import androidx.navigation.fragment.NavHostFragment;
 
 public class ChangePasswordFragment extends Fragment {
 
@@ -44,90 +42,60 @@ public class ChangePasswordFragment extends Fragment {
 
     private void updatePassword() {
         if (getContext() == null) return;
-        String currentPass = editTextCurrentPassword.getText().toString().trim();
-        String newPass     = editTextNewPassword.getText().toString().trim();
-        String confirmPass = editTextConfirmPassword.getText().toString().trim();
+        String currentPass = editTextCurrentPassword.getText().toString();
+        String newPass     = editTextNewPassword.getText().toString();
+        String confirmPass = editTextConfirmPassword.getText().toString();
 
         if (currentPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
-            Toast.makeText(getContext(), "Lütfen tüm alanları doldurun.", Toast.LENGTH_SHORT).show();
+            toast("Lütfen tüm alanları doldurun.");
             return;
         }
         if (!newPass.equals(confirmPass)) {
-            Toast.makeText(getContext(), "Yeni şifreler eşleşmiyor.", Toast.LENGTH_SHORT).show();
+            toast("Yeni şifreler eşleşmiyor.");
             return;
         }
         if (!Validator.isValidPassword(newPass)) {
-            Toast.makeText(getContext(), "Şifre en az 6 karakter olmalıdır.", Toast.LENGTH_SHORT).show();
+            toast(getString(R.string.error_password_rules));
+            return;
+        }
+        if (newPass.equals(currentPass)) {
+            toast("Yeni şifre mevcut şifreyle aynı olamaz.");
+            return;
+        }
+        if (new PrefManager(getContext()).getId() == -1) {
+            toast("Kullanıcı bilgisi bulunamadı.");
             return;
         }
 
-        PrefManager prefManager = new PrefManager(getContext());
-        int userId = prefManager.getId();
-        if (userId == -1) {
-            Toast.makeText(getContext(), "Kullanıcı bilgisi bulunamadı.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        checkCurrentPasswordAndUpdate(userId, currentPass, newPass);
-    }
-
-    private void checkCurrentPasswordAndUpdate(int userId, String currentPass, String newPass) {
+        btnUpdatePassword.setEnabled(false);
+        Context appCtx = requireContext().getApplicationContext();
         new Thread(() -> {
+            String message;
+            boolean success = false;
             try {
-                SupabaseApi api = RetrofitClient.getClient().create(SupabaseApi.class);
-                String apiKey = BuildConfig.SUPABASE_API_KEY;
-                String authHeader = "Bearer " + apiKey;
-                String userIdFilter = "eq." + userId;
-
-                retrofit2.Response<List<User>> response = api.getUserById(apiKey, authHeader, "application/json", userIdFilter).execute();
-
-                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    User user = response.body().get(0);
-                    if (user.getPassword_hash().equals(currentPass)) {
-                        updatePasswordInApi(api, apiKey, authHeader, userIdFilter, newPass);
-                    } else {
-                        if (getActivity() != null) getActivity().runOnUiThread(() -> {
-                            if (isAdded()) Toast.makeText(getContext(), "Mevcut şifreniz yanlış.", Toast.LENGTH_SHORT).show();
-                        });
-                    }
-                } else {
-                    if (getActivity() != null) getActivity().runOnUiThread(() -> {
-                        if (isAdded()) Toast.makeText(getContext(), "Kullanıcı bilgisi alınamadı.", Toast.LENGTH_SHORT).show();
-                    });
-                }
+                // Mevcut şifre sunucuda doğrulanır, yeni şifre Supabase Auth'ta hash'lenir.
+                AuthManager.changePassword(appCtx, currentPass, newPass);
+                message = "Şifreniz başarıyla güncellendi.";
+                success = true;
+            } catch (AuthManager.AuthException e) {
+                message = e.getMessage();
             } catch (Exception e) {
                 Log.e("ChangePassword", "Error", e);
-                if (getActivity() != null) getActivity().runOnUiThread(() -> {
-                    if (isAdded()) Toast.makeText(getContext(), "Bir hata oluştu.", Toast.LENGTH_SHORT).show();
-                });
+                message = "Bir hata oluştu.";
             }
+
+            final String fMessage = message;
+            final boolean fSuccess = success;
+            if (getActivity() != null) getActivity().runOnUiThread(() -> {
+                if (!isAdded()) return;
+                btnUpdatePassword.setEnabled(true);
+                toast(fMessage);
+                if (fSuccess) NavHostFragment.findNavController(this).navigateUp();
+            });
         }).start();
     }
 
-    private void updatePasswordInApi(SupabaseApi api, String apiKey, String authHeader, String userIdFilter, String newPass) {
-        try {
-            Map<String, String> body = new HashMap<>();
-            body.put("password_hash", newPass);
-
-            retrofit2.Response<Void> updateResponse = api.updateUserPassword(apiKey, authHeader, "application/json", "return=minimal", userIdFilter, body).execute();
-
-            if (updateResponse.isSuccessful()) {
-                if (getActivity() != null) getActivity().runOnUiThread(() -> {
-                    if (isAdded()) {
-                        Toast.makeText(getContext(), "Şifreniz başarıyla güncellendi.", Toast.LENGTH_SHORT).show();
-                        requireActivity().onBackPressed();
-                    }
-                });
-            } else {
-                if (getActivity() != null) getActivity().runOnUiThread(() -> {
-                    if (isAdded()) Toast.makeText(getContext(), "Şifre güncellenirken hata oluştu.", Toast.LENGTH_SHORT).show();
-                });
-            }
-        } catch (Exception e) {
-            Log.e("ChangePassword", "Error updating", e);
-            if (getActivity() != null) getActivity().runOnUiThread(() -> {
-                if (isAdded()) Toast.makeText(getContext(), "Bir hata oluştu.", Toast.LENGTH_SHORT).show();
-            });
-        }
+    private void toast(String msg) {
+        if (getContext() != null) Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 }
