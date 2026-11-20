@@ -30,3 +30,6 @@ google-services.json
 
 # Yerel IDE cihaz seçimi
 .idea/deploymentTargetSelector.xml
+
+# Kişisel kopyalar (ör. doldurulmuş gizlilik politikası)
+*.local.md

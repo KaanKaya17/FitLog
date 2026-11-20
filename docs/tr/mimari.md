@@ -141,6 +141,8 @@ Bu sınıfların Android bağımlılığı yok ve birim testleriyle kapsanıyorl
 ## Gizlilik
 
 - Firebase Analytics ve Crashlytics **varsayılan olarak kapalı** (manifest'te). `ConsentManager` bunları yalnızca kullanıcı onay verirse açar; kullanıcı Ayarlar → Gizlilik'ten istediği zaman değiştirebilir.
+- Kendi `google-services.json` dosyan yoksa Gradle bir yer tutucu üretir ve `BuildConfig.FIREBASE_CONFIGURED = false` olur. Uygulama o durumda FCM'i atlar, analitik ve hata raporlarını hiç açmaz.
+- Kuruluma özel tüm değerler (`SUPABASE_URL`, `SUPABASE_API_KEY`, `PRIVACY_POLICY_URL`, release imzası) `local.properties` dosyasından ya da ortam değişkenlerinden gelir. Bkz. `app/build.gradle.kts`.
 - Barkod sorguları ayrı bir HTTP istemcisi kullanır; Supabase token'ı Open Food Facts'e hiç gitmez.
 - Release derlemesinde debug logları R8 tarafından silinir.
 

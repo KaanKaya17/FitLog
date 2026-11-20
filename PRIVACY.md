@@ -1,6 +1,8 @@
 # FitLog Gizlilik Politikası / Privacy Policy
 
-_Son güncelleme / Last updated: 2026-11-20_
+_Son güncelleme / Last updated: [TARİH / DATE]_
+
+> **Kendi FitLog'unu yayınlıyorsan / If you publish your own FitLog build:** bu dosya bir şablondur. Köşeli parantezli alanları kendi bilgilerinle doldur, bir yerde yayınla ve adresini `local.properties` içindeki `PRIVACY_POLICY_URL` ile uygulamaya ver. This file is a template: fill in the bracketed fields, host it somewhere, and point the app to it with `PRIVACY_POLICY_URL` in `local.properties`. Ayrıntılar / details: [docs/en/setup.md](docs/en/setup.md#9-privacy-policy).
 
 ---
 

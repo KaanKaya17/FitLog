@@ -13,12 +13,52 @@ if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
 
+// ── Kendi kurulumuna ait değerler (docs/en/setup.md) ──────────────────────
+// Hepsi local.properties'ten (git'e girmez) ya da aynı adlı ortam değişkenlerinden okunur.
+fun localValue(key: String): String =
+    (System.getenv(key) ?: localProperties.getProperty(key, "")).trim().trim('"')
+
+// Yalnızca herkese açık (public) değerler APK'ya girer.
+// SUPABASE_API_KEY = Supabase "anon"/"publishable" anahtarı (service_role ASLA!).
+// Gemini anahtarı uygulamada değil, Supabase Edge Function secret'ında tutulur.
+val supabaseUrl = localValue("SUPABASE_URL")
+val supabaseKey = localValue("SUPABASE_API_KEY")
+val privacyPolicyUrl = localValue("PRIVACY_POLICY_URL")
+    .ifEmpty { "https://github.com/KaanKaya17/FitLog/blob/master/PRIVACY.md" }
+
+// Firebase isteğe bağlı: app/google-services.json yoksa, derleme kırılmasın diye
+// sahte değerlerle bir yer tutucu üretilir. Bildirim, analitik ve hata raporları
+// o durumda çalışmaz; uygulamanın geri kalanı normal çalışır.
+val appId = "com.example.fitlog"
+val googleServicesFile = file("google-services.json")
+val placeholderMarker = "fitlog-placeholder"
+if (!googleServicesFile.exists()) {
+    logger.warn("FitLog: app/google-services.json bulunamadı; Firebase kapalı (yer tutucu oluşturuldu).")
+    googleServicesFile.writeText(
+        """
+        {
+          "project_info": { "project_number": "000000000000", "project_id": "$placeholderMarker",
+                            "storage_bucket": "$placeholderMarker.appspot.com" },
+          "client": [{
+            "client_info": { "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+                             "android_client_info": { "package_name": "$appId" } },
+            "oauth_client": [],
+            "api_key": [{ "current_key": "placeholder" }],
+            "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
+          }],
+          "configuration_version": "1"
+        }
+        """.trimIndent()
+    )
+}
+val firebaseConfigured = !googleServicesFile.readText().contains(placeholderMarker)
+
 android {
     namespace = "com.example.fitlog"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.fitlog"
+        applicationId = appId
         minSdk = 33
         targetSdk = 36
         versionCode = 1
@@ -29,13 +69,12 @@ android {
         // Yalnızca herkese açık (public) değerler APK'ya girer.
         // SUPABASE_API_KEY = Supabase "anon"/"publishable" anahtarı (service_role ASLA!).
         // Gemini anahtarı uygulamada değil, Supabase Edge Function secret'ında tutulur.
-        val supabaseUrl = localProperties.getProperty("SUPABASE_URL", "").trim('"')
-        val supabaseKey = localProperties.getProperty("SUPABASE_API_KEY", "").trim('"')
-        if (supabaseUrl.isEmpty() || supabaseKey.isEmpty()) {
-            logger.warn("UYARI: local.properties içinde SUPABASE_URL / SUPABASE_API_KEY tanımlı değil.")
-        }
         buildConfigField("String", "SUPABASE_URL", "\"$supabaseUrl\"")
         buildConfigField("String", "SUPABASE_API_KEY", "\"$supabaseKey\"")
+        // Kendi google-services.json dosyası yoksa yer tutucuyla derlenir; Firebase özellikleri kapalı kalır.
+        buildConfigField("boolean", "FIREBASE_CONFIGURED", firebaseConfigured.toString())
+        // Uygulama içindeki "Gizlilik politikası" bağlantısı.
+        resValue("string", "privacy_policy_url", privacyPolicyUrl)
     }
 
     buildFeatures {
@@ -122,3 +161,26 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
+
+// Supabase ayarları olmadan derlenen uygulama açılışta çöker; bunun yerine derleme
+// net bir mesajla dursun. (Gradle senkronizasyonu yine çalışır.)
+val checkFitLogConfig by tasks.registering {
+    val url = supabaseUrl
+    val key = supabaseKey
+    doLast {
+        if (url.isEmpty() || key.isEmpty()) {
+            throw GradleException(
+                "FitLog: SUPABASE_URL / SUPABASE_API_KEY tanımlı değil (not set).\n" +
+                "local.properties dosyasına kendi Supabase projenin değerlerini ekle / " +
+                "add your own Supabase project's values to local.properties:\n" +
+                "  SUPABASE_URL=https://<project-ref>.supabase.co\n" +
+                "  SUPABASE_API_KEY=<anon-or-publishable-key>\n" +
+                "Ayrıntılar: docs/en/setup.md (EN) · docs/tr/kurulum.md (TR)"
+            )
+        }
+        if (!url.startsWith("https://")) {
+            throw GradleException("FitLog: SUPABASE_URL https:// ile başlamalı / must start with https:// (got: $url)")
+        }
+    }
+}
+tasks.named("preBuild") { dependsOn(checkFitLogConfig) }

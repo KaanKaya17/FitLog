@@ -27,30 +27,12 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      # Gerçek anahtarlar repoda yok. CI yalnızca derleme/test için sahte
-      # (herkese açık olmayan hiçbir bilgi içermeyen) değerler kullanır.
+      # Gerçek anahtarlar repoda yok. CI yalnızca derleme/test için sahte değerler
+      # kullanır; google-services.json yoksa Gradle yer tutucuyu kendisi üretir.
       - name: Create placeholder config
         run: |
-          printf 'SUPABASE_URL=https://example.supabase.co\nSUPABASE_API_KEY=ci-placeholder\n' > local.properties
-          cat > app/google-services.json <<'JSON'
-          {
-            "project_info": {
-              "project_number": "000000000000",
-              "project_id": "fitlog-ci",
-              "storage_bucket": "fitlog-ci.appspot.com"
-            },
-            "client": [{
-              "client_info": {
-                "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
-                "android_client_info": { "package_name": "com.example.fitlog" }
-              },
-              "oauth_client": [],
-              "api_key": [{ "current_key": "ci-placeholder" }],
-              "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
-            }],
-            "configuration_version": "1"
-          }
-          JSON
+          echo "SUPABASE_URL=https://example.supabase.co" > local.properties
+          echo "SUPABASE_API_KEY=ci-placeholder" >> local.properties
 
       - name: Unit tests, lint and build
         run: |

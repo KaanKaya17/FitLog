@@ -13,6 +13,7 @@ Bu rehber, projeyi indirdiğin andan FitLog'un **kendi** Supabase sunucunla tele
 - [6. Firebase (isteğe bağlı)](#6-firebase-isteğe-bağlı)
 - [7. Uygulamayı bağla](#7-uygulamayı-bağla)
 - [8. Çalıştır](#8-çalıştır)
+- [9. Gizlilik politikası](#9-gizlilik-politikası)
 - [Google ile giriş (isteğe bağlı)](#google-ile-giriş-isteğe-bağlı)
 - [Kendi paket adın (isteğe bağlı)](#kendi-paket-adın-isteğe-bağlı)
 - [Yönetici işlemleri](#yönetici-işlemleri)
@@ -35,7 +36,7 @@ Bu rehber, projeyi indirdiğin andan FitLog'un **kendi** Supabase sunucunla tele
 git clone https://github.com/KaanKaya17/FitLog.git
 ```
 
-`FitLog` klasörünü Android Studio'da aç ve Gradle'ın senkronize olmasını bekle. 6. ve 7. adımlar bitene kadar ilk senkronizasyon hata verir; bu normal.
+`FitLog` klasörünü Android Studio'da aç ve Gradle'ın senkronize olmasını bekle. Senkronizasyon hemen çalışır; derlemek için [7. adımdaki](#7-uygulamayı-bağla) değerler gerekir.
 
 ## 2. Supabase projesi oluştur
 
@@ -122,13 +123,9 @@ Firebase anlık bildirim (FCM), Crashlytics ve Analytics için kullanılır. Ana
 
 **Firebase olmadan**
 
-Derleme yine de bir `google-services.json` ister. Yer tutucu dosyayı kopyala:
+Hiçbir şey yapma. `app/google-services.json` yoksa derleme senin için bir yer tutucu oluşturur ve `Firebase kapalı` uyarısı yazar. Geri kalan her şey çalışır; yalnızca anlık bildirimler, hata raporları ve analitik kapalı kalır. Onay penceresi yine görünür, ama kullanıcı kabul etse bile hiçbir veri toplanmaz.
 
-```bash
-cp docs/google-services.placeholder.json app/google-services.json
-```
-
-Geri kalan her şey çalışır; yalnızca anlık bildirimler, hata raporları ve analitik kapalı kalır.
+Firebase'i sonradan açmak için yer tutucuyu kendi `google-services.json` dosyanla değiştirip yeniden derle.
 
 ## 7. Uygulamayı bağla
 
@@ -137,9 +134,11 @@ Proje kökündeki `local.properties` dosyasını oluştur ya da düzenle. Bu dos
 ```properties
 SUPABASE_URL=https://<proje-ref>.supabase.co
 SUPABASE_API_KEY=<anon-ya-da-publishable-anahtar>
+# isteğe bağlı, 9. adıma bak
+PRIVACY_POLICY_URL=https://example.com/gizlilik
 ```
 
-Sonra **File → Sync Project with Gradle Files**'a tıkla.
+Sonra **File → Sync Project with Gradle Files**'a tıkla. Supabase değerleri eksikse derleme neyi eklemen gerektiğini söyleyen bir mesajla durur. Aynı adlar ortam değişkeni olarak da çalışır; bu CI'da işe yarar.
 
 ## 8. Çalıştır
 
@@ -162,6 +161,18 @@ Testleri çalıştırmak için:
 ```
 
 İkinci komut bağlı bir cihaz ya da emülatör ister ve o cihazdaki yerel oturumu sıfırlar.
+
+## 9. Gizlilik politikası
+
+Uygulama onay penceresinden ve **Ayarlar → Gizlilik** bölümünden bir gizlilik politikasına bağlanır. Derlediğin uygulamayı başkalarıyla paylaşacaksan, özellikle Google Play'de, kendi politikan gerekir:
+
+1. [`PRIVACY.md`](../../PRIVACY.md) dosyasını kopyalayıp köşeli parantezli alanları doldur: iletişim e-postan ve tarih. Kullanmadığın şeyleri (örneğin Firebase) çıkar.
+2. Herkese açık bir yerde yayınla: GitHub Pages, bir gist ya da kendi siten.
+3. `local.properties` içindeki `PRIVACY_POLICY_URL` değerini o adres yap ve yeniden derle.
+
+İpucu: doldurduğun kopyayı git'e ekleme. `.local.md` ile biten dosyalar (örneğin `PRIVACY.local.md`) zaten git'e girmez.
+
+`PRIVACY_POLICY_URL` tanımlı değilse bağlantı bu repodaki şablonu açar.
 
 ## Google ile giriş (isteğe bağlı)
 
@@ -200,8 +211,8 @@ where a.day = current_date order by a.count desc;
 
 | Belirti | Çözüm |
 |---|---|
-| Derleme hatası: `File google-services.json is missing` | [6. adımı](#6-firebase-isteğe-bağlı) yap |
-| Gradle uyarısı: `SUPABASE_URL / SUPABASE_API_KEY tanımlı değil` | `local.properties` içinde [7. adımdaki](#7-uygulamayı-bağla) değerler eksik |
+| Derleme `FitLog: SUPABASE_URL / SUPABASE_API_KEY tanımlı değil (not set)` mesajıyla duruyor | [7. adımdaki](#7-uygulamayı-bağla) değerleri `local.properties` dosyasına ekle |
+| Anlık bildirimler hiç gelmiyor | Firebase yer tutucusu kullanılıyor. Kendi `google-services.json` dosyanı ekle ([6. adım](#6-firebase-isteğe-bağlı)) |
 | Giriş "Invalid API key" hatası veriyor | Yanlış anahtar kullanılmış ya da anahtarın etrafında tırnak veya boşluk var |
 | Sıfırlama ya da onay bağlantısı tarayıcıda bir sayfa açıyor | Redirect URLs listesinde `fitlog://auth-callback` yok ([4. adım](#4-giriş-ayarları)) |
 | AI "sunucu hatası" veriyor | `GEMINI_API_KEY` secret'ı eksik ya da fonksiyon yüklenmemiş ([5. adım](#5-ai-fonksiyonunu-yükle)) |

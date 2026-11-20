@@ -141,6 +141,8 @@ These classes have no Android dependencies and are covered by unit tests:
 ## Privacy
 
 - Firebase Analytics and Crashlytics are **off by default** (in the manifest). `ConsentManager` turns them on only after the user agrees, and the user can change it any time under Settings → Privacy.
+- Without your own `google-services.json`, Gradle generates a placeholder and sets `BuildConfig.FIREBASE_CONFIGURED = false`. The app then skips FCM and never enables analytics or crash reporting.
+- All per-installation values (`SUPABASE_URL`, `SUPABASE_API_KEY`, `PRIVACY_POLICY_URL`, release signing) come from `local.properties` or environment variables. See `app/build.gradle.kts`.
 - Barcode lookups use a separate HTTP client, so the Supabase token never reaches Open Food Facts.
 - Debug logs are removed from release builds by R8.
 

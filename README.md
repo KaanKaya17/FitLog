@@ -93,13 +93,15 @@ git clone https://github.com/KaanKaya17/FitLog.git
 1. Create a Supabase project and run the SQL files in [`supabase/migrations/`](supabase/migrations) in order (or `supabase db push`).
 2. Add `fitlog://auth-callback` to **Authentication → URL Configuration → Redirect URLs**.
 3. Deploy [`gemini-proxy`](supabase/functions/gemini-proxy) and set the `GEMINI_API_KEY` secret.
-4. Put `google-services.json` in `app/`. Without Firebase, copy [`docs/google-services.placeholder.json`](docs/google-services.placeholder.json) there instead.
+4. *(Optional)* Put your Firebase `google-services.json` in `app/`. Without it the app still builds and runs; only push notifications, analytics and crash reports are off.
 5. Add your project URL and anon key to `local.properties`:
    ```properties
    SUPABASE_URL=https://<project-ref>.supabase.co
    SUPABASE_API_KEY=<anon-or-publishable-key>
    ```
 6. Run the app from Android Studio.
+
+Nothing in this repository points at the original author's servers: every build uses the Supabase project, Firebase project and privacy policy you configure.
 
 The **[setup guide](docs/en/setup.md)** walks through every step, including the dashboard-only route, Google sign-in, admin tasks and troubleshooting.
 

@@ -37,7 +37,9 @@ public final class ConsentManager {
 
     /** Kayıtlı onayı Firebase'e uygular (uygulama açılışında çağrılır). */
     public static void apply(Context ctx) {
-        boolean granted = isGranted(ctx);
+        // Kendi Firebase projesi olmayan kurulumlarda (yer tutucu google-services.json)
+        // onay verilse bile hiçbir şey toplanmaz.
+        boolean granted = isGranted(ctx) && BuildConfig.FIREBASE_CONFIGURED;
         FirebaseAnalytics.getInstance(ctx).setAnalyticsCollectionEnabled(granted);
         // Debug build'lerde Crashlytics'e hiç rapor gönderme.
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(granted && !BuildConfig.DEBUG);

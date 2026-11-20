@@ -13,6 +13,7 @@ This guide takes you from a fresh clone to FitLog running on your phone with **y
 - [6. Firebase (optional)](#6-firebase-optional)
 - [7. Connect the app](#7-connect-the-app)
 - [8. Run it](#8-run-it)
+- [9. Privacy policy](#9-privacy-policy)
 - [Optional: Google sign-in](#optional-google-sign-in)
 - [Optional: your own package name](#optional-your-own-package-name)
 - [Admin tasks](#admin-tasks)
@@ -35,7 +36,7 @@ This guide takes you from a fresh clone to FitLog running on your phone with **y
 git clone https://github.com/KaanKaya17/FitLog.git
 ```
 
-Open the `FitLog` folder in Android Studio and let Gradle sync. The first sync will fail until step 6 and 7 are done; that is expected.
+Open the `FitLog` folder in Android Studio and let Gradle sync. Sync works right away; building needs the values from [step 7](#7-connect-the-app).
 
 ## 2. Create a Supabase project
 
@@ -122,13 +123,9 @@ Firebase is used for push notifications (FCM), Crashlytics and Analytics. Analyt
 
 **Without Firebase**
 
-The build still needs a `google-services.json`. Copy the placeholder:
+Do nothing. If `app/google-services.json` is missing, the build creates a placeholder for you and prints `Firebase kapalı`. Everything else works; push notifications, crash reports and analytics simply stay off. The consent dialog still appears, but nothing is collected even if the user agrees.
 
-```bash
-cp docs/google-services.placeholder.json app/google-services.json
-```
-
-Everything else works. Only push notifications, crash reports and analytics stay off.
+To switch Firebase on later, replace the placeholder with your real `google-services.json` and rebuild.
 
 ## 7. Connect the app
 
@@ -137,9 +134,11 @@ Create or edit `local.properties` in the project root. It is git-ignored, and An
 ```properties
 SUPABASE_URL=https://<project-ref>.supabase.co
 SUPABASE_API_KEY=<anon-or-publishable-key>
+# optional, see step 9
+PRIVACY_POLICY_URL=https://example.com/privacy
 ```
 
-Then click **File → Sync Project with Gradle Files**.
+Then click **File → Sync Project with Gradle Files**. If the Supabase values are missing, the build stops with a message telling you what to add. The same names also work as environment variables, which is handy in CI.
 
 ## 8. Run it
 
@@ -162,6 +161,18 @@ To run the tests:
 ```
 
 The second command needs a connected device or emulator, and it clears the local session on that device.
+
+## 9. Privacy policy
+
+The app links to a privacy policy from its consent dialog and from **Settings → Privacy**. If you share your build with other people, especially on Google Play, you need your own:
+
+1. Copy [`PRIVACY.md`](../../PRIVACY.md) and fill in the bracketed fields: your contact email and the date. Remove anything you don't use, such as Firebase.
+2. Publish it somewhere public, such as GitHub Pages, a gist or your website.
+3. Set `PRIVACY_POLICY_URL` in `local.properties` to that address and rebuild.
+
+Tip: keep the filled-in copy out of git. Files ending in `.local.md` (for example `PRIVACY.local.md`) are already ignored.
+
+Without `PRIVACY_POLICY_URL`, the link opens the template in this repository.
 
 ## Optional: Google sign-in
 
@@ -200,8 +211,8 @@ where a.day = current_date order by a.count desc;
 
 | Symptom | Fix |
 |---|---|
-| Build error: `File google-services.json is missing` | Do [step 6](#6-firebase-optional) |
-| Gradle warning: `SUPABASE_URL / SUPABASE_API_KEY tanımlı değil` | `local.properties` is missing the values from [step 7](#7-connect-the-app) |
+| Build stops with `FitLog: SUPABASE_URL / SUPABASE_API_KEY tanımlı değil (not set)` | Add the values from [step 7](#7-connect-the-app) to `local.properties` |
+| Push notifications never arrive | You're using the placeholder Firebase config. Add your own `google-services.json` ([step 6](#6-firebase-optional)) |
 | Sign-in fails with "Invalid API key" | You used the wrong key, or put quotes or spaces around it |
 | Reset or confirmation link opens a browser page | `fitlog://auth-callback` is missing from Redirect URLs ([step 4](#4-configure-authentication)) |
 | AI shows "server error" | The `GEMINI_API_KEY` secret is missing, or the function isn't deployed ([step 5](#5-deploy-the-ai-function)) |

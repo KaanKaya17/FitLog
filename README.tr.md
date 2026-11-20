@@ -93,13 +93,15 @@ git clone https://github.com/KaanKaya17/FitLog.git
 1. Bir Supabase projesi oluştur ve [`supabase/migrations/`](supabase/migrations) içindeki SQL dosyalarını sırayla çalıştır (ya da `supabase db push` kullan).
 2. **Authentication → URL Configuration → Redirect URLs** listesine `fitlog://auth-callback` ekle.
 3. [`gemini-proxy`](supabase/functions/gemini-proxy) fonksiyonunu yükle ve `GEMINI_API_KEY` secret'ını tanımla.
-4. `google-services.json` dosyasını `app/` klasörüne koy. Firebase kullanmayacaksan bunun yerine [`docs/google-services.placeholder.json`](docs/google-services.placeholder.json) dosyasını oraya kopyala.
+4. *(İsteğe bağlı)* Firebase'in `google-services.json` dosyasını `app/` klasörüne koy. Bu dosya olmadan da uygulama derlenir ve çalışır; yalnızca anlık bildirimler, analitik ve hata raporları kapalı kalır.
 5. Proje URL'sini ve anon anahtarını `local.properties` dosyasına yaz:
    ```properties
    SUPABASE_URL=https://<proje-ref>.supabase.co
    SUPABASE_API_KEY=<anon-ya-da-publishable-anahtar>
    ```
 6. Uygulamayı Android Studio'dan çalıştır.
+
+Bu repodaki hiçbir şey orijinal geliştiricinin sunucularına bağlı değil: her derleme senin tanımladığın Supabase projesini, Firebase projesini ve gizlilik politikasını kullanır.
 
 **[Kurulum rehberi](docs/tr/kurulum.md)** her adımı anlatır: yalnızca panelle kurulum, Google ile giriş, yönetici işlemleri ve sorun giderme dahil.
 

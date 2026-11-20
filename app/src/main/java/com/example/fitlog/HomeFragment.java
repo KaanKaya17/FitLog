@@ -198,6 +198,8 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void checkFcmToken() {
+        // Kendi google-services.json'u olmayan kurulumlarda FCM yok.
+        if (!BuildConfig.FIREBASE_CONFIGURED) return;
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (!task.isSuccessful() || !isAdded()) return;
             String token = task.getResult();
