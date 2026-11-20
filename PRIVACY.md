@@ -1,15 +1,12 @@
 # FitLog Gizlilik Politikası / Privacy Policy
 
-_Son güncelleme / Last updated: 2026-11-19_
-
-> **TODO (yayından önce doldurun / fill in before publishing):** aşağıdaki
-> `[İLETİŞİM E-POSTASI]` alanını gerçek bir iletişim adresiyle değiştirin.
+_Son güncelleme / Last updated: 2026-11-20_
 
 ---
 
 ## Türkçe
 
-FitLog ("uygulama"), beslenme, su ve kilo takibi yapmanızı sağlayan bir mobil uygulamadır. Bu politika hangi verileri topladığımızı, neden topladığımızı ve haklarınızı açıklar. Veri sorumlusu uygulamanın geliştiricisidir: [İLETİŞİM E-POSTASI].
+FitLog ("uygulama"), beslenme, su ve kilo takibi yapmanızı sağlayan bir mobil uygulamadır. Bu politika hangi verileri topladığımızı, neden topladığımızı ve haklarınızı açıklar. Veri sorumlusu uygulamanın geliştiricisidir: [İLETİŞİM E-POSTASI / CONTACT EMAIL].
 
 ### Topladığımız veriler
 | Veri | Amaç |
@@ -35,7 +32,7 @@ Bu hizmet sağlayıcıların sunucuları yurt dışında bulunabilir. Verilerini
 - **Erişim / taşıma:** Ayarlar → Verilerimi dışa aktar ile tüm kayıtlarınızı indirebilirsiniz.
 - **Silme:** Profil → Hesabı sil ile hesabınız ve tüm kayıtlarınız kalıcı olarak silinir.
 - **Onayı geri çekme:** Ayarlar → Gizlilik bölümünden analitiği istediğiniz zaman kapatabilirsiniz.
-- KVKK md. 11 kapsamındaki diğer talepleriniz için: [İLETİŞİM E-POSTASI].
+- KVKK md. 11 kapsamındaki diğer talepleriniz için: [İLETİŞİM E-POSTASI / CONTACT EMAIL].
 
 ### Sağlık uyarısı
 FitLog tıbbi bir cihaz değildir; öneriler bilgilendirme amaçlıdır.
@@ -47,7 +44,7 @@ Uygulama 13 yaşından küçük çocuklara yönelik değildir.
 
 ## English
 
-FitLog ("the app") helps you track meals, water and weight. This policy explains what we collect, why, and your rights. The data controller is the app's developer: [İLETİŞİM E-POSTASI].
+FitLog ("the app") helps you track meals, water and weight. This policy explains what we collect, why, and your rights. The data controller is the app's developer: [İLETİŞİM E-POSTASI / CONTACT EMAIL].
 
 ### Data we collect
 | Data | Purpose |
@@ -73,7 +70,7 @@ These providers may process data outside your country. We do not sell your data 
 - **Access / portability:** Settings → Export my data.
 - **Deletion:** Profile → Delete account permanently deletes your account and all logs.
 - **Withdraw consent:** turn analytics off any time in Settings → Privacy.
-- For any other request (GDPR / KVKK): [İLETİŞİM E-POSTASI].
+- For any other request (GDPR / KVKK): [İLETİŞİM E-POSTASI / CONTACT EMAIL].
 
 ### Health notice
 FitLog is not a medical device; suggestions are for information only.
