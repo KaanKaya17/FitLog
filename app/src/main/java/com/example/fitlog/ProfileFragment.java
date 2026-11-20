@@ -102,8 +102,8 @@ public class ProfileFragment extends BaseFragment {
 
         String gender = pref.getGender();
         if (gender == null || gender.isEmpty()) tvGender.setText("—");
-        else if (gender.equals("Male")) tvGender.setText(R.string.gender_male);
-        else if (gender.equals("Female")) tvGender.setText(R.string.gender_female);
+        else if (gender.equalsIgnoreCase("Male")) tvGender.setText(R.string.gender_male);
+        else if (gender.equalsIgnoreCase("Female")) tvGender.setText(R.string.gender_female);
         else tvGender.setText(gender);
     }
 }

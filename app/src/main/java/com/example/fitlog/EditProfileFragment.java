@@ -113,7 +113,7 @@ public class EditProfileFragment extends BaseFragment {
 
     private void selectGender(String gender) {
         selectedGender = gender;
-        boolean male = "Male".equals(gender);
+        boolean male = "Male".equalsIgnoreCase(gender);
         cardMale.setBackgroundResource(male ? R.drawable.badge_blue : R.drawable.edittext_bg);
         cardFemale.setBackgroundResource(male ? R.drawable.edittext_bg : R.drawable.badge_pink);
     }

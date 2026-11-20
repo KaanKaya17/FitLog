@@ -52,7 +52,26 @@ The app is available in **English, Turkish and Greek**.
 
 ## 📱 Screenshots
 
-*(Coming soon)*
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/home.png" width="200" alt="Home"><br><sub>Home</sub></td>
+    <td align="center"><img src="docs/screenshots/add-meal.png" width="200" alt="Add a meal"><br><sub>Add a meal</sub></td>
+    <td align="center"><img src="docs/screenshots/meals.png" width="200" alt="Meals of the day"><br><sub>Meals of the day</sub></td>
+    <td align="center"><img src="docs/screenshots/water.png" width="200" alt="Water"><br><sub>Water</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/history.png" width="200" alt="History and streaks"><br><sub>History and streaks</sub></td>
+    <td align="center"><img src="docs/screenshots/weight.png" width="200" alt="Weight trend"><br><sub>Weight trend</sub></td>
+    <td align="center"><img src="docs/screenshots/ai-coach.png" width="200" alt="AI coach"><br><sub>AI coach</sub></td>
+    <td align="center"><img src="docs/screenshots/settings.png" width="200" alt="Goals and reminders"><br><sub>Goals and reminders</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/home-dark.png" width="200" alt="Dark theme"><br><sub>Dark theme</sub></td>
+    <td align="center"><img src="docs/screenshots/login.png" width="200" alt="Sign in"><br><sub>Sign in</sub></td>
+  </tr>
+</table>
+
+*Screenshots use a demo account with sample data.*
 
 ## 🔐 Security
 

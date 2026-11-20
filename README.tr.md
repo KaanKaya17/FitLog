@@ -52,7 +52,26 @@ Uygulama **Türkçe, İngilizce ve Yunanca** kullanılabilir.
 
 ## 📱 Ekran Görüntüleri
 
-*(Yakında)*
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/home.png" width="200" alt="Ana sayfa"><br><sub>Ana sayfa</sub></td>
+    <td align="center"><img src="docs/screenshots/add-meal.png" width="200" alt="Öğün ekleme"><br><sub>Öğün ekleme</sub></td>
+    <td align="center"><img src="docs/screenshots/meals.png" width="200" alt="Günün öğünleri"><br><sub>Günün öğünleri</sub></td>
+    <td align="center"><img src="docs/screenshots/water.png" width="200" alt="Su"><br><sub>Su</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/history.png" width="200" alt="Geçmiş ve seriler"><br><sub>Geçmiş ve seriler</sub></td>
+    <td align="center"><img src="docs/screenshots/weight.png" width="200" alt="Kilo grafiği"><br><sub>Kilo grafiği</sub></td>
+    <td align="center"><img src="docs/screenshots/ai-coach.png" width="200" alt="AI koç"><br><sub>AI koç</sub></td>
+    <td align="center"><img src="docs/screenshots/settings.png" width="200" alt="Hedefler ve hatırlatıcılar"><br><sub>Hedefler ve hatırlatıcılar</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/home-dark.png" width="200" alt="Koyu tema"><br><sub>Koyu tema</sub></td>
+    <td align="center"><img src="docs/screenshots/login.png" width="200" alt="Giriş"><br><sub>Giriş</sub></td>
+  </tr>
+</table>
+
+*Görüntülerde örnek verili bir demo hesap kullanıldı.*
 
 ## 🔐 Güvenlik
 

@@ -50,6 +50,9 @@ public class WaterTrackFragment extends BaseFragment {
 
         dailyGoal = Math.max(1, new PrefManager(requireContext()).getWaterGoal());
         progressWater.setMax(dailyGoal);
+        // Layout'taki "/ 2000 ml" yer tutucusu yerine kullanıcının gerçek hedefi.
+        ((TextView) view.findViewById(R.id.tvGoalAmount))
+                .setText(getString(R.string.water_goal_divider, String.valueOf(dailyGoal)));
 
         view.findViewById(R.id.btn200ml).setOnClickListener(v -> addWater(200));
         view.findViewById(R.id.btn300ml).setOnClickListener(v -> addWater(300));
