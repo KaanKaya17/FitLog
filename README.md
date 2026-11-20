@@ -135,3 +135,6 @@ Birim testleri tarih aralıklarını, kalori/makro hesabını, seri ve geçmiş 
 
 ## 📱 Ekran Görüntüleri
 *(Yakında)*
+
+## 📄 Lisans
+[MIT](LICENSE): kodu dilediğiniz gibi kullanabilir, değiştirebilir ve dağıtabilirsiniz; yalnızca lisans metnini koruyun.
